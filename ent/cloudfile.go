@@ -26,6 +26,8 @@ type CloudFile struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// State true: normal false: ban | 状态 true 正常 false 禁用
 	State bool `json:"state,omitempty"`
+	// Tenant ID | 租户 ID
+	TenantID uint64 `json:"tenant_id,omitempty"`
 	// The file's name | 文件名
 	Name string `json:"name,omitempty"`
 	// The file's url | 文件地址
@@ -81,7 +83,7 @@ func (*CloudFile) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case cloudfile.FieldState:
 			values[i] = new(sql.NullBool)
-		case cloudfile.FieldSize, cloudfile.FieldFileType:
+		case cloudfile.FieldTenantID, cloudfile.FieldSize, cloudfile.FieldFileType:
 			values[i] = new(sql.NullInt64)
 		case cloudfile.FieldName, cloudfile.FieldURL, cloudfile.FieldUserID:
 			values[i] = new(sql.NullString)
@@ -129,6 +131,12 @@ func (cf *CloudFile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
 				cf.State = value.Bool
+			}
+		case cloudfile.FieldTenantID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
+			} else if value.Valid {
+				cf.TenantID = uint64(value.Int64)
 			}
 		case cloudfile.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -221,6 +229,9 @@ func (cf *CloudFile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("state=")
 	builder.WriteString(fmt.Sprintf("%v", cf.State))
+	builder.WriteString(", ")
+	builder.WriteString("tenant_id=")
+	builder.WriteString(fmt.Sprintf("%v", cf.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(cf.Name)

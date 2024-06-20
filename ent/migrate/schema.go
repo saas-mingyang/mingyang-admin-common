@@ -15,6 +15,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "state", Type: field.TypeBool, Nullable: true, Comment: "State true: normal false: ban | 状态 true 正常 false 禁用", Default: true},
+		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "The file's name | 文件名"},
 		{Name: "url", Type: field.TypeString, Comment: "The file's url | 文件地址"},
 		{Name: "size", Type: field.TypeUint64, Comment: "The file's size | 文件大小"},
@@ -30,7 +31,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "fms_cloud_files_fms_storage_providers_storage_providers",
-				Columns:    []*schema.Column{FmsCloudFilesColumns[9]},
+				Columns:    []*schema.Column{FmsCloudFilesColumns[10]},
 				RefColumns: []*schema.Column{FmsStorageProvidersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -39,12 +40,12 @@ var (
 			{
 				Name:    "cloudfile_name",
 				Unique:  false,
-				Columns: []*schema.Column{FmsCloudFilesColumns[4]},
+				Columns: []*schema.Column{FmsCloudFilesColumns[5]},
 			},
 			{
 				Name:    "cloudfile_file_type",
 				Unique:  false,
-				Columns: []*schema.Column{FmsCloudFilesColumns[7]},
+				Columns: []*schema.Column{FmsCloudFilesColumns[8]},
 			},
 		},
 	}
@@ -54,6 +55,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
+		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "CloudFileTag's name | 标签名称"},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "The remark of tag | 标签的备注"},
 	}
@@ -66,7 +68,7 @@ var (
 			{
 				Name:    "cloudfiletag_name",
 				Unique:  false,
-				Columns: []*schema.Column{FmsCloudFileTagsColumns[4]},
+				Columns: []*schema.Column{FmsCloudFileTagsColumns[5]},
 			},
 		},
 	}
@@ -76,6 +78,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
+		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "File's name | 文件名称"},
 		{Name: "file_type", Type: field.TypeUint8, Comment: "File's type | 文件类型"},
 		{Name: "size", Type: field.TypeUint64, Comment: "File's size | 文件大小"},
@@ -92,12 +95,12 @@ var (
 			{
 				Name:    "file_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{FmsFilesColumns[8]},
+				Columns: []*schema.Column{FmsFilesColumns[9]},
 			},
 			{
 				Name:    "file_file_type",
 				Unique:  false,
-				Columns: []*schema.Column{FmsFilesColumns[5]},
+				Columns: []*schema.Column{FmsFilesColumns[6]},
 			},
 		},
 	}
@@ -107,6 +110,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
+		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "FileTag's name | 标签名称"},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "The remark of tag | 标签的备注"},
 	}
@@ -119,7 +123,7 @@ var (
 			{
 				Name:    "filetag_name",
 				Unique:  false,
-				Columns: []*schema.Column{FmsFileTagsColumns[4]},
+				Columns: []*schema.Column{FmsFileTagsColumns[5]},
 			},
 		},
 	}
@@ -129,6 +133,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "state", Type: field.TypeBool, Nullable: true, Comment: "State true: normal false: ban | 状态 true 正常 false 禁用", Default: true},
+		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
 		{Name: "name", Type: field.TypeString, Unique: true, Comment: "The cloud storage service name | 服务名称"},
 		{Name: "bucket", Type: field.TypeString, Comment: "The cloud storage bucket name | 云存储服务的存储桶"},
 		{Name: "secret_id", Type: field.TypeString, Comment: "The secret ID | 密钥 ID"},

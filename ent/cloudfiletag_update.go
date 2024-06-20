@@ -140,7 +140,9 @@ func (cftu *CloudFileTagUpdate) RemoveCloudFiles(c ...*CloudFile) *CloudFileTagU
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cftu *CloudFileTagUpdate) Save(ctx context.Context) (int, error) {
-	cftu.defaults()
+	if err := cftu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, cftu.sqlSave, cftu.mutation, cftu.hooks)
 }
 
@@ -167,11 +169,15 @@ func (cftu *CloudFileTagUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cftu *CloudFileTagUpdate) defaults() {
+func (cftu *CloudFileTagUpdate) defaults() error {
 	if _, ok := cftu.mutation.UpdatedAt(); !ok {
+		if cloudfiletag.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized cloudfiletag.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := cloudfiletag.UpdateDefaultUpdatedAt()
 		cftu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (cftu *CloudFileTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -392,7 +398,9 @@ func (cftuo *CloudFileTagUpdateOne) Select(field string, fields ...string) *Clou
 
 // Save executes the query and returns the updated CloudFileTag entity.
 func (cftuo *CloudFileTagUpdateOne) Save(ctx context.Context) (*CloudFileTag, error) {
-	cftuo.defaults()
+	if err := cftuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cftuo.sqlSave, cftuo.mutation, cftuo.hooks)
 }
 
@@ -419,11 +427,15 @@ func (cftuo *CloudFileTagUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cftuo *CloudFileTagUpdateOne) defaults() {
+func (cftuo *CloudFileTagUpdateOne) defaults() error {
 	if _, ok := cftuo.mutation.UpdatedAt(); !ok {
+		if cloudfiletag.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized cloudfiletag.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := cloudfiletag.UpdateDefaultUpdatedAt()
 		cftuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (cftuo *CloudFileTagUpdateOne) sqlSave(ctx context.Context) (_node *CloudFileTag, err error) {

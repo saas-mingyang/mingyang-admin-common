@@ -5,6 +5,7 @@ package cloudfile
 import (
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	uuid "github.com/gofrs/uuid/v5"
@@ -21,6 +22,8 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldState holds the string denoting the state field in the database.
 	FieldState = "state"
+	// FieldTenantID holds the string denoting the tenant_id field in the database.
+	FieldTenantID = "tenant_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldURL holds the string denoting the url field in the database.
@@ -57,6 +60,7 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldState,
+	FieldTenantID,
 	FieldName,
 	FieldURL,
 	FieldSize,
@@ -91,7 +95,13 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/suyuan32/simple-admin-file/ent/runtime"
 var (
+	Hooks [1]ent.Hook
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -100,6 +110,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultState holds the default value on creation for the "state" field.
 	DefaultState bool
+	// DefaultTenantID holds the default value on creation for the "tenant_id" field.
+	DefaultTenantID uint64
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -125,6 +137,11 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByState orders the results by the state field.
 func ByState(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldState, opts...).ToFunc()
+}
+
+// ByTenantID orders the results by the tenant_id field.
+func ByTenantID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTenantID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

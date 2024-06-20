@@ -251,7 +251,9 @@ func (spu *StorageProviderUpdate) RemoveCloudfiles(c ...*CloudFile) *StorageProv
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (spu *StorageProviderUpdate) Save(ctx context.Context) (int, error) {
-	spu.defaults()
+	if err := spu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, spu.sqlSave, spu.mutation, spu.hooks)
 }
 
@@ -278,11 +280,15 @@ func (spu *StorageProviderUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (spu *StorageProviderUpdate) defaults() {
+func (spu *StorageProviderUpdate) defaults() error {
 	if _, ok := spu.mutation.UpdatedAt(); !ok {
+		if storageprovider.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized storageprovider.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := storageprovider.UpdateDefaultUpdatedAt()
 		spu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (spu *StorageProviderUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -638,7 +644,9 @@ func (spuo *StorageProviderUpdateOne) Select(field string, fields ...string) *St
 
 // Save executes the query and returns the updated StorageProvider entity.
 func (spuo *StorageProviderUpdateOne) Save(ctx context.Context) (*StorageProvider, error) {
-	spuo.defaults()
+	if err := spuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, spuo.sqlSave, spuo.mutation, spuo.hooks)
 }
 
@@ -665,11 +673,15 @@ func (spuo *StorageProviderUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (spuo *StorageProviderUpdateOne) defaults() {
+func (spuo *StorageProviderUpdateOne) defaults() error {
 	if _, ok := spuo.mutation.UpdatedAt(); !ok {
+		if storageprovider.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized storageprovider.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := storageprovider.UpdateDefaultUpdatedAt()
 		spuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (spuo *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *StorageProvider, err error) {

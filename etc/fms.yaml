@@ -3,6 +3,8 @@ Host: 0.0.0.0
 Port: 9102
 MaxBytes: 1073741824 # max content length : 1 gb | 所有类型单个文件最大大小
 Timeout: 300000 # bigger max bytes need longer timeout | 超时时间
+Middlewares:
+  Tenant: true
 
 Auth:
   AccessSecret:  # JWT key
@@ -65,3 +67,16 @@ UploadConf:
 CoreRpc:
   Target: k8s://default/core-rpc-svc:9101
   Enabled: true
+
+CasbinConf:
+  ModelText: |
+    [request_definition]
+    r = sub, obj, act, domain
+    [policy_definition]
+    p = sub, obj, act, domain
+    [role_definition]
+    g = _, _
+    [policy_effect]
+    e = some(where (p.eft == allow))
+    [matchers]
+    m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act && r.domain == p.domain

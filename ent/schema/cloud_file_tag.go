@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"context"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -8,6 +9,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
+	ent2 "github.com/suyuan32/simple-admin-file/ent"
+	"github.com/suyuan32/simple-admin-file/ent/hook"
 )
 
 // CloudFileTag holds the schema definition for the CloudFileTag entity.
@@ -30,6 +34,7 @@ func (CloudFileTag) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.IDMixin{},
 		mixins.StatusMixin{},
+		mixins.TenantMixin{},
 	}
 }
 
@@ -43,6 +48,23 @@ func (CloudFileTag) Edges() []ent.Edge {
 func (CloudFileTag) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name"),
+	}
+}
+
+// Hooks of the CloudFileTag.
+func (CloudFileTag) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			func(next ent.Mutator) ent.Mutator {
+				return hook.CloudFileTagFunc(func(ctx context.Context, m *ent2.CloudFileTagMutation) (ent.Value, error) {
+					if !tenantctx.GetTenantAdminCtx(ctx) {
+						m.SetTenantID(tenantctx.GetTenantIDFromCtx(ctx))
+					}
+					return next.Mutate(ctx, m)
+				})
+			},
+			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
+		),
 	}
 }
 

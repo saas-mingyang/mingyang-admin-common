@@ -25,6 +25,8 @@ type File struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Status 1: normal 2: ban | 状态 1 正常 2 禁用
 	Status uint8 `json:"status,omitempty"`
+	// Tenant ID | 租户 ID
+	TenantID uint64 `json:"tenant_id,omitempty"`
 	// File's name | 文件名称
 	Name string `json:"name,omitempty"`
 	// File's type | 文件类型
@@ -66,7 +68,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case file.FieldStatus, file.FieldFileType, file.FieldSize:
+		case file.FieldStatus, file.FieldTenantID, file.FieldFileType, file.FieldSize:
 			values[i] = new(sql.NullInt64)
 		case file.FieldName, file.FieldPath, file.FieldUserID, file.FieldMd5:
 			values[i] = new(sql.NullString)
@@ -112,6 +114,12 @@ func (f *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				f.Status = uint8(value.Int64)
+			}
+		case file.FieldTenantID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
+			} else if value.Valid {
+				f.TenantID = uint64(value.Int64)
 			}
 		case file.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -198,6 +206,9 @@ func (f *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", f.Status))
+	builder.WriteString(", ")
+	builder.WriteString("tenant_id=")
+	builder.WriteString(fmt.Sprintf("%v", f.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(f.Name)

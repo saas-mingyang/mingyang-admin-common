@@ -1,12 +1,16 @@
 package schema
 
 import (
+	"context"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
+	ent2 "github.com/suyuan32/simple-admin-file/ent"
+	"github.com/suyuan32/simple-admin-file/ent/hook"
 )
 
 // StorageProvider holds the schema definition for the StorageProvider entity.
@@ -56,6 +60,7 @@ func (StorageProvider) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.IDMixin{},
 		mixins.StateMixin{},
+		mixins.TenantMixin{},
 	}
 }
 
@@ -63,6 +68,23 @@ func (StorageProvider) Mixin() []ent.Mixin {
 func (StorageProvider) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("cloudfiles", CloudFile.Type).Ref("storage_providers"),
+	}
+}
+
+// Hooks of the StorageProvider.
+func (StorageProvider) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			func(next ent.Mutator) ent.Mutator {
+				return hook.StorageProviderFunc(func(ctx context.Context, m *ent2.StorageProviderMutation) (ent.Value, error) {
+					if !tenantctx.GetTenantAdminCtx(ctx) {
+						m.SetTenantID(tenantctx.GetTenantIDFromCtx(ctx))
+					}
+					return next.Mutate(ctx, m)
+				})
+			},
+			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
+		),
 	}
 }
 

@@ -382,7 +382,8 @@ func (c *CloudFileClient) QueryTags(cf *CloudFile) *CloudFileTagQuery {
 
 // Hooks returns the client hooks.
 func (c *CloudFileClient) Hooks() []Hook {
-	return c.hooks.CloudFile
+	hooks := c.hooks.CloudFile
+	return append(hooks[:len(hooks):len(hooks)], cloudfile.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -531,7 +532,8 @@ func (c *CloudFileTagClient) QueryCloudFiles(cft *CloudFileTag) *CloudFileQuery 
 
 // Hooks returns the client hooks.
 func (c *CloudFileTagClient) Hooks() []Hook {
-	return c.hooks.CloudFileTag
+	hooks := c.hooks.CloudFileTag
+	return append(hooks[:len(hooks):len(hooks)], cloudfiletag.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -680,7 +682,8 @@ func (c *FileClient) QueryTags(f *File) *FileTagQuery {
 
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
-	return c.hooks.File
+	hooks := c.hooks.File
+	return append(hooks[:len(hooks):len(hooks)], file.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -829,7 +832,8 @@ func (c *FileTagClient) QueryFiles(ft *FileTag) *FileQuery {
 
 // Hooks returns the client hooks.
 func (c *FileTagClient) Hooks() []Hook {
-	return c.hooks.FileTag
+	hooks := c.hooks.FileTag
+	return append(hooks[:len(hooks):len(hooks)], filetag.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -978,7 +982,8 @@ func (c *StorageProviderClient) QueryCloudfiles(sp *StorageProvider) *CloudFileQ
 
 // Hooks returns the client hooks.
 func (c *StorageProviderClient) Hooks() []Hook {
-	return c.hooks.StorageProvider
+	hooks := c.hooks.StorageProvider
+	return append(hooks[:len(hooks):len(hooks)], storageprovider.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.

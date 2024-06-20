@@ -65,6 +65,20 @@ func (cfc *CloudFileCreate) SetNillableState(b *bool) *CloudFileCreate {
 	return cfc
 }
 
+// SetTenantID sets the "tenant_id" field.
+func (cfc *CloudFileCreate) SetTenantID(u uint64) *CloudFileCreate {
+	cfc.mutation.SetTenantID(u)
+	return cfc
+}
+
+// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
+func (cfc *CloudFileCreate) SetNillableTenantID(u *uint64) *CloudFileCreate {
+	if u != nil {
+		cfc.SetTenantID(*u)
+	}
+	return cfc
+}
+
 // SetName sets the "name" field.
 func (cfc *CloudFileCreate) SetName(s string) *CloudFileCreate {
 	cfc.mutation.SetName(s)
@@ -150,7 +164,9 @@ func (cfc *CloudFileCreate) Mutation() *CloudFileMutation {
 
 // Save creates the CloudFile in the database.
 func (cfc *CloudFileCreate) Save(ctx context.Context) (*CloudFile, error) {
-	cfc.defaults()
+	if err := cfc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cfc.sqlSave, cfc.mutation, cfc.hooks)
 }
 
@@ -177,12 +193,18 @@ func (cfc *CloudFileCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cfc *CloudFileCreate) defaults() {
+func (cfc *CloudFileCreate) defaults() error {
 	if _, ok := cfc.mutation.CreatedAt(); !ok {
+		if cloudfile.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized cloudfile.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
 		v := cloudfile.DefaultCreatedAt()
 		cfc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := cfc.mutation.UpdatedAt(); !ok {
+		if cloudfile.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized cloudfile.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := cloudfile.DefaultUpdatedAt()
 		cfc.mutation.SetUpdatedAt(v)
 	}
@@ -190,10 +212,18 @@ func (cfc *CloudFileCreate) defaults() {
 		v := cloudfile.DefaultState
 		cfc.mutation.SetState(v)
 	}
+	if _, ok := cfc.mutation.TenantID(); !ok {
+		v := cloudfile.DefaultTenantID
+		cfc.mutation.SetTenantID(v)
+	}
 	if _, ok := cfc.mutation.ID(); !ok {
+		if cloudfile.DefaultID == nil {
+			return fmt.Errorf("ent: uninitialized cloudfile.DefaultID (forgotten import ent/runtime?)")
+		}
 		v := cloudfile.DefaultID()
 		cfc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -203,6 +233,9 @@ func (cfc *CloudFileCreate) check() error {
 	}
 	if _, ok := cfc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "CloudFile.updated_at"`)}
+	}
+	if _, ok := cfc.mutation.TenantID(); !ok {
+		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "CloudFile.tenant_id"`)}
 	}
 	if _, ok := cfc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "CloudFile.name"`)}
@@ -265,6 +298,10 @@ func (cfc *CloudFileCreate) createSpec() (*CloudFile, *sqlgraph.CreateSpec) {
 	if value, ok := cfc.mutation.State(); ok {
 		_spec.SetField(cloudfile.FieldState, field.TypeBool, value)
 		_node.State = value
+	}
+	if value, ok := cfc.mutation.TenantID(); ok {
+		_spec.SetField(cloudfile.FieldTenantID, field.TypeUint64, value)
+		_node.TenantID = value
 	}
 	if value, ok := cfc.mutation.Name(); ok {
 		_spec.SetField(cloudfile.FieldName, field.TypeString, value)

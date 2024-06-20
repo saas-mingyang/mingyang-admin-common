@@ -64,6 +64,20 @@ func (spc *StorageProviderCreate) SetNillableState(b *bool) *StorageProviderCrea
 	return spc
 }
 
+// SetTenantID sets the "tenant_id" field.
+func (spc *StorageProviderCreate) SetTenantID(u uint64) *StorageProviderCreate {
+	spc.mutation.SetTenantID(u)
+	return spc
+}
+
+// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
+func (spc *StorageProviderCreate) SetNillableTenantID(u *uint64) *StorageProviderCreate {
+	if u != nil {
+		spc.SetTenantID(*u)
+	}
+	return spc
+}
+
 // SetName sets the "name" field.
 func (spc *StorageProviderCreate) SetName(s string) *StorageProviderCreate {
 	spc.mutation.SetName(s)
@@ -184,7 +198,9 @@ func (spc *StorageProviderCreate) Mutation() *StorageProviderMutation {
 
 // Save creates the StorageProvider in the database.
 func (spc *StorageProviderCreate) Save(ctx context.Context) (*StorageProvider, error) {
-	spc.defaults()
+	if err := spc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, spc.sqlSave, spc.mutation, spc.hooks)
 }
 
@@ -211,18 +227,28 @@ func (spc *StorageProviderCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (spc *StorageProviderCreate) defaults() {
+func (spc *StorageProviderCreate) defaults() error {
 	if _, ok := spc.mutation.CreatedAt(); !ok {
+		if storageprovider.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized storageprovider.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
 		v := storageprovider.DefaultCreatedAt()
 		spc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := spc.mutation.UpdatedAt(); !ok {
+		if storageprovider.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized storageprovider.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := storageprovider.DefaultUpdatedAt()
 		spc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := spc.mutation.State(); !ok {
 		v := storageprovider.DefaultState
 		spc.mutation.SetState(v)
+	}
+	if _, ok := spc.mutation.TenantID(); !ok {
+		v := storageprovider.DefaultTenantID
+		spc.mutation.SetTenantID(v)
 	}
 	if _, ok := spc.mutation.IsDefault(); !ok {
 		v := storageprovider.DefaultIsDefault
@@ -232,6 +258,7 @@ func (spc *StorageProviderCreate) defaults() {
 		v := storageprovider.DefaultUseCdn
 		spc.mutation.SetUseCdn(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -241,6 +268,9 @@ func (spc *StorageProviderCreate) check() error {
 	}
 	if _, ok := spc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "StorageProvider.updated_at"`)}
+	}
+	if _, ok := spc.mutation.TenantID(); !ok {
+		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "StorageProvider.tenant_id"`)}
 	}
 	if _, ok := spc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "StorageProvider.name"`)}
@@ -309,6 +339,10 @@ func (spc *StorageProviderCreate) createSpec() (*StorageProvider, *sqlgraph.Crea
 	if value, ok := spc.mutation.State(); ok {
 		_spec.SetField(storageprovider.FieldState, field.TypeBool, value)
 		_node.State = value
+	}
+	if value, ok := spc.mutation.TenantID(); ok {
+		_spec.SetField(storageprovider.FieldTenantID, field.TypeUint64, value)
+		_node.TenantID = value
 	}
 	if value, ok := spc.mutation.Name(); ok {
 		_spec.SetField(storageprovider.FieldName, field.TypeString, value)

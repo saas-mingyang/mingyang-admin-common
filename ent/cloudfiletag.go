@@ -23,6 +23,8 @@ type CloudFileTag struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Status 1: normal 2: ban | 状态 1 正常 2 禁用
 	Status uint8 `json:"status,omitempty"`
+	// Tenant ID | 租户 ID
+	TenantID uint64 `json:"tenant_id,omitempty"`
 	// CloudFileTag's name | 标签名称
 	Name string `json:"name,omitempty"`
 	// The remark of tag | 标签的备注
@@ -56,7 +58,7 @@ func (*CloudFileTag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case cloudfiletag.FieldID, cloudfiletag.FieldStatus:
+		case cloudfiletag.FieldID, cloudfiletag.FieldStatus, cloudfiletag.FieldTenantID:
 			values[i] = new(sql.NullInt64)
 		case cloudfiletag.FieldName, cloudfiletag.FieldRemark:
 			values[i] = new(sql.NullString)
@@ -100,6 +102,12 @@ func (cft *CloudFileTag) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				cft.Status = uint8(value.Int64)
+			}
+		case cloudfiletag.FieldTenantID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
+			} else if value.Valid {
+				cft.TenantID = uint64(value.Int64)
 			}
 		case cloudfiletag.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -162,6 +170,9 @@ func (cft *CloudFileTag) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", cft.Status))
+	builder.WriteString(", ")
+	builder.WriteString("tenant_id=")
+	builder.WriteString(fmt.Sprintf("%v", cft.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(cft.Name)

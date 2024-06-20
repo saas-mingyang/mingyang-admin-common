@@ -10,6 +10,7 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 
 	"github.com/suyuan32/simple-admin-file/ent"
+	_ "github.com/suyuan32/simple-admin-file/ent/runtime"
 	"github.com/suyuan32/simple-admin-file/internal/config"
 	i18n2 "github.com/suyuan32/simple-admin-file/internal/i18n"
 	"github.com/suyuan32/simple-admin-file/internal/middleware"

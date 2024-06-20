@@ -208,7 +208,9 @@ func (cfu *CloudFileUpdate) RemoveTags(c ...*CloudFileTag) *CloudFileUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cfu *CloudFileUpdate) Save(ctx context.Context) (int, error) {
-	cfu.defaults()
+	if err := cfu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, cfu.sqlSave, cfu.mutation, cfu.hooks)
 }
 
@@ -235,11 +237,15 @@ func (cfu *CloudFileUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cfu *CloudFileUpdate) defaults() {
+func (cfu *CloudFileUpdate) defaults() error {
 	if _, ok := cfu.mutation.UpdatedAt(); !ok {
+		if cloudfile.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized cloudfile.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := cloudfile.UpdateDefaultUpdatedAt()
 		cfu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (cfu *CloudFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -566,7 +572,9 @@ func (cfuo *CloudFileUpdateOne) Select(field string, fields ...string) *CloudFil
 
 // Save executes the query and returns the updated CloudFile entity.
 func (cfuo *CloudFileUpdateOne) Save(ctx context.Context) (*CloudFile, error) {
-	cfuo.defaults()
+	if err := cfuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cfuo.sqlSave, cfuo.mutation, cfuo.hooks)
 }
 
@@ -593,11 +601,15 @@ func (cfuo *CloudFileUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cfuo *CloudFileUpdateOne) defaults() {
+func (cfuo *CloudFileUpdateOne) defaults() error {
 	if _, ok := cfuo.mutation.UpdatedAt(); !ok {
+		if cloudfile.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized cloudfile.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := cloudfile.UpdateDefaultUpdatedAt()
 		cfuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (cfuo *CloudFileUpdateOne) sqlSave(ctx context.Context) (_node *CloudFile, err error) {

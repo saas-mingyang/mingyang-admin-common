@@ -45,6 +45,8 @@ type CloudFileMutation struct {
 	created_at               *time.Time
 	updated_at               *time.Time
 	state                    *bool
+	tenant_id                *uint64
+	addtenant_id             *int64
 	name                     *string
 	url                      *string
 	size                     *uint64
@@ -286,6 +288,62 @@ func (m *CloudFileMutation) StateCleared() bool {
 func (m *CloudFileMutation) ResetState() {
 	m.state = nil
 	delete(m.clearedFields, cloudfile.FieldState)
+}
+
+// SetTenantID sets the "tenant_id" field.
+func (m *CloudFileMutation) SetTenantID(u uint64) {
+	m.tenant_id = &u
+	m.addtenant_id = nil
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *CloudFileMutation) TenantID() (r uint64, exists bool) {
+	v := m.tenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the CloudFile entity.
+// If the CloudFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CloudFileMutation) OldTenantID(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// AddTenantID adds u to the "tenant_id" field.
+func (m *CloudFileMutation) AddTenantID(u int64) {
+	if m.addtenant_id != nil {
+		*m.addtenant_id += u
+	} else {
+		m.addtenant_id = &u
+	}
+}
+
+// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
+func (m *CloudFileMutation) AddedTenantID() (r int64, exists bool) {
+	v := m.addtenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *CloudFileMutation) ResetTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
 }
 
 // SetName sets the "name" field.
@@ -635,7 +693,7 @@ func (m *CloudFileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CloudFileMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, cloudfile.FieldCreatedAt)
 	}
@@ -644,6 +702,9 @@ func (m *CloudFileMutation) Fields() []string {
 	}
 	if m.state != nil {
 		fields = append(fields, cloudfile.FieldState)
+	}
+	if m.tenant_id != nil {
+		fields = append(fields, cloudfile.FieldTenantID)
 	}
 	if m.name != nil {
 		fields = append(fields, cloudfile.FieldName)
@@ -674,6 +735,8 @@ func (m *CloudFileMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case cloudfile.FieldState:
 		return m.State()
+	case cloudfile.FieldTenantID:
+		return m.TenantID()
 	case cloudfile.FieldName:
 		return m.Name()
 	case cloudfile.FieldURL:
@@ -699,6 +762,8 @@ func (m *CloudFileMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case cloudfile.FieldState:
 		return m.OldState(ctx)
+	case cloudfile.FieldTenantID:
+		return m.OldTenantID(ctx)
 	case cloudfile.FieldName:
 		return m.OldName(ctx)
 	case cloudfile.FieldURL:
@@ -738,6 +803,13 @@ func (m *CloudFileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetState(v)
+		return nil
+	case cloudfile.FieldTenantID:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
 		return nil
 	case cloudfile.FieldName:
 		v, ok := value.(string)
@@ -782,6 +854,9 @@ func (m *CloudFileMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *CloudFileMutation) AddedFields() []string {
 	var fields []string
+	if m.addtenant_id != nil {
+		fields = append(fields, cloudfile.FieldTenantID)
+	}
 	if m.addsize != nil {
 		fields = append(fields, cloudfile.FieldSize)
 	}
@@ -796,6 +871,8 @@ func (m *CloudFileMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CloudFileMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case cloudfile.FieldTenantID:
+		return m.AddedTenantID()
 	case cloudfile.FieldSize:
 		return m.AddedSize()
 	case cloudfile.FieldFileType:
@@ -809,6 +886,13 @@ func (m *CloudFileMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CloudFileMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case cloudfile.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTenantID(v)
+		return nil
 	case cloudfile.FieldSize:
 		v, ok := value.(int64)
 		if !ok {
@@ -867,6 +951,9 @@ func (m *CloudFileMutation) ResetField(name string) error {
 		return nil
 	case cloudfile.FieldState:
 		m.ResetState()
+		return nil
+	case cloudfile.FieldTenantID:
+		m.ResetTenantID()
 		return nil
 	case cloudfile.FieldName:
 		m.ResetName()
@@ -999,6 +1086,8 @@ type CloudFileTagMutation struct {
 	updated_at         *time.Time
 	status             *uint8
 	addstatus          *int8
+	tenant_id          *uint64
+	addtenant_id       *int64
 	name               *string
 	remark             *string
 	clearedFields      map[string]struct{}
@@ -1256,6 +1345,62 @@ func (m *CloudFileTagMutation) ResetStatus() {
 	delete(m.clearedFields, cloudfiletag.FieldStatus)
 }
 
+// SetTenantID sets the "tenant_id" field.
+func (m *CloudFileTagMutation) SetTenantID(u uint64) {
+	m.tenant_id = &u
+	m.addtenant_id = nil
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *CloudFileTagMutation) TenantID() (r uint64, exists bool) {
+	v := m.tenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the CloudFileTag entity.
+// If the CloudFileTag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CloudFileTagMutation) OldTenantID(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// AddTenantID adds u to the "tenant_id" field.
+func (m *CloudFileTagMutation) AddTenantID(u int64) {
+	if m.addtenant_id != nil {
+		*m.addtenant_id += u
+	} else {
+		m.addtenant_id = &u
+	}
+}
+
+// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
+func (m *CloudFileTagMutation) AddedTenantID() (r int64, exists bool) {
+	v := m.addtenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *CloudFileTagMutation) ResetTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
+}
+
 // SetName sets the "name" field.
 func (m *CloudFileTagMutation) SetName(s string) {
 	m.name = &s
@@ -1429,7 +1574,7 @@ func (m *CloudFileTagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CloudFileTagMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.created_at != nil {
 		fields = append(fields, cloudfiletag.FieldCreatedAt)
 	}
@@ -1438,6 +1583,9 @@ func (m *CloudFileTagMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, cloudfiletag.FieldStatus)
+	}
+	if m.tenant_id != nil {
+		fields = append(fields, cloudfiletag.FieldTenantID)
 	}
 	if m.name != nil {
 		fields = append(fields, cloudfiletag.FieldName)
@@ -1459,6 +1607,8 @@ func (m *CloudFileTagMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case cloudfiletag.FieldStatus:
 		return m.Status()
+	case cloudfiletag.FieldTenantID:
+		return m.TenantID()
 	case cloudfiletag.FieldName:
 		return m.Name()
 	case cloudfiletag.FieldRemark:
@@ -1478,6 +1628,8 @@ func (m *CloudFileTagMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldUpdatedAt(ctx)
 	case cloudfiletag.FieldStatus:
 		return m.OldStatus(ctx)
+	case cloudfiletag.FieldTenantID:
+		return m.OldTenantID(ctx)
 	case cloudfiletag.FieldName:
 		return m.OldName(ctx)
 	case cloudfiletag.FieldRemark:
@@ -1512,6 +1664,13 @@ func (m *CloudFileTagMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case cloudfiletag.FieldTenantID:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
+		return nil
 	case cloudfiletag.FieldName:
 		v, ok := value.(string)
 		if !ok {
@@ -1537,6 +1696,9 @@ func (m *CloudFileTagMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, cloudfiletag.FieldStatus)
 	}
+	if m.addtenant_id != nil {
+		fields = append(fields, cloudfiletag.FieldTenantID)
+	}
 	return fields
 }
 
@@ -1547,6 +1709,8 @@ func (m *CloudFileTagMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case cloudfiletag.FieldStatus:
 		return m.AddedStatus()
+	case cloudfiletag.FieldTenantID:
+		return m.AddedTenantID()
 	}
 	return nil, false
 }
@@ -1562,6 +1726,13 @@ func (m *CloudFileTagMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
+		return nil
+	case cloudfiletag.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTenantID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown CloudFileTag numeric field %s", name)
@@ -1613,6 +1784,9 @@ func (m *CloudFileTagMutation) ResetField(name string) error {
 		return nil
 	case cloudfiletag.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case cloudfiletag.FieldTenantID:
+		m.ResetTenantID()
 		return nil
 	case cloudfiletag.FieldName:
 		m.ResetName()
@@ -1718,6 +1892,8 @@ type FileMutation struct {
 	updated_at    *time.Time
 	status        *uint8
 	addstatus     *int8
+	tenant_id     *uint64
+	addtenant_id  *int64
 	name          *string
 	file_type     *uint8
 	addfile_type  *int8
@@ -1979,6 +2155,62 @@ func (m *FileMutation) ResetStatus() {
 	m.status = nil
 	m.addstatus = nil
 	delete(m.clearedFields, file.FieldStatus)
+}
+
+// SetTenantID sets the "tenant_id" field.
+func (m *FileMutation) SetTenantID(u uint64) {
+	m.tenant_id = &u
+	m.addtenant_id = nil
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *FileMutation) TenantID() (r uint64, exists bool) {
+	v := m.tenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldTenantID(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// AddTenantID adds u to the "tenant_id" field.
+func (m *FileMutation) AddTenantID(u int64) {
+	if m.addtenant_id != nil {
+		*m.addtenant_id += u
+	} else {
+		m.addtenant_id = &u
+	}
+}
+
+// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
+func (m *FileMutation) AddedTenantID() (r int64, exists bool) {
+	v := m.addtenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *FileMutation) ResetTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
 }
 
 // SetName sets the "name" field.
@@ -2325,7 +2557,7 @@ func (m *FileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, file.FieldCreatedAt)
 	}
@@ -2334,6 +2566,9 @@ func (m *FileMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, file.FieldStatus)
+	}
+	if m.tenant_id != nil {
+		fields = append(fields, file.FieldTenantID)
 	}
 	if m.name != nil {
 		fields = append(fields, file.FieldName)
@@ -2367,6 +2602,8 @@ func (m *FileMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case file.FieldStatus:
 		return m.Status()
+	case file.FieldTenantID:
+		return m.TenantID()
 	case file.FieldName:
 		return m.Name()
 	case file.FieldFileType:
@@ -2394,6 +2631,8 @@ func (m *FileMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldUpdatedAt(ctx)
 	case file.FieldStatus:
 		return m.OldStatus(ctx)
+	case file.FieldTenantID:
+		return m.OldTenantID(ctx)
 	case file.FieldName:
 		return m.OldName(ctx)
 	case file.FieldFileType:
@@ -2435,6 +2674,13 @@ func (m *FileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
+		return nil
+	case file.FieldTenantID:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
 		return nil
 	case file.FieldName:
 		v, ok := value.(string)
@@ -2489,6 +2735,9 @@ func (m *FileMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, file.FieldStatus)
 	}
+	if m.addtenant_id != nil {
+		fields = append(fields, file.FieldTenantID)
+	}
 	if m.addfile_type != nil {
 		fields = append(fields, file.FieldFileType)
 	}
@@ -2505,6 +2754,8 @@ func (m *FileMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case file.FieldStatus:
 		return m.AddedStatus()
+	case file.FieldTenantID:
+		return m.AddedTenantID()
 	case file.FieldFileType:
 		return m.AddedFileType()
 	case file.FieldSize:
@@ -2524,6 +2775,13 @@ func (m *FileMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
+		return nil
+	case file.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTenantID(v)
 		return nil
 	case file.FieldFileType:
 		v, ok := value.(int8)
@@ -2583,6 +2841,9 @@ func (m *FileMutation) ResetField(name string) error {
 		return nil
 	case file.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case file.FieldTenantID:
+		m.ResetTenantID()
 		return nil
 	case file.FieldName:
 		m.ResetName()
@@ -2700,6 +2961,8 @@ type FileTagMutation struct {
 	updated_at    *time.Time
 	status        *uint8
 	addstatus     *int8
+	tenant_id     *uint64
+	addtenant_id  *int64
 	name          *string
 	remark        *string
 	clearedFields map[string]struct{}
@@ -2957,6 +3220,62 @@ func (m *FileTagMutation) ResetStatus() {
 	delete(m.clearedFields, filetag.FieldStatus)
 }
 
+// SetTenantID sets the "tenant_id" field.
+func (m *FileTagMutation) SetTenantID(u uint64) {
+	m.tenant_id = &u
+	m.addtenant_id = nil
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *FileTagMutation) TenantID() (r uint64, exists bool) {
+	v := m.tenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the FileTag entity.
+// If the FileTag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileTagMutation) OldTenantID(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// AddTenantID adds u to the "tenant_id" field.
+func (m *FileTagMutation) AddTenantID(u int64) {
+	if m.addtenant_id != nil {
+		*m.addtenant_id += u
+	} else {
+		m.addtenant_id = &u
+	}
+}
+
+// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
+func (m *FileTagMutation) AddedTenantID() (r int64, exists bool) {
+	v := m.addtenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *FileTagMutation) ResetTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
+}
+
 // SetName sets the "name" field.
 func (m *FileTagMutation) SetName(s string) {
 	m.name = &s
@@ -3130,7 +3449,7 @@ func (m *FileTagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileTagMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.created_at != nil {
 		fields = append(fields, filetag.FieldCreatedAt)
 	}
@@ -3139,6 +3458,9 @@ func (m *FileTagMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, filetag.FieldStatus)
+	}
+	if m.tenant_id != nil {
+		fields = append(fields, filetag.FieldTenantID)
 	}
 	if m.name != nil {
 		fields = append(fields, filetag.FieldName)
@@ -3160,6 +3482,8 @@ func (m *FileTagMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case filetag.FieldStatus:
 		return m.Status()
+	case filetag.FieldTenantID:
+		return m.TenantID()
 	case filetag.FieldName:
 		return m.Name()
 	case filetag.FieldRemark:
@@ -3179,6 +3503,8 @@ func (m *FileTagMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case filetag.FieldStatus:
 		return m.OldStatus(ctx)
+	case filetag.FieldTenantID:
+		return m.OldTenantID(ctx)
 	case filetag.FieldName:
 		return m.OldName(ctx)
 	case filetag.FieldRemark:
@@ -3213,6 +3539,13 @@ func (m *FileTagMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case filetag.FieldTenantID:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
+		return nil
 	case filetag.FieldName:
 		v, ok := value.(string)
 		if !ok {
@@ -3238,6 +3571,9 @@ func (m *FileTagMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, filetag.FieldStatus)
 	}
+	if m.addtenant_id != nil {
+		fields = append(fields, filetag.FieldTenantID)
+	}
 	return fields
 }
 
@@ -3248,6 +3584,8 @@ func (m *FileTagMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case filetag.FieldStatus:
 		return m.AddedStatus()
+	case filetag.FieldTenantID:
+		return m.AddedTenantID()
 	}
 	return nil, false
 }
@@ -3263,6 +3601,13 @@ func (m *FileTagMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
+		return nil
+	case filetag.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTenantID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown FileTag numeric field %s", name)
@@ -3314,6 +3659,9 @@ func (m *FileTagMutation) ResetField(name string) error {
 		return nil
 	case filetag.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case filetag.FieldTenantID:
+		m.ResetTenantID()
 		return nil
 	case filetag.FieldName:
 		m.ResetName()
@@ -3418,6 +3766,8 @@ type StorageProviderMutation struct {
 	created_at        *time.Time
 	updated_at        *time.Time
 	state             *bool
+	tenant_id         *uint64
+	addtenant_id      *int64
 	name              *string
 	bucket            *string
 	secret_id         *string
@@ -3660,6 +4010,62 @@ func (m *StorageProviderMutation) StateCleared() bool {
 func (m *StorageProviderMutation) ResetState() {
 	m.state = nil
 	delete(m.clearedFields, storageprovider.FieldState)
+}
+
+// SetTenantID sets the "tenant_id" field.
+func (m *StorageProviderMutation) SetTenantID(u uint64) {
+	m.tenant_id = &u
+	m.addtenant_id = nil
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *StorageProviderMutation) TenantID() (r uint64, exists bool) {
+	v := m.tenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldTenantID(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// AddTenantID adds u to the "tenant_id" field.
+func (m *StorageProviderMutation) AddTenantID(u int64) {
+	if m.addtenant_id != nil {
+		*m.addtenant_id += u
+	} else {
+		m.addtenant_id = &u
+	}
+}
+
+// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
+func (m *StorageProviderMutation) AddedTenantID() (r int64, exists bool) {
+	v := m.addtenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *StorageProviderMutation) ResetTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
 }
 
 // SetName sets the "name" field.
@@ -4136,7 +4542,7 @@ func (m *StorageProviderMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *StorageProviderMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.created_at != nil {
 		fields = append(fields, storageprovider.FieldCreatedAt)
 	}
@@ -4145,6 +4551,9 @@ func (m *StorageProviderMutation) Fields() []string {
 	}
 	if m.state != nil {
 		fields = append(fields, storageprovider.FieldState)
+	}
+	if m.tenant_id != nil {
+		fields = append(fields, storageprovider.FieldTenantID)
 	}
 	if m.name != nil {
 		fields = append(fields, storageprovider.FieldName)
@@ -4190,6 +4599,8 @@ func (m *StorageProviderMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case storageprovider.FieldState:
 		return m.State()
+	case storageprovider.FieldTenantID:
+		return m.TenantID()
 	case storageprovider.FieldName:
 		return m.Name()
 	case storageprovider.FieldBucket:
@@ -4225,6 +4636,8 @@ func (m *StorageProviderMutation) OldField(ctx context.Context, name string) (en
 		return m.OldUpdatedAt(ctx)
 	case storageprovider.FieldState:
 		return m.OldState(ctx)
+	case storageprovider.FieldTenantID:
+		return m.OldTenantID(ctx)
 	case storageprovider.FieldName:
 		return m.OldName(ctx)
 	case storageprovider.FieldBucket:
@@ -4274,6 +4687,13 @@ func (m *StorageProviderMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetState(v)
+		return nil
+	case storageprovider.FieldTenantID:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
 		return nil
 	case storageprovider.FieldName:
 		v, ok := value.(string)
@@ -4352,13 +4772,21 @@ func (m *StorageProviderMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *StorageProviderMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addtenant_id != nil {
+		fields = append(fields, storageprovider.FieldTenantID)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *StorageProviderMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case storageprovider.FieldTenantID:
+		return m.AddedTenantID()
+	}
 	return nil, false
 }
 
@@ -4367,6 +4795,13 @@ func (m *StorageProviderMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *StorageProviderMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case storageprovider.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTenantID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown StorageProvider numeric field %s", name)
 }
@@ -4423,6 +4858,9 @@ func (m *StorageProviderMutation) ResetField(name string) error {
 		return nil
 	case storageprovider.FieldState:
 		m.ResetState()
+		return nil
+	case storageprovider.FieldTenantID:
+		m.ResetTenantID()
 		return nil
 	case storageprovider.FieldName:
 		m.ResetName()

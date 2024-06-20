@@ -64,6 +64,20 @@ func (fc *FileCreate) SetNillableStatus(u *uint8) *FileCreate {
 	return fc
 }
 
+// SetTenantID sets the "tenant_id" field.
+func (fc *FileCreate) SetTenantID(u uint64) *FileCreate {
+	fc.mutation.SetTenantID(u)
+	return fc
+}
+
+// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableTenantID(u *uint64) *FileCreate {
+	if u != nil {
+		fc.SetTenantID(*u)
+	}
+	return fc
+}
+
 // SetName sets the "name" field.
 func (fc *FileCreate) SetName(s string) *FileCreate {
 	fc.mutation.SetName(s)
@@ -136,7 +150,9 @@ func (fc *FileCreate) Mutation() *FileMutation {
 
 // Save creates the File in the database.
 func (fc *FileCreate) Save(ctx context.Context) (*File, error) {
-	fc.defaults()
+	if err := fc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, fc.sqlSave, fc.mutation, fc.hooks)
 }
 
@@ -163,12 +179,18 @@ func (fc *FileCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (fc *FileCreate) defaults() {
+func (fc *FileCreate) defaults() error {
 	if _, ok := fc.mutation.CreatedAt(); !ok {
+		if file.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized file.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
 		v := file.DefaultCreatedAt()
 		fc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := fc.mutation.UpdatedAt(); !ok {
+		if file.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized file.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := file.DefaultUpdatedAt()
 		fc.mutation.SetUpdatedAt(v)
 	}
@@ -176,10 +198,18 @@ func (fc *FileCreate) defaults() {
 		v := file.DefaultStatus
 		fc.mutation.SetStatus(v)
 	}
+	if _, ok := fc.mutation.TenantID(); !ok {
+		v := file.DefaultTenantID
+		fc.mutation.SetTenantID(v)
+	}
 	if _, ok := fc.mutation.ID(); !ok {
+		if file.DefaultID == nil {
+			return fmt.Errorf("ent: uninitialized file.DefaultID (forgotten import ent/runtime?)")
+		}
 		v := file.DefaultID()
 		fc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -189,6 +219,9 @@ func (fc *FileCreate) check() error {
 	}
 	if _, ok := fc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "File.updated_at"`)}
+	}
+	if _, ok := fc.mutation.TenantID(); !ok {
+		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "File.tenant_id"`)}
 	}
 	if _, ok := fc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "File.name"`)}
@@ -254,6 +287,10 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := fc.mutation.Status(); ok {
 		_spec.SetField(file.FieldStatus, field.TypeUint8, value)
 		_node.Status = value
+	}
+	if value, ok := fc.mutation.TenantID(); ok {
+		_spec.SetField(file.FieldTenantID, field.TypeUint64, value)
+		_node.TenantID = value
 	}
 	if value, ok := fc.mutation.Name(); ok {
 		_spec.SetField(file.FieldName, field.TypeString, value)

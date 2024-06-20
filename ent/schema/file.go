@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"context"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -8,6 +9,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
+	ent2 "github.com/suyuan32/simple-admin-file/ent"
+	"github.com/suyuan32/simple-admin-file/ent/hook"
 )
 
 // File holds the schema definition for the File entity.
@@ -42,6 +46,7 @@ func (File) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.UUIDMixin{},
 		mixins.StatusMixin{},
+		mixins.TenantMixin{},
 	}
 }
 
@@ -56,6 +61,23 @@ func (File) Indexes() []ent.Index {
 func (File) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("tags", FileTag.Type).Ref("files"),
+	}
+}
+
+// Hooks of the File.
+func (File) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			func(next ent.Mutator) ent.Mutator {
+				return hook.FileFunc(func(ctx context.Context, m *ent2.FileMutation) (ent.Value, error) {
+					if !tenantctx.GetTenantAdminCtx(ctx) {
+						m.SetTenantID(tenantctx.GetTenantIDFromCtx(ctx))
+					}
+					return next.Mutate(ctx, m)
+				})
+			},
+			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
+		),
 	}
 }
 

@@ -64,6 +64,20 @@ func (ftc *FileTagCreate) SetNillableStatus(u *uint8) *FileTagCreate {
 	return ftc
 }
 
+// SetTenantID sets the "tenant_id" field.
+func (ftc *FileTagCreate) SetTenantID(u uint64) *FileTagCreate {
+	ftc.mutation.SetTenantID(u)
+	return ftc
+}
+
+// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
+func (ftc *FileTagCreate) SetNillableTenantID(u *uint64) *FileTagCreate {
+	if u != nil {
+		ftc.SetTenantID(*u)
+	}
+	return ftc
+}
+
 // SetName sets the "name" field.
 func (ftc *FileTagCreate) SetName(s string) *FileTagCreate {
 	ftc.mutation.SetName(s)
@@ -112,7 +126,9 @@ func (ftc *FileTagCreate) Mutation() *FileTagMutation {
 
 // Save creates the FileTag in the database.
 func (ftc *FileTagCreate) Save(ctx context.Context) (*FileTag, error) {
-	ftc.defaults()
+	if err := ftc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ftc.sqlSave, ftc.mutation, ftc.hooks)
 }
 
@@ -139,12 +155,18 @@ func (ftc *FileTagCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ftc *FileTagCreate) defaults() {
+func (ftc *FileTagCreate) defaults() error {
 	if _, ok := ftc.mutation.CreatedAt(); !ok {
+		if filetag.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized filetag.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
 		v := filetag.DefaultCreatedAt()
 		ftc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ftc.mutation.UpdatedAt(); !ok {
+		if filetag.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized filetag.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := filetag.DefaultUpdatedAt()
 		ftc.mutation.SetUpdatedAt(v)
 	}
@@ -152,6 +174,11 @@ func (ftc *FileTagCreate) defaults() {
 		v := filetag.DefaultStatus
 		ftc.mutation.SetStatus(v)
 	}
+	if _, ok := ftc.mutation.TenantID(); !ok {
+		v := filetag.DefaultTenantID
+		ftc.mutation.SetTenantID(v)
+	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -161,6 +188,9 @@ func (ftc *FileTagCreate) check() error {
 	}
 	if _, ok := ftc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "FileTag.updated_at"`)}
+	}
+	if _, ok := ftc.mutation.TenantID(); !ok {
+		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "FileTag.tenant_id"`)}
 	}
 	if _, ok := ftc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "FileTag.name"`)}
@@ -208,6 +238,10 @@ func (ftc *FileTagCreate) createSpec() (*FileTag, *sqlgraph.CreateSpec) {
 	if value, ok := ftc.mutation.Status(); ok {
 		_spec.SetField(filetag.FieldStatus, field.TypeUint8, value)
 		_node.Status = value
+	}
+	if value, ok := ftc.mutation.TenantID(); ok {
+		_spec.SetField(filetag.FieldTenantID, field.TypeUint64, value)
+		_node.TenantID = value
 	}
 	if value, ok := ftc.mutation.Name(); ok {
 		_spec.SetField(filetag.FieldName, field.TypeString, value)

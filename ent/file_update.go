@@ -203,7 +203,9 @@ func (fu *FileUpdate) RemoveTags(f ...*FileTag) *FileUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fu *FileUpdate) Save(ctx context.Context) (int, error) {
-	fu.defaults()
+	if err := fu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, fu.sqlSave, fu.mutation, fu.hooks)
 }
 
@@ -230,11 +232,15 @@ func (fu *FileUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (fu *FileUpdate) defaults() {
+func (fu *FileUpdate) defaults() error {
 	if _, ok := fu.mutation.UpdatedAt(); !ok {
+		if file.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized file.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := file.UpdateDefaultUpdatedAt()
 		fu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -534,7 +540,9 @@ func (fuo *FileUpdateOne) Select(field string, fields ...string) *FileUpdateOne 
 
 // Save executes the query and returns the updated File entity.
 func (fuo *FileUpdateOne) Save(ctx context.Context) (*File, error) {
-	fuo.defaults()
+	if err := fuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, fuo.sqlSave, fuo.mutation, fuo.hooks)
 }
 
@@ -561,11 +569,15 @@ func (fuo *FileUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (fuo *FileUpdateOne) defaults() {
+func (fuo *FileUpdateOne) defaults() error {
 	if _, ok := fuo.mutation.UpdatedAt(); !ok {
+		if file.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized file.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := file.UpdateDefaultUpdatedAt()
 		fuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {

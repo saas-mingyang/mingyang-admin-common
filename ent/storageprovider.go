@@ -23,6 +23,8 @@ type StorageProvider struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// State true: normal false: ban | 状态 true 正常 false 禁用
 	State bool `json:"state,omitempty"`
+	// Tenant ID | 租户 ID
+	TenantID uint64 `json:"tenant_id,omitempty"`
 	// The cloud storage service name | 服务名称
 	Name string `json:"name,omitempty"`
 	// The cloud storage bucket name | 云存储服务的存储桶
@@ -74,7 +76,7 @@ func (*StorageProvider) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case storageprovider.FieldState, storageprovider.FieldIsDefault, storageprovider.FieldUseCdn:
 			values[i] = new(sql.NullBool)
-		case storageprovider.FieldID:
+		case storageprovider.FieldID, storageprovider.FieldTenantID:
 			values[i] = new(sql.NullInt64)
 		case storageprovider.FieldName, storageprovider.FieldBucket, storageprovider.FieldSecretID, storageprovider.FieldSecretKey, storageprovider.FieldEndpoint, storageprovider.FieldFolder, storageprovider.FieldRegion, storageprovider.FieldCdnURL:
 			values[i] = new(sql.NullString)
@@ -118,6 +120,12 @@ func (sp *StorageProvider) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
 				sp.State = value.Bool
+			}
+		case storageprovider.FieldTenantID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
+			} else if value.Valid {
+				sp.TenantID = uint64(value.Int64)
 			}
 		case storageprovider.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -228,6 +236,9 @@ func (sp *StorageProvider) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("state=")
 	builder.WriteString(fmt.Sprintf("%v", sp.State))
+	builder.WriteString(", ")
+	builder.WriteString("tenant_id=")
+	builder.WriteString(fmt.Sprintf("%v", sp.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(sp.Name)

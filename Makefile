@@ -26,7 +26,7 @@ PROJECT_BUILD_SUFFIX=api
 SWAGGER_TYPE=json
 
 # Ent enabled features | Ent 启用的官方特性
-ENT_FEATURE=sql/execquery,intercept
+ENT_FEATURE=sql/execquery,intercept,privacy,entql
 
 # Auto generate API data for initialization | 自动生成 API 初始化数据
 AUTO_API_INIT_DATA=true

@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"context"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -8,6 +9,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
+	ent2 "github.com/suyuan32/simple-admin-file/ent"
+	"github.com/suyuan32/simple-admin-file/ent/hook"
 )
 
 // CloudFile holds the schema definition for the CloudFile entity.
@@ -49,6 +53,7 @@ func (CloudFile) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.UUIDMixin{},
 		mixins.StateMixin{},
+		mixins.TenantMixin{},
 	}
 }
 
@@ -57,6 +62,23 @@ func (CloudFile) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name"),
 		index.Fields("file_type"),
+	}
+}
+
+// Hooks of the CloudFile.
+func (CloudFile) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			func(next ent.Mutator) ent.Mutator {
+				return hook.CloudFileFunc(func(ctx context.Context, m *ent2.CloudFileMutation) (ent.Value, error) {
+					if !tenantctx.GetTenantAdminCtx(ctx) {
+						m.SetTenantID(tenantctx.GetTenantIDFromCtx(ctx))
+					}
+					return next.Mutate(ctx, m)
+				})
+			},
+			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
+		),
 	}
 }
 

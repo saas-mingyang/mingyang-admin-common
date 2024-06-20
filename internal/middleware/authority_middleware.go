@@ -3,17 +3,17 @@ package middleware
 import (
 	"context"
 	"errors"
+	"github.com/casbin/casbin/v2"
 	"github.com/redis/go-redis/v9"
 	"github.com/suyuan32/simple-admin-common/config"
-	"github.com/suyuan32/simple-admin-common/utils/jwt"
-	"net/http"
-	"strings"
-
-	"github.com/casbin/casbin/v2"
 	"github.com/suyuan32/simple-admin-common/enum/errorcode"
+	"github.com/suyuan32/simple-admin-common/utils/jwt"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/rest/enum"
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"net/http"
+	"strings"
 
 	"github.com/suyuan32/simple-admin-common/i18n"
 )
@@ -39,7 +39,7 @@ func (m *AuthorityMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		// get the method
 		act := r.Method
 		// get the role id
-		roleIds := r.Context().Value("roleId").(string)
+		roleIds := strings.Split(r.Context().Value("roleId").(string), ",")
 
 		// check jwt blacklist
 		jwtResult, err := m.Rds.Get(context.Background(), config.RedisTokenPrefix+jwt.StripBearerPrefixFromToken(r.Header.Get("Authorization"))).Result()
@@ -54,7 +54,7 @@ func (m *AuthorityMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		result := batchCheck(m.Cbn, roleIds, act, obj)
+		result := batchCheck(m.Cbn, roleIds, act, obj, r.Context().Value(enum.TENANT_ID_CTX_KEY).(string))
 
 		if result {
 			logx.Infow("HTTP/HTTPS Request", logx.Field("UUID", r.Context().Value("userId").(string)),
@@ -72,10 +72,10 @@ func (m *AuthorityMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func batchCheck(cbn *casbin.Enforcer, roleIds, act, obj string) bool {
+func batchCheck(cbn *casbin.Enforcer, roleIds []string, act, obj, domain string) bool {
 	var checkReq [][]any
-	for _, v := range strings.Split(roleIds, ",") {
-		checkReq = append(checkReq, []any{v, obj, act})
+	for _, v := range roleIds {
+		checkReq = append(checkReq, []any{v, obj, act, domain})
 	}
 
 	result, err := cbn.BatchEnforce(checkReq)

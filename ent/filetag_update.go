@@ -140,7 +140,9 @@ func (ftu *FileTagUpdate) RemoveFiles(f ...*File) *FileTagUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ftu *FileTagUpdate) Save(ctx context.Context) (int, error) {
-	ftu.defaults()
+	if err := ftu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ftu.sqlSave, ftu.mutation, ftu.hooks)
 }
 
@@ -167,11 +169,15 @@ func (ftu *FileTagUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ftu *FileTagUpdate) defaults() {
+func (ftu *FileTagUpdate) defaults() error {
 	if _, ok := ftu.mutation.UpdatedAt(); !ok {
+		if filetag.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized filetag.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := filetag.UpdateDefaultUpdatedAt()
 		ftu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (ftu *FileTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -392,7 +398,9 @@ func (ftuo *FileTagUpdateOne) Select(field string, fields ...string) *FileTagUpd
 
 // Save executes the query and returns the updated FileTag entity.
 func (ftuo *FileTagUpdateOne) Save(ctx context.Context) (*FileTag, error) {
-	ftuo.defaults()
+	if err := ftuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ftuo.sqlSave, ftuo.mutation, ftuo.hooks)
 }
 
@@ -419,11 +427,15 @@ func (ftuo *FileTagUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ftuo *FileTagUpdateOne) defaults() {
+func (ftuo *FileTagUpdateOne) defaults() error {
 	if _, ok := ftuo.mutation.UpdatedAt(); !ok {
+		if filetag.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized filetag.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
 		v := filetag.UpdateDefaultUpdatedAt()
 		ftuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 func (ftuo *FileTagUpdateOne) sqlSave(ctx context.Context) (_node *FileTag, err error) {

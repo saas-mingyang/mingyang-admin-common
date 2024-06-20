@@ -2,7 +2,184 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/suyuan32/simple-admin-file/ent/runtime.go
+import (
+	"time"
+
+	uuid "github.com/gofrs/uuid/v5"
+	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
+	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
+	"github.com/suyuan32/simple-admin-file/ent/file"
+	"github.com/suyuan32/simple-admin-file/ent/filetag"
+	"github.com/suyuan32/simple-admin-file/ent/schema"
+	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+)
+
+// The init function reads all schema descriptors with runtime code
+// (default values, validators, hooks and policies) and stitches it
+// to their package variables.
+func init() {
+	cloudfileMixin := schema.CloudFile{}.Mixin()
+	cloudfileHooks := schema.CloudFile{}.Hooks()
+	cloudfile.Hooks[0] = cloudfileHooks[0]
+	cloudfileMixinFields0 := cloudfileMixin[0].Fields()
+	_ = cloudfileMixinFields0
+	cloudfileMixinFields1 := cloudfileMixin[1].Fields()
+	_ = cloudfileMixinFields1
+	cloudfileMixinFields2 := cloudfileMixin[2].Fields()
+	_ = cloudfileMixinFields2
+	cloudfileFields := schema.CloudFile{}.Fields()
+	_ = cloudfileFields
+	// cloudfileDescCreatedAt is the schema descriptor for created_at field.
+	cloudfileDescCreatedAt := cloudfileMixinFields0[1].Descriptor()
+	// cloudfile.DefaultCreatedAt holds the default value on creation for the created_at field.
+	cloudfile.DefaultCreatedAt = cloudfileDescCreatedAt.Default.(func() time.Time)
+	// cloudfileDescUpdatedAt is the schema descriptor for updated_at field.
+	cloudfileDescUpdatedAt := cloudfileMixinFields0[2].Descriptor()
+	// cloudfile.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	cloudfile.DefaultUpdatedAt = cloudfileDescUpdatedAt.Default.(func() time.Time)
+	// cloudfile.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	cloudfile.UpdateDefaultUpdatedAt = cloudfileDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// cloudfileDescState is the schema descriptor for state field.
+	cloudfileDescState := cloudfileMixinFields1[0].Descriptor()
+	// cloudfile.DefaultState holds the default value on creation for the state field.
+	cloudfile.DefaultState = cloudfileDescState.Default.(bool)
+	// cloudfileDescTenantID is the schema descriptor for tenant_id field.
+	cloudfileDescTenantID := cloudfileMixinFields2[0].Descriptor()
+	// cloudfile.DefaultTenantID holds the default value on creation for the tenant_id field.
+	cloudfile.DefaultTenantID = cloudfileDescTenantID.Default.(uint64)
+	// cloudfileDescID is the schema descriptor for id field.
+	cloudfileDescID := cloudfileMixinFields0[0].Descriptor()
+	// cloudfile.DefaultID holds the default value on creation for the id field.
+	cloudfile.DefaultID = cloudfileDescID.Default.(func() uuid.UUID)
+	cloudfiletagMixin := schema.CloudFileTag{}.Mixin()
+	cloudfiletagHooks := schema.CloudFileTag{}.Hooks()
+	cloudfiletag.Hooks[0] = cloudfiletagHooks[0]
+	cloudfiletagMixinFields0 := cloudfiletagMixin[0].Fields()
+	_ = cloudfiletagMixinFields0
+	cloudfiletagMixinFields1 := cloudfiletagMixin[1].Fields()
+	_ = cloudfiletagMixinFields1
+	cloudfiletagMixinFields2 := cloudfiletagMixin[2].Fields()
+	_ = cloudfiletagMixinFields2
+	cloudfiletagFields := schema.CloudFileTag{}.Fields()
+	_ = cloudfiletagFields
+	// cloudfiletagDescCreatedAt is the schema descriptor for created_at field.
+	cloudfiletagDescCreatedAt := cloudfiletagMixinFields0[1].Descriptor()
+	// cloudfiletag.DefaultCreatedAt holds the default value on creation for the created_at field.
+	cloudfiletag.DefaultCreatedAt = cloudfiletagDescCreatedAt.Default.(func() time.Time)
+	// cloudfiletagDescUpdatedAt is the schema descriptor for updated_at field.
+	cloudfiletagDescUpdatedAt := cloudfiletagMixinFields0[2].Descriptor()
+	// cloudfiletag.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	cloudfiletag.DefaultUpdatedAt = cloudfiletagDescUpdatedAt.Default.(func() time.Time)
+	// cloudfiletag.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	cloudfiletag.UpdateDefaultUpdatedAt = cloudfiletagDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// cloudfiletagDescStatus is the schema descriptor for status field.
+	cloudfiletagDescStatus := cloudfiletagMixinFields1[0].Descriptor()
+	// cloudfiletag.DefaultStatus holds the default value on creation for the status field.
+	cloudfiletag.DefaultStatus = cloudfiletagDescStatus.Default.(uint8)
+	// cloudfiletagDescTenantID is the schema descriptor for tenant_id field.
+	cloudfiletagDescTenantID := cloudfiletagMixinFields2[0].Descriptor()
+	// cloudfiletag.DefaultTenantID holds the default value on creation for the tenant_id field.
+	cloudfiletag.DefaultTenantID = cloudfiletagDescTenantID.Default.(uint64)
+	fileMixin := schema.File{}.Mixin()
+	fileHooks := schema.File{}.Hooks()
+	file.Hooks[0] = fileHooks[0]
+	fileMixinFields0 := fileMixin[0].Fields()
+	_ = fileMixinFields0
+	fileMixinFields1 := fileMixin[1].Fields()
+	_ = fileMixinFields1
+	fileMixinFields2 := fileMixin[2].Fields()
+	_ = fileMixinFields2
+	fileFields := schema.File{}.Fields()
+	_ = fileFields
+	// fileDescCreatedAt is the schema descriptor for created_at field.
+	fileDescCreatedAt := fileMixinFields0[1].Descriptor()
+	// file.DefaultCreatedAt holds the default value on creation for the created_at field.
+	file.DefaultCreatedAt = fileDescCreatedAt.Default.(func() time.Time)
+	// fileDescUpdatedAt is the schema descriptor for updated_at field.
+	fileDescUpdatedAt := fileMixinFields0[2].Descriptor()
+	// file.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	file.DefaultUpdatedAt = fileDescUpdatedAt.Default.(func() time.Time)
+	// file.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	file.UpdateDefaultUpdatedAt = fileDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// fileDescStatus is the schema descriptor for status field.
+	fileDescStatus := fileMixinFields1[0].Descriptor()
+	// file.DefaultStatus holds the default value on creation for the status field.
+	file.DefaultStatus = fileDescStatus.Default.(uint8)
+	// fileDescTenantID is the schema descriptor for tenant_id field.
+	fileDescTenantID := fileMixinFields2[0].Descriptor()
+	// file.DefaultTenantID holds the default value on creation for the tenant_id field.
+	file.DefaultTenantID = fileDescTenantID.Default.(uint64)
+	// fileDescID is the schema descriptor for id field.
+	fileDescID := fileMixinFields0[0].Descriptor()
+	// file.DefaultID holds the default value on creation for the id field.
+	file.DefaultID = fileDescID.Default.(func() uuid.UUID)
+	filetagMixin := schema.FileTag{}.Mixin()
+	filetagHooks := schema.FileTag{}.Hooks()
+	filetag.Hooks[0] = filetagHooks[0]
+	filetagMixinFields0 := filetagMixin[0].Fields()
+	_ = filetagMixinFields0
+	filetagMixinFields1 := filetagMixin[1].Fields()
+	_ = filetagMixinFields1
+	filetagMixinFields2 := filetagMixin[2].Fields()
+	_ = filetagMixinFields2
+	filetagFields := schema.FileTag{}.Fields()
+	_ = filetagFields
+	// filetagDescCreatedAt is the schema descriptor for created_at field.
+	filetagDescCreatedAt := filetagMixinFields0[1].Descriptor()
+	// filetag.DefaultCreatedAt holds the default value on creation for the created_at field.
+	filetag.DefaultCreatedAt = filetagDescCreatedAt.Default.(func() time.Time)
+	// filetagDescUpdatedAt is the schema descriptor for updated_at field.
+	filetagDescUpdatedAt := filetagMixinFields0[2].Descriptor()
+	// filetag.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	filetag.DefaultUpdatedAt = filetagDescUpdatedAt.Default.(func() time.Time)
+	// filetag.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	filetag.UpdateDefaultUpdatedAt = filetagDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// filetagDescStatus is the schema descriptor for status field.
+	filetagDescStatus := filetagMixinFields1[0].Descriptor()
+	// filetag.DefaultStatus holds the default value on creation for the status field.
+	filetag.DefaultStatus = filetagDescStatus.Default.(uint8)
+	// filetagDescTenantID is the schema descriptor for tenant_id field.
+	filetagDescTenantID := filetagMixinFields2[0].Descriptor()
+	// filetag.DefaultTenantID holds the default value on creation for the tenant_id field.
+	filetag.DefaultTenantID = filetagDescTenantID.Default.(uint64)
+	storageproviderMixin := schema.StorageProvider{}.Mixin()
+	storageproviderHooks := schema.StorageProvider{}.Hooks()
+	storageprovider.Hooks[0] = storageproviderHooks[0]
+	storageproviderMixinFields0 := storageproviderMixin[0].Fields()
+	_ = storageproviderMixinFields0
+	storageproviderMixinFields1 := storageproviderMixin[1].Fields()
+	_ = storageproviderMixinFields1
+	storageproviderMixinFields2 := storageproviderMixin[2].Fields()
+	_ = storageproviderMixinFields2
+	storageproviderFields := schema.StorageProvider{}.Fields()
+	_ = storageproviderFields
+	// storageproviderDescCreatedAt is the schema descriptor for created_at field.
+	storageproviderDescCreatedAt := storageproviderMixinFields0[1].Descriptor()
+	// storageprovider.DefaultCreatedAt holds the default value on creation for the created_at field.
+	storageprovider.DefaultCreatedAt = storageproviderDescCreatedAt.Default.(func() time.Time)
+	// storageproviderDescUpdatedAt is the schema descriptor for updated_at field.
+	storageproviderDescUpdatedAt := storageproviderMixinFields0[2].Descriptor()
+	// storageprovider.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	storageprovider.DefaultUpdatedAt = storageproviderDescUpdatedAt.Default.(func() time.Time)
+	// storageprovider.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	storageprovider.UpdateDefaultUpdatedAt = storageproviderDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// storageproviderDescState is the schema descriptor for state field.
+	storageproviderDescState := storageproviderMixinFields1[0].Descriptor()
+	// storageprovider.DefaultState holds the default value on creation for the state field.
+	storageprovider.DefaultState = storageproviderDescState.Default.(bool)
+	// storageproviderDescTenantID is the schema descriptor for tenant_id field.
+	storageproviderDescTenantID := storageproviderMixinFields2[0].Descriptor()
+	// storageprovider.DefaultTenantID holds the default value on creation for the tenant_id field.
+	storageprovider.DefaultTenantID = storageproviderDescTenantID.Default.(uint64)
+	// storageproviderDescIsDefault is the schema descriptor for is_default field.
+	storageproviderDescIsDefault := storageproviderFields[7].Descriptor()
+	// storageprovider.DefaultIsDefault holds the default value on creation for the is_default field.
+	storageprovider.DefaultIsDefault = storageproviderDescIsDefault.Default.(bool)
+	// storageproviderDescUseCdn is the schema descriptor for use_cdn field.
+	storageproviderDescUseCdn := storageproviderFields[8].Descriptor()
+	// storageprovider.DefaultUseCdn holds the default value on creation for the use_cdn field.
+	storageprovider.DefaultUseCdn = storageproviderDescUseCdn.Default.(bool)
+}
 
 const (
 	Version = "v0.13.1"                                         // Version of ent codegen.
