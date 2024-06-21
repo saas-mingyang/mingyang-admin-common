@@ -2,6 +2,7 @@ package storageprovider
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
 	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 	"github.com/suyuan32/simple-admin-file/internal/svc"
@@ -29,6 +30,8 @@ func NewDeleteStorageProviderLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *DeleteStorageProviderLogic) DeleteStorageProvider(req *types.IDsReq) (*types.BaseMsgResp, error) {
+	tenantId := tenantctx.GetTenantIDFromCtx(l.ctx)
+
 	check, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.HasStorageProvidersWith(storageprovider.IDIn(req.Ids...))).
 		Count(l.ctx)
 
@@ -46,7 +49,10 @@ func (l *DeleteStorageProviderLogic) DeleteStorageProvider(req *types.IDsReq) (*
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
 
-	l.svcCtx.CloudStorage = cloud.NewCloudServiceGroup(l.svcCtx.DB)
+	err = cloud.AddTenantCloudServiceGroup(l.svcCtx.DB, l.svcCtx.CloudStorage, tenantId)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.BaseMsgResp{Msg: l.svcCtx.Trans.Trans(l.ctx, i18n.DeleteSuccess)}, nil
 }

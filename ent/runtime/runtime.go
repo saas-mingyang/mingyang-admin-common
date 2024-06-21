@@ -3,6 +3,7 @@
 package runtime
 
 import (
+	"context"
 	"time"
 
 	uuid "github.com/gofrs/uuid/v5"
@@ -12,6 +13,9 @@ import (
 	"github.com/suyuan32/simple-admin-file/ent/filetag"
 	"github.com/suyuan32/simple-admin-file/ent/schema"
 	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+
+	"entgo.io/ent"
+	"entgo.io/ent/privacy"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -19,8 +23,18 @@ import (
 // to their package variables.
 func init() {
 	cloudfileMixin := schema.CloudFile{}.Mixin()
+	cloudfile.Policy = privacy.NewPolicies(schema.CloudFile{})
+	cloudfile.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := cloudfile.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	cloudfileHooks := schema.CloudFile{}.Hooks()
-	cloudfile.Hooks[0] = cloudfileHooks[0]
+
+	cloudfile.Hooks[1] = cloudfileHooks[0]
 	cloudfileMixinFields0 := cloudfileMixin[0].Fields()
 	_ = cloudfileMixinFields0
 	cloudfileMixinFields1 := cloudfileMixin[1].Fields()
@@ -52,8 +66,18 @@ func init() {
 	// cloudfile.DefaultID holds the default value on creation for the id field.
 	cloudfile.DefaultID = cloudfileDescID.Default.(func() uuid.UUID)
 	cloudfiletagMixin := schema.CloudFileTag{}.Mixin()
+	cloudfiletag.Policy = privacy.NewPolicies(schema.CloudFileTag{})
+	cloudfiletag.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := cloudfiletag.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	cloudfiletagHooks := schema.CloudFileTag{}.Hooks()
-	cloudfiletag.Hooks[0] = cloudfiletagHooks[0]
+
+	cloudfiletag.Hooks[1] = cloudfiletagHooks[0]
 	cloudfiletagMixinFields0 := cloudfiletagMixin[0].Fields()
 	_ = cloudfiletagMixinFields0
 	cloudfiletagMixinFields1 := cloudfiletagMixin[1].Fields()
@@ -81,8 +105,18 @@ func init() {
 	// cloudfiletag.DefaultTenantID holds the default value on creation for the tenant_id field.
 	cloudfiletag.DefaultTenantID = cloudfiletagDescTenantID.Default.(uint64)
 	fileMixin := schema.File{}.Mixin()
+	file.Policy = privacy.NewPolicies(schema.File{})
+	file.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := file.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	fileHooks := schema.File{}.Hooks()
-	file.Hooks[0] = fileHooks[0]
+
+	file.Hooks[1] = fileHooks[0]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields1 := fileMixin[1].Fields()
@@ -114,8 +148,18 @@ func init() {
 	// file.DefaultID holds the default value on creation for the id field.
 	file.DefaultID = fileDescID.Default.(func() uuid.UUID)
 	filetagMixin := schema.FileTag{}.Mixin()
+	filetag.Policy = privacy.NewPolicies(schema.FileTag{})
+	filetag.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := filetag.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	filetagHooks := schema.FileTag{}.Hooks()
-	filetag.Hooks[0] = filetagHooks[0]
+
+	filetag.Hooks[1] = filetagHooks[0]
 	filetagMixinFields0 := filetagMixin[0].Fields()
 	_ = filetagMixinFields0
 	filetagMixinFields1 := filetagMixin[1].Fields()
@@ -143,8 +187,18 @@ func init() {
 	// filetag.DefaultTenantID holds the default value on creation for the tenant_id field.
 	filetag.DefaultTenantID = filetagDescTenantID.Default.(uint64)
 	storageproviderMixin := schema.StorageProvider{}.Mixin()
+	storageprovider.Policy = privacy.NewPolicies(schema.StorageProvider{})
+	storageprovider.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := storageprovider.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	storageproviderHooks := schema.StorageProvider{}.Hooks()
-	storageprovider.Hooks[0] = storageproviderHooks[0]
+
+	storageprovider.Hooks[1] = storageproviderHooks[0]
 	storageproviderMixinFields0 := storageproviderMixin[0].Fields()
 	_ = storageproviderMixinFields0
 	storageproviderMixinFields1 := storageproviderMixin[1].Fields()

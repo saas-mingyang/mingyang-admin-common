@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -400,6 +401,12 @@ func (cfq *CloudFileQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		cfq.sql = prev
+	}
+	if cloudfile.Policy == nil {
+		return errors.New("ent: uninitialized cloudfile.Policy (forgotten import ent/runtime?)")
+	}
+	if err := cloudfile.Policy.EvalQuery(ctx, cfq); err != nil {
+		return err
 	}
 	return nil
 }

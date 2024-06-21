@@ -12,6 +12,7 @@ import (
 	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	ent2 "github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/ent/hook"
+	"github.com/suyuan32/simple-admin-file/ent/privacy"
 )
 
 // CloudFileTag holds the schema definition for the CloudFileTag entity.
@@ -66,6 +67,10 @@ func (CloudFileTag) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
 		),
 	}
+}
+
+func (CloudFileTag) Policy() ent.Policy {
+	return privacy.FilterTenantRule()
 }
 
 func (CloudFileTag) Annotations() []schema.Annotation {

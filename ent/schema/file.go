@@ -12,6 +12,7 @@ import (
 	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	ent2 "github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/ent/hook"
+	"github.com/suyuan32/simple-admin-file/ent/privacy"
 )
 
 // File holds the schema definition for the File entity.
@@ -79,6 +80,10 @@ func (File) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
 		),
 	}
+}
+
+func (File) Policy() ent.Policy {
+	return privacy.FilterTenantRule()
 }
 
 func (File) Annotations() []schema.Annotation {

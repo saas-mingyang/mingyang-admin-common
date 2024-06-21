@@ -12,6 +12,7 @@ import (
 	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	ent2 "github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/ent/hook"
+	"github.com/suyuan32/simple-admin-file/ent/privacy"
 )
 
 // CloudFile holds the schema definition for the CloudFile entity.
@@ -80,6 +81,10 @@ func (CloudFile) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
 		),
 	}
+}
+
+func (CloudFile) Policy() ent.Policy {
+	return privacy.FilterTenantRule()
 }
 
 // Annotations of the CloudFile

@@ -29,6 +29,7 @@
 	},
 	"storage_provider": {
 		"hasFileError": "该提供商存在云文件，请先删除该提供商的所有云文件才可删除提供商",
-		"StorageProviderNotExist": "云存储服务商不存在"
+		"StorageProviderNotExist": "云存储服务商不存在",
+		"failedLoadProviderConfig": "加载云服务提供商失败，请联系管理员"
 	}
 }

@@ -10,10 +10,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/duke-git/lancet/v2/datetime"
 	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/suyuan32/simple-admin-common/utils/uuidx"
+	"github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/internal/svc"
 	"github.com/suyuan32/simple-admin-file/internal/types"
+	"github.com/suyuan32/simple-admin-file/internal/utils/cloud"
 	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-file/internal/utils/filex"
 	"github.com/zeromicro/go-zero/core/errorx"
@@ -43,6 +46,17 @@ func NewUploadLogic(r *http.Request, svcCtx *svc.ServiceContext) *UploadLogic {
 }
 
 func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
+	tenantId := tenantctx.GetTenantIDFromCtx(l.ctx)
+	if _, ok := l.svcCtx.CloudStorage.Service[tenantId]; !ok {
+		err = cloud.AddTenantCloudServiceGroup(l.svcCtx.DB, l.svcCtx.CloudStorage, tenantId)
+		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil, errorx.NewCodeInternalError("storage_provider.StorageProviderNotExist")
+			}
+			return nil, errorx.NewCodeInternalError("storage_provider.failedLoadProviderConfig")
+		}
+	}
+
 	err = l.r.ParseMultipartForm(l.svcCtx.Config.UploadConf.MaxVideoSize)
 	if err != nil {
 		logx.Error("fail to parse the multipart form")
@@ -90,7 +104,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	if l.r.MultipartForm.Value["provider"] != nil && l.r.MultipartForm.Value["provider"][0] != "" {
 		provider = l.r.MultipartForm.Value["provider"][0]
 	} else {
-		provider = l.svcCtx.CloudStorage.DefaultProvider
+		provider = l.svcCtx.CloudStorage.Service[tenantId].DefaultProvider
 	}
 
 	var fileTagId uint64
@@ -104,25 +118,25 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}
 
 	relativeSrc := fmt.Sprintf("%s/%s/%s/%s",
-		l.svcCtx.CloudStorage.ProviderData[provider].Folder,
+		l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Folder,
 		datetime.FormatTimeToStr(time.Now(), "yyyy-mm-dd"),
 		fileType,
 		storeFileName)
 
-	url, err := l.UploadToProvider(file, relativeSrc, provider)
+	url, err := l.UploadToProvider(file, relativeSrc, provider, tenantId)
 	if err != nil {
 		return nil, err
 	}
 
-	if l.svcCtx.CloudStorage.ProviderData[provider].UseCdn {
-		url = fmt.Sprintf("%s%s", l.svcCtx.CloudStorage.ProviderData[provider].CdnUrl, relativeSrc)
+	if l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].UseCdn {
+		url = fmt.Sprintf("%s%s", l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].CdnUrl, relativeSrc)
 	}
 
 	// store to database
 	query := l.svcCtx.DB.CloudFile.Create().
 		SetName(fileName).
 		SetFileType(filex.ConvertFileTypeToUint8(fileType)).
-		SetStorageProvidersID(l.svcCtx.CloudStorage.ProviderData[provider].Id).
+		SetStorageProvidersID(l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Id).
 		SetURL(url).
 		SetSize(uint64(handler.Size)).
 		SetUserID(userId)
@@ -159,10 +173,10 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}, nil
 }
 
-func (l *UploadLogic) UploadToProvider(file multipart.File, fileName, provider string) (url string, err error) {
-	if client, ok := l.svcCtx.CloudStorage.CloudStorage[provider]; ok {
+func (l *UploadLogic) UploadToProvider(file multipart.File, fileName, provider string, tenantId uint64) (url string, err error) {
+	if client, ok := l.svcCtx.CloudStorage.Service[tenantId].CloudStorage[provider]; ok {
 		_, err := client.PutObjectWithContext(l.ctx, &s3.PutObjectInput{
-			Bucket: aws.String(l.svcCtx.CloudStorage.ProviderData[provider].Bucket),
+			Bucket: aws.String(l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Bucket),
 			Key:    aws.String(fileName),
 			Body:   file,
 		})
@@ -177,8 +191,8 @@ func (l *UploadLogic) UploadToProvider(file multipart.File, fileName, provider s
 		}
 
 		return fmt.Sprintf("https://%s.%s%s",
-			l.svcCtx.CloudStorage.ProviderData[provider].Bucket,
-			l.svcCtx.CloudStorage.ProviderData[provider].Endpoint, fileName), nil
+			l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Bucket,
+			l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Endpoint, fileName), nil
 	}
 
 	return url, nil

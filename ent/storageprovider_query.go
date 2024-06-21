@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -362,6 +363,12 @@ func (spq *StorageProviderQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		spq.sql = prev
+	}
+	if storageprovider.Policy == nil {
+		return errors.New("ent: uninitialized storageprovider.Policy (forgotten import ent/runtime?)")
+	}
+	if err := storageprovider.Policy.EvalQuery(ctx, spq); err != nil {
+		return err
 	}
 	return nil
 }

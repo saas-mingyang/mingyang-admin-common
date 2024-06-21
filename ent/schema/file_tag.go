@@ -12,6 +12,7 @@ import (
 	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	ent2 "github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/ent/hook"
+	"github.com/suyuan32/simple-admin-file/ent/privacy"
 )
 
 // FileTag holds the schema definition for the FileTag entity.
@@ -66,6 +67,10 @@ func (FileTag) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
 		),
 	}
+}
+
+func (FileTag) Policy() ent.Policy {
+	return privacy.FilterTenantRule()
 }
 
 func (FileTag) Annotations() []schema.Annotation {

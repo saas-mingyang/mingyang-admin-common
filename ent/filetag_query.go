@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -363,6 +364,12 @@ func (ftq *FileTagQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ftq.sql = prev
+	}
+	if filetag.Policy == nil {
+		return errors.New("ent: uninitialized filetag.Policy (forgotten import ent/runtime?)")
+	}
+	if err := filetag.Policy.EvalQuery(ctx, ftq); err != nil {
+		return err
 	}
 	return nil
 }

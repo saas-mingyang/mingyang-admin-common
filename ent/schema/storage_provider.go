@@ -11,6 +11,7 @@ import (
 	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	ent2 "github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/ent/hook"
+	"github.com/suyuan32/simple-admin-file/ent/privacy"
 )
 
 // StorageProvider holds the schema definition for the StorageProvider entity.
@@ -86,6 +87,10 @@ func (StorageProvider) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
 		),
 	}
+}
+
+func (StorageProvider) Policy() ent.Policy {
+	return privacy.FilterTenantRule()
 }
 
 func (StorageProvider) Annotations() []schema.Annotation {

@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -363,6 +364,12 @@ func (cftq *CloudFileTagQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		cftq.sql = prev
+	}
+	if cloudfiletag.Policy == nil {
+		return errors.New("ent: uninitialized cloudfiletag.Policy (forgotten import ent/runtime?)")
+	}
+	if err := cloudfiletag.Policy.EvalQuery(ctx, cftq); err != nil {
+		return err
 	}
 	return nil
 }

@@ -2,6 +2,7 @@ package storageprovider
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	"github.com/suyuan32/simple-admin-file/internal/svc"
 	"github.com/suyuan32/simple-admin-file/internal/types"
 	"github.com/suyuan32/simple-admin-file/internal/utils/cloud"
@@ -27,6 +28,8 @@ func NewUpdateStorageProviderLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *UpdateStorageProviderLogic) UpdateStorageProvider(req *types.StorageProviderInfo) (*types.BaseMsgResp, error) {
+	tenantId := tenantctx.GetTenantIDFromCtx(l.ctx)
+
 	err := l.svcCtx.DB.StorageProvider.UpdateOneID(*req.Id).
 		SetNotNilState(req.State).
 		SetNotNilName(req.Name).
@@ -45,7 +48,10 @@ func (l *UpdateStorageProviderLogic) UpdateStorageProvider(req *types.StoragePro
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
 
-	l.svcCtx.CloudStorage = cloud.NewCloudServiceGroup(l.svcCtx.DB)
+	err = cloud.AddTenantCloudServiceGroup(l.svcCtx.DB, l.svcCtx.CloudStorage, tenantId)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.BaseMsgResp{Msg: l.svcCtx.Trans.Trans(l.ctx, i18n.UpdateSuccess)}, nil
 }

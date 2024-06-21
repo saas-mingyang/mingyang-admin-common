@@ -6,12 +6,18 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/suyuan32/simple-admin-common/orm/ent/entenum"
+	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
 	"github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type CloudServiceGroup struct {
+	Service map[uint64]*CloudService
+}
+
+type CloudService struct {
 	CloudStorage map[string]*s3.S3
 
 	ProviderData map[string]struct {
@@ -29,21 +35,29 @@ type CloudServiceGroup struct {
 // NewCloudServiceGroup returns the S3 service client group
 func NewCloudServiceGroup(db *ent.Client) *CloudServiceGroup {
 	cloudServices := &CloudServiceGroup{}
-	cloudServices.CloudStorage = make(map[string]*s3.S3)
-	cloudServices.ProviderData = make(map[string]struct {
+	cloudServices.Service = make(map[uint64]*CloudService)
+
+	_ = AddTenantCloudServiceGroup(db, cloudServices, entenum.TENANT_DEFAULT_ID)
+
+	return cloudServices
+}
+
+func AddTenantCloudServiceGroup(db *ent.Client, service *CloudServiceGroup, tenantId uint64) error {
+	data, err := db.StorageProvider.Query().Where(storageprovider.StateEQ(true), storageprovider.TenantIDEQ(tenantId)).All(tenantctx.AdminCtx(context.Background()))
+	if err != nil {
+		logx.Errorw("failed to load provider config from database, make sure database has been initialize and has config data",
+			logx.Field("detail", err))
+		return err
+	}
+
+	service.Service[tenantId] = &CloudService{CloudStorage: make(map[string]*s3.S3), ProviderData: make(map[string]struct {
 		Id       uint64
 		Folder   string
 		Bucket   string
 		Endpoint string
 		UseCdn   bool
 		CdnUrl   string
-	})
-
-	data, err := db.StorageProvider.Query().Where(storageprovider.StateEQ(true)).All(context.Background())
-	if err != nil {
-		logx.Errorw("failed to load provider config from database, make sure database has been initialize and has config data",
-			logx.Field("detail", err))
-	}
+	}), DefaultProvider: ""}
 
 	for _, v := range data {
 		sess := session.Must(session.NewSession(
@@ -55,8 +69,8 @@ func NewCloudServiceGroup(db *ent.Client) *CloudServiceGroup {
 		))
 		svc := s3.New(sess)
 
-		cloudServices.CloudStorage[v.Name] = svc
-		cloudServices.ProviderData[v.Name] = struct {
+		service.Service[tenantId].CloudStorage[v.Name] = svc
+		service.Service[tenantId].ProviderData[v.Name] = struct {
 			Id       uint64
 			Folder   string
 			Bucket   string
@@ -66,9 +80,9 @@ func NewCloudServiceGroup(db *ent.Client) *CloudServiceGroup {
 		}{Id: v.ID, Folder: v.Folder, Bucket: v.Bucket, Endpoint: v.Endpoint, UseCdn: v.UseCdn, CdnUrl: v.CdnURL}
 
 		if v.IsDefault {
-			cloudServices.DefaultProvider = v.Name
+			service.Service[tenantId].DefaultProvider = v.Name
 		}
 	}
 
-	return cloudServices
+	return err
 }

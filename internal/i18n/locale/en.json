@@ -30,6 +30,7 @@
 	},
 	"storage_provider": {
 		"hasFileError": "The provider has cloud files, you must delete all cloud files belonging to this provider.",
-		"StorageProviderNotExist": "The storage provider is not found."
+		"StorageProviderNotExist": "The storage provider is not found.",
+		"failedLoadProviderConfig": "Failed to load cloud service provider, please contact the administrator"
 	}
 }
