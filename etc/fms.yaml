@@ -14,9 +14,9 @@ CROSConf:
   Address: '*'
 
 Log:
-  ServiceName: fileManagerLogger
+  ServiceName: fileTenantManagerLogger
   Mode: file
-  Path: /home/data/logs/file/api
+  Path: /home/data/logs/file-tenant/api
   Level: info
   Compress: false
   KeepDays: 7

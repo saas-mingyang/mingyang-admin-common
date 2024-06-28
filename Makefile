@@ -35,7 +35,7 @@ AUTO_API_INIT_DATA=true
 GOARCH=amd64
 
 # The repository of docker | Docker 仓库地址
-DOCKER_REPO=registry.cn-hangzhou.aliyuncs.com/simple_admin
+DOCKER_REPO=registry.cn-hangzhou.aliyuncs.com/simple_admin_vip
 
 # ---- You may not need to modify the codes below | 下面的代码大概率不需要更改 ----
 
