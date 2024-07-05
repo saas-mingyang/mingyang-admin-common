@@ -37,7 +37,7 @@ func NewCloudServiceGroup(db *ent.Client) *CloudServiceGroup {
 	cloudServices := &CloudServiceGroup{}
 	cloudServices.Service = make(map[uint64]*CloudService)
 
-	_ = AddTenantCloudServiceGroup(db, cloudServices, entenum.TENANT_DEFAULT_ID)
+	_ = AddTenantCloudServiceGroup(db, cloudServices, entenum.TenantDefaultId)
 
 	return cloudServices
 }
