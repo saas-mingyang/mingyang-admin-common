@@ -2,7 +2,7 @@ package storageprovider
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
+	"github.com/suyuan32/simple-admin-common/orm/ent/entctx/tenantctx"
 	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
 	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 	"github.com/suyuan32/simple-admin-file/internal/svc"
