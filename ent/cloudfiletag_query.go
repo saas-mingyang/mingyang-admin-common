@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -87,7 +88,7 @@ func (cftq *CloudFileTagQuery) QueryCloudFiles() *CloudFileQuery {
 // First returns the first CloudFileTag entity from the query.
 // Returns a *NotFoundError when no CloudFileTag was found.
 func (cftq *CloudFileTagQuery) First(ctx context.Context) (*CloudFileTag, error) {
-	nodes, err := cftq.Limit(1).All(setContextOp(ctx, cftq.ctx, "First"))
+	nodes, err := cftq.Limit(1).All(setContextOp(ctx, cftq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +111,7 @@ func (cftq *CloudFileTagQuery) FirstX(ctx context.Context) *CloudFileTag {
 // Returns a *NotFoundError when no CloudFileTag ID was found.
 func (cftq *CloudFileTagQuery) FirstID(ctx context.Context) (id uint64, err error) {
 	var ids []uint64
-	if ids, err = cftq.Limit(1).IDs(setContextOp(ctx, cftq.ctx, "FirstID")); err != nil {
+	if ids, err = cftq.Limit(1).IDs(setContextOp(ctx, cftq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -133,7 +134,7 @@ func (cftq *CloudFileTagQuery) FirstIDX(ctx context.Context) uint64 {
 // Returns a *NotSingularError when more than one CloudFileTag entity is found.
 // Returns a *NotFoundError when no CloudFileTag entities are found.
 func (cftq *CloudFileTagQuery) Only(ctx context.Context) (*CloudFileTag, error) {
-	nodes, err := cftq.Limit(2).All(setContextOp(ctx, cftq.ctx, "Only"))
+	nodes, err := cftq.Limit(2).All(setContextOp(ctx, cftq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +162,7 @@ func (cftq *CloudFileTagQuery) OnlyX(ctx context.Context) *CloudFileTag {
 // Returns a *NotFoundError when no entities are found.
 func (cftq *CloudFileTagQuery) OnlyID(ctx context.Context) (id uint64, err error) {
 	var ids []uint64
-	if ids, err = cftq.Limit(2).IDs(setContextOp(ctx, cftq.ctx, "OnlyID")); err != nil {
+	if ids, err = cftq.Limit(2).IDs(setContextOp(ctx, cftq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -186,7 +187,7 @@ func (cftq *CloudFileTagQuery) OnlyIDX(ctx context.Context) uint64 {
 
 // All executes the query and returns a list of CloudFileTags.
 func (cftq *CloudFileTagQuery) All(ctx context.Context) ([]*CloudFileTag, error) {
-	ctx = setContextOp(ctx, cftq.ctx, "All")
+	ctx = setContextOp(ctx, cftq.ctx, ent.OpQueryAll)
 	if err := cftq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -208,7 +209,7 @@ func (cftq *CloudFileTagQuery) IDs(ctx context.Context) (ids []uint64, err error
 	if cftq.ctx.Unique == nil && cftq.path != nil {
 		cftq.Unique(true)
 	}
-	ctx = setContextOp(ctx, cftq.ctx, "IDs")
+	ctx = setContextOp(ctx, cftq.ctx, ent.OpQueryIDs)
 	if err = cftq.Select(cloudfiletag.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -226,7 +227,7 @@ func (cftq *CloudFileTagQuery) IDsX(ctx context.Context) []uint64 {
 
 // Count returns the count of the given query.
 func (cftq *CloudFileTagQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, cftq.ctx, "Count")
+	ctx = setContextOp(ctx, cftq.ctx, ent.OpQueryCount)
 	if err := cftq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -244,7 +245,7 @@ func (cftq *CloudFileTagQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (cftq *CloudFileTagQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, cftq.ctx, "Exist")
+	ctx = setContextOp(ctx, cftq.ctx, ent.OpQueryExist)
 	switch _, err := cftq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -567,7 +568,7 @@ func (cftgb *CloudFileTagGroupBy) Aggregate(fns ...AggregateFunc) *CloudFileTagG
 
 // Scan applies the selector query and scans the result into the given value.
 func (cftgb *CloudFileTagGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cftgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, cftgb.build.ctx, ent.OpQueryGroupBy)
 	if err := cftgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -615,7 +616,7 @@ func (cfts *CloudFileTagSelect) Aggregate(fns ...AggregateFunc) *CloudFileTagSel
 
 // Scan applies the selector query and scans the result into the given value.
 func (cfts *CloudFileTagSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cfts.ctx, "Select")
+	ctx = setContextOp(ctx, cfts.ctx, ent.OpQuerySelect)
 	if err := cfts.prepareQuery(ctx); err != nil {
 		return err
 	}

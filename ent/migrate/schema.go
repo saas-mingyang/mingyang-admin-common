@@ -12,10 +12,10 @@ var (
 	// FmsCloudFilesColumns holds the columns for the "fms_cloud_files" table.
 	FmsCloudFilesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "state", Type: field.TypeBool, Nullable: true, Comment: "State true: normal false: ban | 状态 true 正常 false 禁用", Default: true},
-		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "state", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "tenant_id", Type: field.TypeUint64, Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "The file's name | 文件名"},
 		{Name: "url", Type: field.TypeString, Comment: "The file's url | 文件地址"},
 		{Name: "size", Type: field.TypeUint64, Comment: "The file's size | 文件大小"},
@@ -52,10 +52,10 @@ var (
 	// FmsCloudFileTagsColumns holds the columns for the "fms_cloud_file_tags" table.
 	FmsCloudFileTagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint64, Increment: true},
-		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
-		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Default: 1},
+		{Name: "tenant_id", Type: field.TypeUint64, Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "CloudFileTag's name | 标签名称"},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "The remark of tag | 标签的备注"},
 	}
@@ -75,10 +75,10 @@ var (
 	// FmsFilesColumns holds the columns for the "fms_files" table.
 	FmsFilesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
-		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Default: 1},
+		{Name: "tenant_id", Type: field.TypeUint64, Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "File's name | 文件名称"},
 		{Name: "file_type", Type: field.TypeUint8, Comment: "File's type | 文件类型"},
 		{Name: "size", Type: field.TypeUint64, Comment: "File's size | 文件大小"},
@@ -107,10 +107,10 @@ var (
 	// FmsFileTagsColumns holds the columns for the "fms_file_tags" table.
 	FmsFileTagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint64, Increment: true},
-		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
-		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Default: 1},
+		{Name: "tenant_id", Type: field.TypeUint64, Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "FileTag's name | 标签名称"},
 		{Name: "remark", Type: field.TypeString, Nullable: true, Comment: "The remark of tag | 标签的备注"},
 	}
@@ -130,10 +130,10 @@ var (
 	// FmsStorageProvidersColumns holds the columns for the "fms_storage_providers" table.
 	FmsStorageProvidersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint64, Increment: true},
-		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
-		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "state", Type: field.TypeBool, Nullable: true, Comment: "State true: normal false: ban | 状态 true 正常 false 禁用", Default: true},
-		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "state", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "tenant_id", Type: field.TypeUint64, Default: 1},
 		{Name: "name", Type: field.TypeString, Unique: true, Comment: "The cloud storage service name | 服务名称"},
 		{Name: "bucket", Type: field.TypeString, Comment: "The cloud storage bucket name | 云存储服务的存储桶"},
 		{Name: "secret_id", Type: field.TypeString, Comment: "The secret ID | 密钥 ID"},

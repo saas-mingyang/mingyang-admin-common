@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -86,7 +87,7 @@ func (spq *StorageProviderQuery) QueryCloudfiles() *CloudFileQuery {
 // First returns the first StorageProvider entity from the query.
 // Returns a *NotFoundError when no StorageProvider was found.
 func (spq *StorageProviderQuery) First(ctx context.Context) (*StorageProvider, error) {
-	nodes, err := spq.Limit(1).All(setContextOp(ctx, spq.ctx, "First"))
+	nodes, err := spq.Limit(1).All(setContextOp(ctx, spq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +110,7 @@ func (spq *StorageProviderQuery) FirstX(ctx context.Context) *StorageProvider {
 // Returns a *NotFoundError when no StorageProvider ID was found.
 func (spq *StorageProviderQuery) FirstID(ctx context.Context) (id uint64, err error) {
 	var ids []uint64
-	if ids, err = spq.Limit(1).IDs(setContextOp(ctx, spq.ctx, "FirstID")); err != nil {
+	if ids, err = spq.Limit(1).IDs(setContextOp(ctx, spq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -132,7 +133,7 @@ func (spq *StorageProviderQuery) FirstIDX(ctx context.Context) uint64 {
 // Returns a *NotSingularError when more than one StorageProvider entity is found.
 // Returns a *NotFoundError when no StorageProvider entities are found.
 func (spq *StorageProviderQuery) Only(ctx context.Context) (*StorageProvider, error) {
-	nodes, err := spq.Limit(2).All(setContextOp(ctx, spq.ctx, "Only"))
+	nodes, err := spq.Limit(2).All(setContextOp(ctx, spq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +161,7 @@ func (spq *StorageProviderQuery) OnlyX(ctx context.Context) *StorageProvider {
 // Returns a *NotFoundError when no entities are found.
 func (spq *StorageProviderQuery) OnlyID(ctx context.Context) (id uint64, err error) {
 	var ids []uint64
-	if ids, err = spq.Limit(2).IDs(setContextOp(ctx, spq.ctx, "OnlyID")); err != nil {
+	if ids, err = spq.Limit(2).IDs(setContextOp(ctx, spq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -185,7 +186,7 @@ func (spq *StorageProviderQuery) OnlyIDX(ctx context.Context) uint64 {
 
 // All executes the query and returns a list of StorageProviders.
 func (spq *StorageProviderQuery) All(ctx context.Context) ([]*StorageProvider, error) {
-	ctx = setContextOp(ctx, spq.ctx, "All")
+	ctx = setContextOp(ctx, spq.ctx, ent.OpQueryAll)
 	if err := spq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -207,7 +208,7 @@ func (spq *StorageProviderQuery) IDs(ctx context.Context) (ids []uint64, err err
 	if spq.ctx.Unique == nil && spq.path != nil {
 		spq.Unique(true)
 	}
-	ctx = setContextOp(ctx, spq.ctx, "IDs")
+	ctx = setContextOp(ctx, spq.ctx, ent.OpQueryIDs)
 	if err = spq.Select(storageprovider.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -225,7 +226,7 @@ func (spq *StorageProviderQuery) IDsX(ctx context.Context) []uint64 {
 
 // Count returns the count of the given query.
 func (spq *StorageProviderQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, spq.ctx, "Count")
+	ctx = setContextOp(ctx, spq.ctx, ent.OpQueryCount)
 	if err := spq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -243,7 +244,7 @@ func (spq *StorageProviderQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (spq *StorageProviderQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, spq.ctx, "Exist")
+	ctx = setContextOp(ctx, spq.ctx, ent.OpQueryExist)
 	switch _, err := spq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -536,7 +537,7 @@ func (spgb *StorageProviderGroupBy) Aggregate(fns ...AggregateFunc) *StorageProv
 
 // Scan applies the selector query and scans the result into the given value.
 func (spgb *StorageProviderGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, spgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, spgb.build.ctx, ent.OpQueryGroupBy)
 	if err := spgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -584,7 +585,7 @@ func (sps *StorageProviderSelect) Aggregate(fns ...AggregateFunc) *StorageProvid
 
 // Scan applies the selector query and scans the result into the given value.
 func (sps *StorageProviderSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sps.ctx, "Select")
+	ctx = setContextOp(ctx, sps.ctx, ent.OpQuerySelect)
 	if err := sps.prepareQuery(ctx); err != nil {
 		return err
 	}
