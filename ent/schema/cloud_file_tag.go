@@ -23,11 +23,9 @@ type CloudFileTag struct {
 // Fields of the CloudFileTag.
 func (CloudFileTag) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").Comment("CloudFileTag's name | 标签名称").
-			Annotations(entsql.WithComments(true)),
+		field.String("name").Comment("CloudFileTag's name | 标签名称"),
 		field.String("remark").Comment("The remark of tag | 标签的备注").
-			Optional().
-			Annotations(entsql.WithComments(true)),
+			Optional(),
 	}
 }
 
@@ -75,6 +73,7 @@ func (CloudFileTag) Policy() ent.Policy {
 
 func (CloudFileTag) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entsql.WithComments(true),
 		entsql.Annotation{Table: "fms_cloud_file_tags"}, // fms means CloudFileTag management service
 	}
 }

@@ -2,13 +2,14 @@ package cloudfile
 
 import (
 	"context"
+	"strings"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/suyuan32/simple-admin-common/orm/ent/entctx/tenantctx"
 	"github.com/suyuan32/simple-admin-file/ent"
 	"github.com/suyuan32/simple-admin-file/internal/utils/cloud"
 	"github.com/zeromicro/go-zero/core/errorx"
-	"strings"
 
 	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
 	"github.com/suyuan32/simple-admin-file/internal/svc"
