@@ -134,6 +134,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 
 	// store to database
 	query := l.svcCtx.DB.CloudFile.Create().
+		SetID(fileUUID).
 		SetName(fileName).
 		SetFileType(filex.ConvertFileTypeToUint8(fileType)).
 		SetStorageProvidersID(l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Id).
