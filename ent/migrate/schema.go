@@ -26,6 +26,7 @@ var (
 	// FmsCloudFilesTable holds the schema information for the "fms_cloud_files" table.
 	FmsCloudFilesTable = &schema.Table{
 		Name:       "fms_cloud_files",
+		Comment:    "Cloud File Table | 云文件表",
 		Columns:    FmsCloudFilesColumns,
 		PrimaryKey: []*schema.Column{FmsCloudFilesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
@@ -62,6 +63,7 @@ var (
 	// FmsCloudFileTagsTable holds the schema information for the "fms_cloud_file_tags" table.
 	FmsCloudFileTagsTable = &schema.Table{
 		Name:       "fms_cloud_file_tags",
+		Comment:    "Cloud File's Tags Table | 云文件标签表",
 		Columns:    FmsCloudFileTagsColumns,
 		PrimaryKey: []*schema.Column{FmsCloudFileTagsColumns[0]},
 		Indexes: []*schema.Index{
@@ -89,6 +91,7 @@ var (
 	// FmsFilesTable holds the schema information for the "fms_files" table.
 	FmsFilesTable = &schema.Table{
 		Name:       "fms_files",
+		Comment:    "File Table | 文件表",
 		Columns:    FmsFilesColumns,
 		PrimaryKey: []*schema.Column{FmsFilesColumns[0]},
 		Indexes: []*schema.Index{
@@ -117,6 +120,7 @@ var (
 	// FmsFileTagsTable holds the schema information for the "fms_file_tags" table.
 	FmsFileTagsTable = &schema.Table{
 		Name:       "fms_file_tags",
+		Comment:    "File's Tags Table | 文件标签表",
 		Columns:    FmsFileTagsColumns,
 		PrimaryKey: []*schema.Column{FmsFileTagsColumns[0]},
 		Indexes: []*schema.Index{
@@ -148,6 +152,7 @@ var (
 	// FmsStorageProvidersTable holds the schema information for the "fms_storage_providers" table.
 	FmsStorageProvidersTable = &schema.Table{
 		Name:       "fms_storage_providers",
+		Comment:    "Cloud File's Provider Configuration Table | 云文件服务商配置表",
 		Columns:    FmsStorageProvidersColumns,
 		PrimaryKey: []*schema.Column{FmsStorageProvidersColumns[0]},
 	}

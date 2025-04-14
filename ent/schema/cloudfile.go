@@ -86,6 +86,7 @@ func (CloudFile) Policy() ent.Policy {
 func (CloudFile) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.WithComments(true),
+		schema.Comment("Cloud File Table | 云文件表"),
 		entsql.Annotation{Table: "fms_cloud_files"},
 	}
 }

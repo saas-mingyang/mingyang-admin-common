@@ -86,6 +86,7 @@ func (StorageProvider) Policy() ent.Policy {
 func (StorageProvider) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.WithComments(true),
+		schema.Comment("Cloud File's Provider Configuration Table | 云文件服务商配置表"),
 		entsql.Annotation{Table: "fms_storage_providers"},
 	}
 }
