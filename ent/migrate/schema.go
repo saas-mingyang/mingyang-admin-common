@@ -48,6 +48,11 @@ var (
 				Unique:  false,
 				Columns: []*schema.Column{FmsCloudFilesColumns[8]},
 			},
+			{
+				Name:    "cloudfile_url",
+				Unique:  false,
+				Columns: []*schema.Column{FmsCloudFilesColumns[5]},
+			},
 		},
 	}
 	// FmsCloudFileTagsColumns holds the columns for the "fms_cloud_file_tags" table.
@@ -104,6 +109,11 @@ var (
 				Name:    "file_file_type",
 				Unique:  false,
 				Columns: []*schema.Column{FmsFilesColumns[6]},
+			},
+			{
+				Name:    "file_path",
+				Unique:  false,
+				Columns: []*schema.Column{FmsFilesColumns[7]},
 			},
 		},
 	}
