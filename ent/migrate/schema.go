@@ -51,7 +51,7 @@ var (
 			{
 				Name:    "cloudfile_url",
 				Unique:  false,
-				Columns: []*schema.Column{FmsCloudFilesColumns[5]},
+				Columns: []*schema.Column{FmsCloudFilesColumns[6]},
 			},
 		},
 	}
@@ -113,7 +113,7 @@ var (
 			{
 				Name:    "file_path",
 				Unique:  false,
-				Columns: []*schema.Column{FmsFilesColumns[7]},
+				Columns: []*schema.Column{FmsFilesColumns[8]},
 			},
 		},
 	}

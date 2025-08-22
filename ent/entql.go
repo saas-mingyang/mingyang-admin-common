@@ -211,13 +211,13 @@ type predicateAdder interface {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cfq *CloudFileQuery) addPredicate(pred func(s *sql.Selector)) {
-	cfq.predicates = append(cfq.predicates, pred)
+func (_q *CloudFileQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the CloudFileQuery builder.
-func (cfq *CloudFileQuery) Filter() *CloudFileFilter {
-	return &CloudFileFilter{config: cfq.config, predicateAdder: cfq}
+func (_q *CloudFileQuery) Filter() *CloudFileFilter {
+	return &CloudFileFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -324,13 +324,13 @@ func (f *CloudFileFilter) WhereHasTagsWith(preds ...predicate.CloudFileTag) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cftq *CloudFileTagQuery) addPredicate(pred func(s *sql.Selector)) {
-	cftq.predicates = append(cftq.predicates, pred)
+func (_q *CloudFileTagQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the CloudFileTagQuery builder.
-func (cftq *CloudFileTagQuery) Filter() *CloudFileTagFilter {
-	return &CloudFileTagFilter{config: cftq.config, predicateAdder: cftq}
+func (_q *CloudFileTagQuery) Filter() *CloudFileTagFilter {
+	return &CloudFileTagFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -408,13 +408,13 @@ func (f *CloudFileTagFilter) WhereHasCloudFilesWith(preds ...predicate.CloudFile
 }
 
 // addPredicate implements the predicateAdder interface.
-func (fq *FileQuery) addPredicate(pred func(s *sql.Selector)) {
-	fq.predicates = append(fq.predicates, pred)
+func (_q *FileQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FileQuery builder.
-func (fq *FileQuery) Filter() *FileFilter {
-	return &FileFilter{config: fq.config, predicateAdder: fq}
+func (_q *FileQuery) Filter() *FileFilter {
+	return &FileFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -512,13 +512,13 @@ func (f *FileFilter) WhereHasTagsWith(preds ...predicate.FileTag) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ftq *FileTagQuery) addPredicate(pred func(s *sql.Selector)) {
-	ftq.predicates = append(ftq.predicates, pred)
+func (_q *FileTagQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FileTagQuery builder.
-func (ftq *FileTagQuery) Filter() *FileTagFilter {
-	return &FileTagFilter{config: ftq.config, predicateAdder: ftq}
+func (_q *FileTagQuery) Filter() *FileTagFilter {
+	return &FileTagFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -596,13 +596,13 @@ func (f *FileTagFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (spq *StorageProviderQuery) addPredicate(pred func(s *sql.Selector)) {
-	spq.predicates = append(spq.predicates, pred)
+func (_q *StorageProviderQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the StorageProviderQuery builder.
-func (spq *StorageProviderQuery) Filter() *StorageProviderFilter {
-	return &StorageProviderFilter{config: spq.config, predicateAdder: spq}
+func (_q *StorageProviderQuery) Filter() *StorageProviderFilter {
+	return &StorageProviderFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
