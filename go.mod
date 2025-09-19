@@ -1,8 +1,6 @@
 module github.com/suyuan32/simple-admin-file
 
-go 1.24.0
-
-toolchain go1.24.2
+go 1.25.0
 
 require (
 	entgo.io/ent v0.14.5
