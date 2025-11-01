@@ -4,6 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -20,11 +26,6 @@ import (
 	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-file/internal/utils/filex"
 	"github.com/zeromicro/go-zero/core/errorx"
-	"mime/multipart"
-	"net/http"
-	"strconv"
-	"strings"
-	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -101,7 +102,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}
 
 	var provider string
-	if l.r.MultipartForm.Value["provider"] != nil && l.r.MultipartForm.Value["provider"][0] != "" {
+	if l.r.MultipartForm.Value["provider"] != nil && l.svcCtx.CloudStorage.Service[tenantId].CloudStorage[l.r.MultipartForm.Value["provider"][0]] != nil {
 		provider = l.r.MultipartForm.Value["provider"][0]
 	} else {
 		provider = l.svcCtx.CloudStorage.Service[tenantId].DefaultProvider
