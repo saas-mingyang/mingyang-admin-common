@@ -21,7 +21,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/logx"
 
-	"github.com/suyuan32/simple-admin-common/config"
+	"github.com/saas-mingyang/mingyang-admin-common/config"
 )
 
 // SetDynamicConfigurationToRedis sets configuration data to redis

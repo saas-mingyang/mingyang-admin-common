@@ -18,8 +18,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
 	"github.com/stretchr/testify/assert"
-	"github.com/suyuan32/simple-admin-common/orm/ent/entenum"
 	"github.com/zeromicro/go-zero/rest/enum"
 	"google.golang.org/grpc/metadata"
 )

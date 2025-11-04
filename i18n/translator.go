@@ -30,8 +30,8 @@ import (
 	"golang.org/x/text/language"
 	"google.golang.org/grpc/status"
 
-	"github.com/suyuan32/simple-admin-common/utils/errcode"
-	"github.com/suyuan32/simple-admin-common/utils/parse"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/errcode"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/parse"
 )
 
 //go:embed locale/*.json
