@@ -15,9 +15,13 @@
 package mixins
 
 import (
+	"context"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/deptctx"
+	"github.com/saas-mingyang/mingyang-admin-core/rpc/ent/intercept"
 )
 
 // DepartmentMixin for embedding the department info in different schemas.
@@ -31,5 +35,26 @@ func (DepartmentMixin) Fields() []ent.Field {
 		field.Uint64("department_id").
 			Optional().
 			Comment("Department ID | 部门 ID"),
+	}
+}
+
+type DepartmentKey struct{}
+
+func (d DepartmentMixin) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+			// Skip soft-delete, means include soft-deleted entities.
+			if skip, _ := ctx.Value(DepartmentKey{}).(bool); skip {
+				return nil
+			}
+
+			fromCtx, err := deptctx.GetDepartmentIDFromCtx(ctx)
+			if err != nil {
+				return err
+			}
+
+			q.WhereP(sql.FieldIn(d.Fields()[0].Descriptor().Name, fromCtx))
+			return nil
+		}),
 	}
 }
