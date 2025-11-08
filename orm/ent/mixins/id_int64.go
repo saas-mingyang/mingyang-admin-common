@@ -31,7 +31,7 @@ type IDInt64Mixin struct {
 
 func (IDInt64Mixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("id").Default(sonyflake.NextID()),
+		field.Int64("id").Default(int64(sonyflake.NextID())),
 		field.Time("created_at").
 			Immutable().
 			Default(time.Now).
