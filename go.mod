@@ -10,7 +10,6 @@ require (
 	github.com/casbin/casbin/v2 v2.131.0
 	github.com/casbin/ent-adapter v1.1.0
 	github.com/casbin/redis-watcher/v2 v2.5.0
-	github.com/emicklei/go-restful/v3 v3.13.0
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/gofrs/uuid/v5 v5.4.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
@@ -21,7 +20,6 @@ require (
 	github.com/nats-io/nats.go v1.47.0
 	github.com/nicksnyder/go-i18n/v2 v2.6.0
 	github.com/redis/go-redis/v9 v9.16.0
-	github.com/sony/sonyflake v1.3.0
 	github.com/stretchr/testify v1.11.1
 	github.com/zeromicro/go-zero v1.9.1
 	go.mongodb.org/mongo-driver v1.17.6
