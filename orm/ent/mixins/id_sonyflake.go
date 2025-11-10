@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// IdSonyFlakeMixin id生成器
 type IdSonyFlakeMixin struct {
 	mixin.Schema
 }
