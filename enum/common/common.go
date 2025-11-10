@@ -7,4 +7,6 @@ const (
 
 const (
 	DefaultParentId int64 = 1000000
+	// DefaultInvalidRoleId used to judge whether the token belongs to core, if it is DefaultInvalidRoleId, it belongs to mms
+	DefaultInvalidRoleId uint64 = 1000000
 )
