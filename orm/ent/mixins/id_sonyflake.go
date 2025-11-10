@@ -15,7 +15,7 @@ type IdSonyFlakeMixin struct {
 
 func (IdSonyFlakeMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.Uint64("id").Default(uint64(sonyflake.NextID())),
+		field.Uint64("id").Default(sonyflake.NextID()),
 		field.Time("created_at").
 			Immutable().
 			Default(time.Now).
