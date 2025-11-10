@@ -13,6 +13,7 @@ type IdSonyFlakeMixin struct {
 	mixin.Schema
 }
 
+// Fields of the IdSonyFlakeMixin.
 func (IdSonyFlakeMixin) Fields() []ent.Field {
 	return []ent.Field{
 		field.Uint64("id").Default(sonyflake.NextID()),
