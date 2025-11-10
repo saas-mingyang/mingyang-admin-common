@@ -35,12 +35,12 @@ func init() {
 }
 
 // NextID 便捷函数，直接生成单个ID
-func NextID() uint64 {
+func NextID() int64 {
 	return defaultSnowflake.Generate()
 }
 
 // BatchNextID 便捷函数，批量生成ID
-func BatchNextID(count int) []uint64 {
+func BatchNextID(count int) []int64 {
 	return defaultSnowflake.BatchGenerate(count)
 }
 
@@ -67,7 +67,7 @@ func MustSnowflake(workerid int64) *Snowflake {
 }
 
 // Generate creates and returns a unique snowflake ID
-func (s *Snowflake) Generate() uint64 {
+func (s *Snowflake) Generate() int64 {
 	s.Lock()
 	defer s.Unlock()
 
@@ -87,20 +87,20 @@ func (s *Snowflake) Generate() uint64 {
 
 	s.timestamp = now
 
-	r := uint64((now-twepoch)<<timestampShift | (s.workerid << workeridShift) | (s.sequence))
+	r := (now-twepoch)<<timestampShift | (s.workerid << workeridShift) | (s.sequence)
 	return r
 }
 
 // BatchGenerate 批量生成唯一snowflake ID
-func (s *Snowflake) BatchGenerate(count int) []uint64 {
+func (s *Snowflake) BatchGenerate(count int) []int64 {
 	if count <= 0 {
-		return []uint64{}
+		return []int64{}
 	}
 
 	s.Lock()
 	defer s.Unlock()
 
-	ids := make([]uint64, count)
+	ids := make([]int64, count)
 	now := time.Now().UnixNano() / 1000000
 
 	// 统一处理逻辑
@@ -118,7 +118,7 @@ func (s *Snowflake) BatchGenerate(count int) []uint64 {
 			}
 			s.timestamp = now
 		}
-		ids[i] = uint64((now-twepoch)<<timestampShift | (s.workerid << workeridShift) | (s.sequence))
+		ids[i] = int64((now-twepoch)<<timestampShift | (s.workerid << workeridShift) | (s.sequence))
 	}
 
 	return ids

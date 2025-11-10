@@ -15,7 +15,6 @@
 package mixins
 
 import (
-	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"time"
 
 	"entgo.io/ent"
@@ -31,7 +30,7 @@ type IDMixin struct {
 
 func (IDMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.Uint64("id").Default(sonyflake.NextID()),
+		field.Uint64("id"),
 		field.Time("created_at").
 			Immutable().
 			Default(time.Now).
