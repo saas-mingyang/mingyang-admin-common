@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
 )
 
 // Cloud File Table | 云文件表

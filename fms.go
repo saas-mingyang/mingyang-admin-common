@@ -27,9 +27,9 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/suyuan32/simple-admin-file/internal/config"
-	"github.com/suyuan32/simple-admin-file/internal/handler"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/config"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/handler"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

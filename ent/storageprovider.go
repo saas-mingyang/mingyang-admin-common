@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
 )
 
 // Cloud File's Provider Configuration Table | 云文件服务商配置表

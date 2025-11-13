@@ -10,16 +10,16 @@ import (
 
 	"github.com/casbin/casbin/v2"
 	"github.com/redis/go-redis/v9"
-	"github.com/suyuan32/simple-admin-common/config"
-	"github.com/suyuan32/simple-admin-common/enum/errorcode"
-	"github.com/suyuan32/simple-admin-common/orm/ent/entctx/tenantctx"
-	"github.com/suyuan32/simple-admin-common/utils/jwt"
+	"github.com/saas-mingyang/mingyang-admin-common/config"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/errorcode"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/jwt"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/enum"
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 )
 
 type AuthorityMiddleware struct {

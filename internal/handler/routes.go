@@ -6,13 +6,13 @@ package handler
 import (
 	"net/http"
 
-	base "github.com/suyuan32/simple-admin-file/internal/handler/base"
-	cloudfile "github.com/suyuan32/simple-admin-file/internal/handler/cloudfile"
-	cloudfiletag "github.com/suyuan32/simple-admin-file/internal/handler/cloudfiletag"
-	file "github.com/suyuan32/simple-admin-file/internal/handler/file"
-	filetag "github.com/suyuan32/simple-admin-file/internal/handler/filetag"
-	storageprovider "github.com/suyuan32/simple-admin-file/internal/handler/storageprovider"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
+	base "github.com/suyuan32/simple-admin-file-tenant/internal/handler/base"
+	cloudfile "github.com/suyuan32/simple-admin-file-tenant/internal/handler/cloudfile"
+	cloudfiletag "github.com/suyuan32/simple-admin-file-tenant/internal/handler/cloudfiletag"
+	file "github.com/suyuan32/simple-admin-file-tenant/internal/handler/file"
+	filetag "github.com/suyuan32/simple-admin-file-tenant/internal/handler/filetag"
+	storageprovider "github.com/suyuan32/simple-admin-file-tenant/internal/handler/storageprovider"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

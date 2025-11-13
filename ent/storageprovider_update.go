@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
 )
 
 // StorageProviderUpdate is the builder for updating StorageProvider entities.

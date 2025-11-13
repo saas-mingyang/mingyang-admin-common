@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/filetag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
 )
 
 // FileTagDelete is the builder for deleting a FileTag entity.

@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/file"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/filetag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
 )
 
 // FileTagUpdate is the builder for updating FileTag entities.

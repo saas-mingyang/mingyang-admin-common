@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
 )
 
 // CloudFileTagCreate is the builder for creating a CloudFileTag entity.

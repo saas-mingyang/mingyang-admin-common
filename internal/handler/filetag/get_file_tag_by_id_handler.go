@@ -5,9 +5,9 @@ import (
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"github.com/suyuan32/simple-admin-file/internal/logic/filetag"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/logic/filetag"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
 )
 
 // swagger:route post /file_tag filetag GetFileTagById

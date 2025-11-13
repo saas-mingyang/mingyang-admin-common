@@ -10,17 +10,17 @@ import (
 	"reflect"
 
 	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/migrate"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/file"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/filetag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
 
 	stdsql "database/sql"
 )

@@ -89,7 +89,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/suyuan32/simple-admin-file/ent/runtime"
+//	import _ "github.com/suyuan32/simple-admin-file-tenant/ent/runtime"
 var (
 	Hooks  [2]ent.Hook
 	Policy ent.Policy

@@ -13,17 +13,17 @@ import (
 
 	"github.com/duke-git/lancet/v2/datetime"
 	"github.com/duke-git/lancet/v2/fileutil"
-	"github.com/suyuan32/simple-admin-common/enum/errorcode"
-	"github.com/suyuan32/simple-admin-common/i18n"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/errorcode"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-file/internal/utils/filex"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/utils/dberrorhandler"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/utils/filex"
 )
 
 type UploadLogic struct {

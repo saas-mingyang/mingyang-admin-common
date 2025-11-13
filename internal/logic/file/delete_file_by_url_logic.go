@@ -3,9 +3,9 @@ package file
 import (
 	"context"
 
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
-	"github.com/suyuan32/simple-admin-file/internal/utils/filex"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/utils/filex"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

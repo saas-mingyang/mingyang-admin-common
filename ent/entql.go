@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/file"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/filetag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

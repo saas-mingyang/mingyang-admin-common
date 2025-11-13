@@ -6,10 +6,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/suyuan32/simple-admin-common/orm/ent/entctx/tenantctx"
-	"github.com/suyuan32/simple-admin-common/orm/ent/entenum"
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
+	"github.com/suyuan32/simple-admin-file-tenant/ent"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

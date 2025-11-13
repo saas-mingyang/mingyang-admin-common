@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
 )
 
 // CloudFileTagDelete is the builder for deleting a CloudFileTag entity.

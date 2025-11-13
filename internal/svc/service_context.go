@@ -2,19 +2,19 @@ package svc
 
 import (
 	"github.com/casbin/casbin/v2"
-	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/suyuan32/simple-admin-core/rpc/coreclient"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 
-	"github.com/suyuan32/simple-admin-file/internal/utils/cloud"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/utils/cloud"
 
-	"github.com/suyuan32/simple-admin-file/ent"
-	_ "github.com/suyuan32/simple-admin-file/ent/runtime"
-	"github.com/suyuan32/simple-admin-file/internal/config"
-	i18n2 "github.com/suyuan32/simple-admin-file/internal/i18n"
-	"github.com/suyuan32/simple-admin-file/internal/middleware"
+	"github.com/suyuan32/simple-admin-file-tenant/ent"
+	_ "github.com/suyuan32/simple-admin-file-tenant/ent/runtime"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/config"
+	i18n2 "github.com/suyuan32/simple-admin-file-tenant/internal/i18n"
+	"github.com/suyuan32/simple-admin-file-tenant/internal/middleware"
 )
 
 type ServiceContext struct {

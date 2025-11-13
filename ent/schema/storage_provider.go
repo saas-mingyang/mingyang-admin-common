@@ -7,11 +7,11 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/suyuan32/simple-admin-common/orm/ent/entctx/tenantctx"
-	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
-	ent2 "github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/hook"
-	"github.com/suyuan32/simple-admin-file/ent/privacy"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/mixins"
+	ent2 "github.com/suyuan32/simple-admin-file-tenant/ent"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/hook"
+	"github.com/suyuan32/simple-admin-file-tenant/ent/privacy"
 )
 
 // StorageProvider holds the schema definition for the StorageProvider entity.
