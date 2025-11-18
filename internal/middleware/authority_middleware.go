@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -89,6 +90,7 @@ func batchCheck(cbn *casbin.Enforcer, roleIds []string, act, obj, domain string)
 	for _, v := range roleIds {
 		checkReq = append(checkReq, []any{v, obj, act, domain})
 	}
+	fmt.Printf("checkReq: %v\n", checkReq)
 
 	result, err := cbn.BatchEnforce(checkReq)
 	if err != nil {
