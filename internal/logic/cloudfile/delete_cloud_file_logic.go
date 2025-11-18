@@ -35,7 +35,7 @@ func NewDeleteCloudFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *D
 	}
 }
 
-func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.UUIDsReq) (*types.BaseMsgResp, error) {
+func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.IdsReq) (*types.BaseMsgResp, error) {
 	if l.svcCtx.Config.UploadConf.DeleteFileWithCloud {
 		tenantId := tenantctx.GetTenantIDFromCtx(l.ctx)
 		if _, ok := l.svcCtx.CloudStorage.Service[tenantId]; !ok {

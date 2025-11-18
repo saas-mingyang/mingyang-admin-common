@@ -101,7 +101,7 @@ service Fms {
 
     // Delete cloud file information | 删除云文件信息
     @handler deleteCloudFile
-    post /cloud_file/delete (UUIDsReq) returns (BaseMsgResp)
+    post /cloud_file/delete (IdsReq) returns (BaseMsgResp)
 
     // Get cloud file list | 获取CloudFile列表
     @handler getCloudFileList

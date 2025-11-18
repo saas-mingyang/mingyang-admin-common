@@ -85,8 +85,8 @@ type UUIDReq struct {
 }
 
 // Basic UUID array request | 基础UUID数组参数请求
-// swagger:model UUIDsReq
-type UUIDsReq struct {
+// swagger:model IdsReq
+type IdsReq struct {
 	// Ids
 	// Required: true
 	Ids []string `json:"ids"`

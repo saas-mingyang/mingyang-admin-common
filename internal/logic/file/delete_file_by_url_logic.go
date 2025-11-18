@@ -31,5 +31,5 @@ func (l *DeleteFileByUrlLogic) DeleteFileByUrl(req *types.FileDeleteReq) (resp *
 	}
 
 	logic := NewDeleteFileLogic(l.ctx, l.svcCtx)
-	return logic.DeleteFile(&types.UUIDsReq{Ids: []string{fileId}})
+	return logic.DeleteFile(&types.IdsReq{Ids: []string{fileId}})
 }

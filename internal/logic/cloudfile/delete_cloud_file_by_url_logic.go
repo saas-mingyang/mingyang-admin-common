@@ -31,5 +31,5 @@ func (l *DeleteCloudFileByUrlLogic) DeleteCloudFileByUrl(req *types.CloudFileDel
 	}
 
 	logic := NewDeleteCloudFileLogic(l.ctx, l.svcCtx)
-	return logic.DeleteCloudFile(&types.UUIDsReq{Ids: []string{fileId}})
+	return logic.DeleteCloudFile(&types.IdsReq{Ids: []string{fileId}})
 }

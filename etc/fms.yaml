@@ -7,7 +7,7 @@ Middlewares:
   Tenant: true
 
 Auth:
-  AccessSecret:  # JWT key
+  AccessSecret: jS6VKDtsJf3z1n2VKDtsJf3z1n2  # JWT key
   AccessExpire: 259200  # Seconds
 
 CROSConf:
@@ -23,32 +23,35 @@ Log:
   StackCoolDownMillis: 100
 
 RedisConf:
-  Host: 10.5.0.3:6379
+  Host: 192.168.201.58:6379
   Db: 0
+
 
 I18nConf:
   Dir:
 
-# DatabaseConf sets the database of file manager service.
 DatabaseConf:
-  Type: mysql
-  Host: 127.0.0.1
-  Port: 3306
-  DBName: simple_admin
-  Username: # set your username
-  Password: # set your password
+  Type: postgres
+  Host: 192.168.201.188
+  Port: 5432
+  DBName: simple_admin_dev
+  Username: postgres
+  Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5
+  # 添加以下配置启用 SQL 日志
+  Debug: true
+  LogSlowThreshold: 600ms
 
 # CasbinDatabaseConf sets the core database if you use the Casbin of Core.
 CasbinDatabaseConf:
-  Type: mysql
-  Host: 127.0.0.1
-  Port: 3306
-  DBName: simple_admin
-  Username: # set your username
-  Password: # set your password
+  Type: postgres
+  Host: 192.168.201.188
+  Port: 5432
+  DBName: simple_admin_dev
+  Username: postgres
+  Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5
@@ -65,7 +68,10 @@ UploadConf:
 
 # You can disable the core rpc if you have already initialized file manager's database.
 CoreRpc:
-  Target: k8s://default/core-rpc-svc:9101
+  Etcd:
+    Hosts:
+      - 192.168.201.58:2379
+    Key: core.rpc
   Enabled: true
 
 CasbinConf:

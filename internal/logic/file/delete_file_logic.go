@@ -35,7 +35,7 @@ func NewDeleteFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 	}
 }
 
-func (l *DeleteFileLogic) DeleteFile(req *types.UUIDsReq) (resp *types.BaseMsgResp, err error) {
+func (l *DeleteFileLogic) DeleteFile(req *types.IdsReq) (resp *types.BaseMsgResp, err error) {
 	err = entx.WithTx(l.ctx, l.svcCtx.DB, func(tx *ent.Tx) error {
 		files, err := tx.File.Query().Where(file2.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).All(l.ctx)
 

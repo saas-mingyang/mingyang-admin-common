@@ -86,7 +86,7 @@ type UUIDReq {
 }
 
 // Basic UUID array request | 基础UUID数组参数请求
-type UUIDsReq {
+type IdsReq {
     // Ids
     // Required: true
     Ids []string `json:"ids"`

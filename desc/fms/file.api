@@ -130,7 +130,7 @@ service Fms {
 	
 	// Delete file information | 删除文件信息
 	@handler deleteFile
-	post /file/delete (UUIDsReq) returns (BaseMsgResp)
+	post /file/delete (IdsReq) returns (BaseMsgResp)
 	
 	// Change file public status | 改变文件公开状态
 	@handler changePublicStatus

@@ -91,7 +91,7 @@
             "in": "body",
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/UUIDsReq"
+              "$ref": "#/definitions/IdsReq"
             }
           }
         ],
@@ -361,7 +361,7 @@
             "in": "body",
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/UUIDsReq"
+              "$ref": "#/definitions/IdsReq"
             }
           }
         ],
@@ -1930,7 +1930,7 @@
       },
       "x-go-package": "github.com/suyuan32/simple-admin-file-tenant/internal/types"
     },
-    "UUIDsReq": {
+    "IdsReq": {
       "description": "Basic UUID array request | 基础UUID数组参数请求",
       "type": "object",
       "required": [
