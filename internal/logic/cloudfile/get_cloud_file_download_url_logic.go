@@ -8,13 +8,11 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
-	"github.com/zeromicro/go-zero/core/errorx"
-	"time"
-
 	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
 	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
-
+	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"time"
 )
 
 type GetCloudFileDownloadUrlLogic struct {
@@ -44,7 +42,10 @@ func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.UUIDRe
 	if providers == nil {
 		return nil, errorx.NewCodeInvalidArgumentError("cloud_file.CloudFileNotExist")
 	}
-	privateURL := GetPrivateURL(providers.CdnURL, file.URL, providers.SecretID, providers.SecretKey)
+	privateURL, err := GetPrivateURLExact(providers.CdnURL, file.URL, providers.SecretID, providers.SecretKey)
+	if err != nil {
+		return nil, errorx.NewCodeInternalError(err.Error())
+	}
 
 	resp = &types.CloudFileInfoResp{}
 
@@ -59,11 +60,10 @@ func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.UUIDRe
 	return resp, nil
 }
 
-// GetPrivateURL 获取私有下载链接
-func GetPrivateURL(domain, key, accessKey, secretKey string) string {
-	fmt.Printf("domain: %s, key: %s, accessKey: %s, secretKey: %s", domain, key, accessKey, secretKey)
+func GetPrivateURLExact(domain, key, accessKey, secretKey string) (string, error) {
+	fmt.Printf("domain: %s, key: %s, accessKey: %s, secretKey: %s\n", domain, key, accessKey, secretKey)
 	mac := auth.New(accessKey, secretKey)
-	deadline := time.Now().Unix() + 3600
-	privateURL := storage.MakePrivateURL(mac, domain, key, deadline)
-	return privateURL
+	deadline := time.Now().Add(time.Second * 3600).Unix()
+	privateURL := storage.MakePrivateURLv2(mac, domain, key, deadline)
+	return privateURL, nil
 }

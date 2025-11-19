@@ -119,8 +119,8 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}
 
 	relativeSrc := fmt.Sprintf("%s/%s/%s/%s",
-		l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Folder,
 		datetime.FormatTimeToStr(time.Now(), "yyyy-mm-dd"),
+		fmt.Sprint(tenantId),
 		fileType,
 		storeFileName)
 
