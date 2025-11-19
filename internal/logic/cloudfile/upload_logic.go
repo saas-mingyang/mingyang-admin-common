@@ -128,11 +128,6 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	if err != nil {
 		return nil, err
 	}
-
-	if l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].UseCdn {
-		url = fmt.Sprintf("%s%s", l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].CdnUrl, relativeSrc)
-	}
-
 	// store to database
 	query := l.svcCtx.DB.CloudFile.Create().
 		SetID(fileUUID).
@@ -176,6 +171,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 }
 
 func (l *UploadLogic) UploadToProvider(file multipart.File, fileName, provider string, tenantId uint64) (url string, err error) {
+	valueFileName := &fileName
 	if client, ok := l.svcCtx.CloudStorage.Service[tenantId].CloudStorage[provider]; ok {
 		_, err := client.PutObjectWithContext(l.ctx, &s3.PutObjectInput{
 			Bucket: aws.String(l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Bucket),
@@ -191,11 +187,8 @@ func (l *UploadLogic) UploadToProvider(file multipart.File, fileName, provider s
 				return url, errorx.NewCodeInternalError("failed to upload object")
 			}
 		}
-
-		return fmt.Sprintf("https://%s.%s%s",
-			l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Bucket,
-			l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Endpoint, fileName), nil
+		fmt.Printf("fileName: %s\n", *valueFileName)
+		return *valueFileName, nil
 	}
-
 	return url, nil
 }

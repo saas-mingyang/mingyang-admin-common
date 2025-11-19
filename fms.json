@@ -133,6 +133,34 @@
         }
       }
     },
+    "/cloud_file/download_url": {
+      "post": {
+        "description": "Get cloud file download url | 获取云文件下载地址",
+        "tags": [
+          "cloudfile"
+        ],
+        "summary": "Get cloud file download url | 获取云文件下载地址",
+        "operationId": "GetCloudFileDownloadUrl",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/UUIDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CloudFileInfoResp",
+            "schema": {
+              "$ref": "#/definitions/CloudFileInfoResp"
+            }
+          }
+        }
+      }
+    },
     "/cloud_file/list": {
       "post": {
         "description": "Get cloud file list | 获取CloudFile列表",
@@ -1678,6 +1706,24 @@
       },
       "x-go-package": "github.com/suyuan32/simple-admin-file-tenant/internal/types"
     },
+    "IdsReq": {
+      "description": "Basic UUID array request | 基础UUID数组参数请求",
+      "type": "object",
+      "required": [
+        "ids"
+      ],
+      "properties": {
+        "ids": {
+          "description": "Ids",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Ids"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-file-tenant/internal/types"
+    },
     "PageInfo": {
       "description": "The page request parameters | 列表请求参数",
       "type": "object",
@@ -1926,24 +1972,6 @@
           "type": "string",
           "maxLength": 36,
           "x-go-name": "Id"
-        }
-      },
-      "x-go-package": "github.com/suyuan32/simple-admin-file-tenant/internal/types"
-    },
-    "IdsReq": {
-      "description": "Basic UUID array request | 基础UUID数组参数请求",
-      "type": "object",
-      "required": [
-        "ids"
-      ],
-      "properties": {
-        "ids": {
-          "description": "Ids",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "Ids"
         }
       },
       "x-go-package": "github.com/suyuan32/simple-admin-file-tenant/internal/types"

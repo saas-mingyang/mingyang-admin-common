@@ -114,6 +114,10 @@ service Fms {
     // Delete cloud file information by url | 通过地址删除云文件信息
     @handler deleteCloudFileByUrl
     post /cloud_file/delete_by_url (CloudFileDeleteReq) returns (BaseMsgResp)
+
+   //  Get cloud file download url | 获取云文件下载地址
+   @handler getCloudFileDownloadUrl
+   post /cloud_file/download_url (UUIDReq) returns (CloudFileInfoResp)
 }
 
 @server(
