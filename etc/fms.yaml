@@ -34,7 +34,7 @@ DatabaseConf:
   Type: postgres
   Host: 192.168.201.188
   Port: 5432
-  DBName: simple_admin_dev
+  DBName: Lei_dev
   Username: postgres
   Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
@@ -68,10 +68,11 @@ UploadConf:
 
 # You can disable the core rpc if you have already initialized file manager's database.
 CoreRpc:
-  Etcd:
-    Hosts:
-      - 192.168.201.58:2379
-    Key: core.rpc
+ # Etcd:
+  #  Hosts:
+  #$    - 192.168.201.58:2379
+   # Key: core.rpc
+  Target: 127.0.0.1:9101
   Enabled: true
 
 CasbinConf:
