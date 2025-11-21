@@ -28,6 +28,10 @@ type TenantKey string
 
 const TenantAdmin TenantKey = "tenant-admin"
 
+const (
+	IgnoreTenantFilterKey string = "ignoreTenantFilter"
+)
+
 // GetTenantIDFromCtx returns tenant id from context.
 // If error occurs, return default tenant ID.
 func GetTenantIDFromCtx(ctx context.Context) uint64 {
@@ -90,5 +94,21 @@ func AdminCtx(ctx context.Context) context.Context {
 func WithTenantIdCtx(ctx context.Context, tenantId uint64) context.Context {
 	tenantIdStr := strconv.Itoa(int(tenantId))
 	ctx = metadata.AppendToOutgoingContext(ctx, enum.TenantIdCtxKey, tenantIdStr)
+	return context.WithValue(ctx, enum.TenantIdCtxKey, tenantIdStr)
+}
+
+// WithIgnoreTenant 创建忽略租户过滤的上下文
+func WithIgnoreTenant(ctx context.Context) context.Context {
+	return context.WithValue(ctx, IgnoreTenantFilterKey, true)
+}
+
+// WithoutIgnoreTenant 创建恢复租户过滤的上下文
+func WithoutIgnoreTenant(ctx context.Context) context.Context {
+	return context.WithValue(ctx, IgnoreTenantFilterKey, false)
+}
+
+// WithTenantId 动态切换租户
+func WithTenantId(ctx context.Context, tenantId uint64) context.Context {
+	tenantIdStr := strconv.FormatUint(tenantId, 10)
 	return context.WithValue(ctx, enum.TenantIdCtxKey, tenantIdStr)
 }
