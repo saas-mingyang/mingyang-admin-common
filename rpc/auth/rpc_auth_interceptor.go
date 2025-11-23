@@ -18,7 +18,6 @@ var ErrUnauthorized = status.Error(codes.Unauthenticated, "unauthorized")
 // Authorization AUTH_JWT_TOKEN 常量定义
 const (
 	Authorization = "Authorization" // g
-	SecretKey     = "SecretKey"
 )
 
 type Claims struct {
