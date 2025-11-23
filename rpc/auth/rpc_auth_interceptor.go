@@ -18,10 +18,20 @@ var ErrUnauthorized = status.Error(codes.Unauthenticated, "unauthorized")
 // Authorization AUTH_JWT_TOKEN 常量定义
 const (
 	Authorization = "Authorization" // g
+	SecretKey     = "SecretKey"
 )
 
+type Claims struct {
+	UserId   int64  `json:"userId"`
+	RoleId   string `json:"roleId"`
+	DeptId   int64  `json:"deptId"`
+	TenantId int64  `json:"jwtTenantId"`
+	Iat      int64  `json:"iat"`
+	Exp      int64  `json:"exp"`
+}
+
 // UnaryAuthInterceptor 返回 RPC 拦截器
-func UnaryAuthInterceptor(skipMethods []string) grpc.UnaryServerInterceptor {
+func UnaryAuthInterceptor(skipMethods []string, secretKey string) grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
 		req interface{},
@@ -38,12 +48,9 @@ func UnaryAuthInterceptor(skipMethods []string) grpc.UnaryServerInterceptor {
 		}
 		tokens := md.Get(Authorization)
 		if len(tokens) <= 0 {
-			fmt.Printf("当前方法: %s\n", info.FullMethod)
-			fmt.Println("tokens len 0")
 			return nil, ErrUnauthorized
 		}
-		// 调用 AuthService 验证 token
-		_, err := ValidateToken(tokens[0])
+		_, err := ValidateToken(tokens[0], secretKey)
 		if err != nil {
 			logx.Errorf("unauthorized err = %s\n", err)
 			return nil, ErrUnauthorized
@@ -52,17 +59,27 @@ func UnaryAuthInterceptor(skipMethods []string) grpc.UnaryServerInterceptor {
 	}
 }
 
-func ValidateToken(token string) (string, error) {
+func ValidateToken(token, secretKey string) (Claims, error) {
+	var claims Claims
 	if token == "" {
-		return "", errors.New("token is empty")
+		return claims, errors.New("token is empty")
 	}
 	fromToken := jwt.StripBearerPrefixFromToken(token)
 	fmt.Printf("fromToken = %s\n", fromToken)
-
 	if fromToken == "" {
-		return "", errors.New("token is empty")
+		return claims, errors.New("token is empty")
 	}
-	return fromToken, nil
+	jwtToken, err := jwt.ParseJwtToken(fromToken, secretKey)
+	if err != nil {
+		return claims, errors.New("ParseJwtToken error")
+	}
+	fmt.Printf("jwtToken = %v\n", jwtToken)
+	err = jwt.MapClaimsToStruct(jwtToken, &claims)
+	if err != nil {
+		fmt.Printf("MapClaimsToStruct error = %v\n", err)
+		return claims, errors.New("MapClaimsToStruct error")
+	}
+	return claims, nil
 }
 
 func containsMethod(methods []string, target string) bool {

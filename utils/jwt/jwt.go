@@ -15,7 +15,10 @@
 package jwt
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/pkg/errors"
 )
 
 // Option describes the jwt extra data
@@ -45,4 +48,28 @@ func NewJwtToken(secretKey string, iat, seconds int64, opt ...Option) (string, e
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
 	return token.SignedString([]byte(secretKey))
+}
+
+func ParseJwtToken(tokenStr, secretKey string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+		return []byte(secretKey), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	}
+	return nil, errors.New("invalid token")
+}
+
+func MapClaimsToStruct(claims jwt.MapClaims, out interface{}) error {
+	jsonData, err := json.Marshal(claims)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(jsonData, out)
 }
