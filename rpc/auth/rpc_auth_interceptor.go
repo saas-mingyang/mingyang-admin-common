@@ -58,7 +58,11 @@ func ValidateToken(token string) (string, error) {
 	}
 	fromToken := jwt.StripBearerPrefixFromToken(token)
 	fmt.Printf("fromToken = %s\n", fromToken)
-	return "", nil
+
+	if fromToken == "" {
+		return "", errors.New("token is empty")
+	}
+	return fromToken, nil
 }
 
 func containsMethod(methods []string, target string) bool {
