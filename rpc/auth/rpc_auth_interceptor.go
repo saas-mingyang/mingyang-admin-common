@@ -21,7 +21,7 @@ const (
 )
 
 type Claims struct {
-	UserId   int64  `json:"userId"`
+	UserId   string `json:"userId"`
 	RoleId   string `json:"roleId"`
 	DeptId   int64  `json:"deptId"`
 	TenantId int64  `json:"jwtTenantId"`
