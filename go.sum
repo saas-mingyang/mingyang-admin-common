@@ -248,8 +248,8 @@ github.com/rogpeppe/go-internal v1.6.1/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTE
 github.com/rogpeppe/go-internal v1.8.0/go.mod h1:WmiCO8CzOY8rg0OYDC4/i/2WRWAB6poM+XZ2dLUbcbE=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
-github.com/saas-mingyang/mingyang-admin-common v0.1.5 h1:tIFROA7xQyJMpbvhoFP/gWyLwQE8vqkt0EBvA1qO170=
-github.com/saas-mingyang/mingyang-admin-common v0.1.5/go.mod h1:mAweT+3C08LGdr14AQNz9Sx5COPEpTtL6dr5fQAKqWc=
+github.com/saas-mingyang/mingyang-admin-common v0.2.1 h1:LHv3sfP/ICPXZa5dppJvhfBC0DqpylwN63rVrp58/EQ=
+github.com/saas-mingyang/mingyang-admin-common v0.2.1/go.mod h1:mAweT+3C08LGdr14AQNz9Sx5COPEpTtL6dr5fQAKqWc=
 github.com/saas-mingyang/mingyang-admin-core v0.0.0-20251107040124-c97a0a448793 h1:wSJjRdeAIX++S1lDSInYlIPg6OyPKCakHBJTNG683RI=
 github.com/saas-mingyang/mingyang-admin-core v0.0.0-20251107040124-c97a0a448793/go.mod h1:wMcbdgNDZ+ZNB4inJb68MD2vAJ2iintwm3EYQn4F7Sc=
 github.com/spaolacci/murmur3 v1.1.0 h1:7c1g84S4BPRrfL5Xrdp6fOJ206sU9y293DDHaoy0bLI=
@@ -265,8 +265,6 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/suyuan32/simple-admin-core v1.7.4 h1:ikgHqNxw1oUf2wnyjFjq5PS1VOWm23sfRzXoRbVnaa8=
-github.com/suyuan32/simple-admin-core v1.7.4/go.mod h1:yWVod50RBHLoaDAsaBpJVrtdEl8MxNVswxyeyLWy0fs=
 github.com/suyuan32/simple-admin-tools v1.9.1 h1:RRFT2Dn22H/b0A4aB+ixul/6xzmTFXG10ER64DuCS0A=
 github.com/suyuan32/simple-admin-tools v1.9.1/go.mod h1:v3y8WAJTCt+g/+Ve0BZuSga38gwdDh/2WNuvve9Tz2Y=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=

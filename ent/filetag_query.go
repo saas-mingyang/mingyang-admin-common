@@ -14,9 +14,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/file"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/filetag"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/predicate"
 )
 
 // FileTagQuery is the builder for querying FileTag entities.

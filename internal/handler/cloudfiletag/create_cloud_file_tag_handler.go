@@ -5,9 +5,9 @@ import (
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"github.com/suyuan32/simple-admin-file-tenant/internal/logic/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
+	"mingyang-admin-simple-admin-file/internal/logic/cloudfiletag"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 )
 
 // swagger:route post /cloud_file_tag/create cloudfiletag CreateCloudFileTag

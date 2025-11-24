@@ -7,11 +7,11 @@ import (
 	"github.com/qiniu/go-sdk/v7/storage"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 	"time"
 )
 

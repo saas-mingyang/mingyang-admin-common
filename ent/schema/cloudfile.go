@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/mixins"
-	ent2 "github.com/suyuan32/simple-admin-file-tenant/ent"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/hook"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/privacy"
+	ent2 "mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/hook"
+	"mingyang-admin-simple-admin-file/ent/privacy"
 )
 
 // CloudFile holds the schema definition for the CloudFile entity.

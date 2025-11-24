@@ -25,11 +25,11 @@ package main
 
 import (
 	"flag"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/config"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/handler"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"mingyang-admin-simple-admin-file/internal/config"
+	"mingyang-admin-simple-admin-file/internal/handler"
+	"mingyang-admin-simple-admin-file/internal/svc"
 )
 
 var configFile = flag.String("f", "etc/fms.yaml", "the config file")

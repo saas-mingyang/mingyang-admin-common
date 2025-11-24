@@ -8,9 +8,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
-	"github.com/suyuan32/simple-admin-file-tenant/ent"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
 	"github.com/zeromicro/go-zero/core/logx"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 type CloudServiceGroup struct {

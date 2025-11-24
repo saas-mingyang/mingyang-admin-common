@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
 )
 
 // Cloud File's Tags Table | 云文件标签表

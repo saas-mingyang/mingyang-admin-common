@@ -6,16 +6,16 @@ import (
 
 	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 
-	file2 "github.com/suyuan32/simple-admin-file-tenant/ent/file"
+	file2 "mingyang-admin-simple-admin-file/ent/file"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 
-	"github.com/suyuan32/simple-admin-file-tenant/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/utils/entx"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/internal/utils/entx"
 
-	"github.com/suyuan32/simple-admin-file-tenant/ent"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

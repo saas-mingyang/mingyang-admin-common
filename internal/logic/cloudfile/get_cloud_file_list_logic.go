@@ -3,15 +3,15 @@ package cloudfile
 import (
 	"context"
 
-	"github.com/suyuan32/simple-admin-file-tenant/ent"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/svc"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/types"
-	"github.com/suyuan32/simple-admin-file-tenant/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 

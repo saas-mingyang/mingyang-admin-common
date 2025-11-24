@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/filetag"
 )
 
 // File's Tags Table | 文件标签表

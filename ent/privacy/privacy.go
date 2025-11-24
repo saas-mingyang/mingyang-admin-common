@@ -6,7 +6,7 @@ import (
 	"context"
 
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
-	"github.com/suyuan32/simple-admin-file-tenant/ent"
+	"mingyang-admin-simple-admin-file/ent"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"

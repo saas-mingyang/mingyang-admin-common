@@ -14,10 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 // CloudFileQuery is the builder for querying CloudFile entities.

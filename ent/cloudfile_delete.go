@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/predicate"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/predicate"
 )
 
 // CloudFileDelete is the builder for deleting a CloudFile entity.

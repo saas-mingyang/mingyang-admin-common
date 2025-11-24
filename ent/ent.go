@@ -12,11 +12,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/file"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/filetag"
-	"github.com/suyuan32/simple-admin-file-tenant/ent/storageprovider"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 // ent aliases to avoid import conflicts in user's code.

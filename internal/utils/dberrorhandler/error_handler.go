@@ -7,7 +7,7 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/saas-mingyang/mingyang-admin-common/msg/logmsg"
 
-	"github.com/suyuan32/simple-admin-file-tenant/ent"
+	"mingyang-admin-simple-admin-file/ent"
 )
 
 // DefaultEntError returns errors dealing with default functions.
