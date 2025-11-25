@@ -4,8 +4,6 @@ import (
 	"context"
 	"os"
 
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
-
 	file2 "mingyang-admin-simple-admin-file/ent/file"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
@@ -37,13 +35,13 @@ func NewDeleteFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 
 func (l *DeleteFileLogic) DeleteFile(req *types.IdsReq) (resp *types.BaseMsgResp, err error) {
 	err = entx.WithTx(l.ctx, l.svcCtx.DB, func(tx *ent.Tx) error {
-		files, err := tx.File.Query().Where(file2.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).All(l.ctx)
+		files, err := tx.File.Query().Where(file2.IDIn(req.Ids...)).All(l.ctx)
 
 		if err != nil {
 			return err
 		}
 
-		_, err = tx.File.Delete().Where(file2.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).Exec(l.ctx)
+		_, err = tx.File.Delete().Where(file2.IDIn(req.Ids...)).Exec(l.ctx)
 
 		if err != nil {
 			return err

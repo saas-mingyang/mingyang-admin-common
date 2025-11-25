@@ -95,7 +95,7 @@ func FileSize(v uint64) predicate.Apk {
 }
 
 // FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
-func FileID(v string) predicate.Apk {
+func FileID(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldEQ(FieldFileID, v))
 }
 
@@ -550,68 +550,43 @@ func FileSizeLTE(v uint64) predicate.Apk {
 }
 
 // FileIDEQ applies the EQ predicate on the "file_id" field.
-func FileIDEQ(v string) predicate.Apk {
+func FileIDEQ(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldEQ(FieldFileID, v))
 }
 
 // FileIDNEQ applies the NEQ predicate on the "file_id" field.
-func FileIDNEQ(v string) predicate.Apk {
+func FileIDNEQ(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldNEQ(FieldFileID, v))
 }
 
 // FileIDIn applies the In predicate on the "file_id" field.
-func FileIDIn(vs ...string) predicate.Apk {
+func FileIDIn(vs ...uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldIn(FieldFileID, vs...))
 }
 
 // FileIDNotIn applies the NotIn predicate on the "file_id" field.
-func FileIDNotIn(vs ...string) predicate.Apk {
+func FileIDNotIn(vs ...uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldNotIn(FieldFileID, vs...))
 }
 
 // FileIDGT applies the GT predicate on the "file_id" field.
-func FileIDGT(v string) predicate.Apk {
+func FileIDGT(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldGT(FieldFileID, v))
 }
 
 // FileIDGTE applies the GTE predicate on the "file_id" field.
-func FileIDGTE(v string) predicate.Apk {
+func FileIDGTE(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldGTE(FieldFileID, v))
 }
 
 // FileIDLT applies the LT predicate on the "file_id" field.
-func FileIDLT(v string) predicate.Apk {
+func FileIDLT(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldLT(FieldFileID, v))
 }
 
 // FileIDLTE applies the LTE predicate on the "file_id" field.
-func FileIDLTE(v string) predicate.Apk {
+func FileIDLTE(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldLTE(FieldFileID, v))
-}
-
-// FileIDContains applies the Contains predicate on the "file_id" field.
-func FileIDContains(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldContains(FieldFileID, v))
-}
-
-// FileIDHasPrefix applies the HasPrefix predicate on the "file_id" field.
-func FileIDHasPrefix(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldHasPrefix(FieldFileID, v))
-}
-
-// FileIDHasSuffix applies the HasSuffix predicate on the "file_id" field.
-func FileIDHasSuffix(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldHasSuffix(FieldFileID, v))
-}
-
-// FileIDEqualFold applies the EqualFold predicate on the "file_id" field.
-func FileIDEqualFold(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldEqualFold(FieldFileID, v))
-}
-
-// FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
-func FileIDContainsFold(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldContainsFold(FieldFileID, v))
 }
 
 // FilePathEQ applies the EQ predicate on the "file_path" field.

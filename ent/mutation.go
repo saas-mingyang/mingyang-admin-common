@@ -18,7 +18,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 const (
@@ -55,7 +54,8 @@ type ApkMutation struct {
 	version_code      *string
 	file_size         *uint64
 	addfile_size      *int64
-	file_id           *string
+	file_id           *uint64
+	addfile_id        *int64
 	file_path         *string
 	md5               *string
 	sha1              *string
@@ -539,12 +539,13 @@ func (m *ApkMutation) ResetFileSize() {
 }
 
 // SetFileID sets the "file_id" field.
-func (m *ApkMutation) SetFileID(s string) {
-	m.file_id = &s
+func (m *ApkMutation) SetFileID(u uint64) {
+	m.file_id = &u
+	m.addfile_id = nil
 }
 
 // FileID returns the value of the "file_id" field in the mutation.
-func (m *ApkMutation) FileID() (r string, exists bool) {
+func (m *ApkMutation) FileID() (r uint64, exists bool) {
 	v := m.file_id
 	if v == nil {
 		return
@@ -555,7 +556,7 @@ func (m *ApkMutation) FileID() (r string, exists bool) {
 // OldFileID returns the old "file_id" field's value of the Apk entity.
 // If the Apk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApkMutation) OldFileID(ctx context.Context) (v string, err error) {
+func (m *ApkMutation) OldFileID(ctx context.Context) (v uint64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldFileID is only allowed on UpdateOne operations")
 	}
@@ -569,9 +570,28 @@ func (m *ApkMutation) OldFileID(ctx context.Context) (v string, err error) {
 	return oldValue.FileID, nil
 }
 
+// AddFileID adds u to the "file_id" field.
+func (m *ApkMutation) AddFileID(u int64) {
+	if m.addfile_id != nil {
+		*m.addfile_id += u
+	} else {
+		m.addfile_id = &u
+	}
+}
+
+// AddedFileID returns the value that was added to the "file_id" field in this mutation.
+func (m *ApkMutation) AddedFileID() (r int64, exists bool) {
+	v := m.addfile_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetFileID resets all changes to the "file_id" field.
 func (m *ApkMutation) ResetFileID() {
 	m.file_id = nil
+	m.addfile_id = nil
 }
 
 // SetFilePath sets the "file_path" field.
@@ -1253,7 +1273,7 @@ func (m *ApkMutation) SetField(name string, value ent.Value) error {
 		m.SetFileSize(v)
 		return nil
 	case apk.FieldFileID:
-		v, ok := value.(string)
+		v, ok := value.(uint64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1339,6 +1359,9 @@ func (m *ApkMutation) AddedFields() []string {
 	if m.addfile_size != nil {
 		fields = append(fields, apk.FieldFileSize)
 	}
+	if m.addfile_id != nil {
+		fields = append(fields, apk.FieldFileID)
+	}
 	if m.adddownload_count != nil {
 		fields = append(fields, apk.FieldDownloadCount)
 	}
@@ -1356,6 +1379,8 @@ func (m *ApkMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedTenantID()
 	case apk.FieldFileSize:
 		return m.AddedFileSize()
+	case apk.FieldFileID:
+		return m.AddedFileID()
 	case apk.FieldDownloadCount:
 		return m.AddedDownloadCount()
 	}
@@ -1387,6 +1412,13 @@ func (m *ApkMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddFileSize(v)
+		return nil
+	case apk.FieldFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFileID(v)
 		return nil
 	case apk.FieldDownloadCount:
 		v, ok := value.(int64)
@@ -1584,7 +1616,7 @@ type CloudFileMutation struct {
 	config
 	op                       Op
 	typ                      string
-	id                       *uuid.UUID
+	id                       *uint64
 	created_at               *time.Time
 	updated_at               *time.Time
 	state                    *bool
@@ -1628,7 +1660,7 @@ func newCloudFileMutation(c config, op Op, opts ...cloudfileOption) *CloudFileMu
 }
 
 // withCloudFileID sets the ID field of the mutation.
-func withCloudFileID(id uuid.UUID) cloudfileOption {
+func withCloudFileID(id uint64) cloudfileOption {
 	return func(m *CloudFileMutation) {
 		var (
 			err   error
@@ -1680,13 +1712,13 @@ func (m CloudFileMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of CloudFile entities.
-func (m *CloudFileMutation) SetID(id uuid.UUID) {
+func (m *CloudFileMutation) SetID(id uint64) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CloudFileMutation) ID() (id uuid.UUID, exists bool) {
+func (m *CloudFileMutation) ID() (id uint64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1697,12 +1729,12 @@ func (m *CloudFileMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *CloudFileMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *CloudFileMutation) IDs(ctx context.Context) ([]uint64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []uint64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2634,8 +2666,8 @@ type CloudFileTagMutation struct {
 	name               *string
 	remark             *string
 	clearedFields      map[string]struct{}
-	cloud_files        map[uuid.UUID]struct{}
-	removedcloud_files map[uuid.UUID]struct{}
+	cloud_files        map[uint64]struct{}
+	removedcloud_files map[uint64]struct{}
 	clearedcloud_files bool
 	done               bool
 	oldValue           func(context.Context) (*CloudFileTag, error)
@@ -3030,9 +3062,9 @@ func (m *CloudFileTagMutation) ResetRemark() {
 }
 
 // AddCloudFileIDs adds the "cloud_files" edge to the CloudFile entity by ids.
-func (m *CloudFileTagMutation) AddCloudFileIDs(ids ...uuid.UUID) {
+func (m *CloudFileTagMutation) AddCloudFileIDs(ids ...uint64) {
 	if m.cloud_files == nil {
-		m.cloud_files = make(map[uuid.UUID]struct{})
+		m.cloud_files = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		m.cloud_files[ids[i]] = struct{}{}
@@ -3050,9 +3082,9 @@ func (m *CloudFileTagMutation) CloudFilesCleared() bool {
 }
 
 // RemoveCloudFileIDs removes the "cloud_files" edge to the CloudFile entity by IDs.
-func (m *CloudFileTagMutation) RemoveCloudFileIDs(ids ...uuid.UUID) {
+func (m *CloudFileTagMutation) RemoveCloudFileIDs(ids ...uint64) {
 	if m.removedcloud_files == nil {
-		m.removedcloud_files = make(map[uuid.UUID]struct{})
+		m.removedcloud_files = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		delete(m.cloud_files, ids[i])
@@ -3061,7 +3093,7 @@ func (m *CloudFileTagMutation) RemoveCloudFileIDs(ids ...uuid.UUID) {
 }
 
 // RemovedCloudFiles returns the removed IDs of the "cloud_files" edge to the CloudFile entity.
-func (m *CloudFileTagMutation) RemovedCloudFilesIDs() (ids []uuid.UUID) {
+func (m *CloudFileTagMutation) RemovedCloudFilesIDs() (ids []uint64) {
 	for id := range m.removedcloud_files {
 		ids = append(ids, id)
 	}
@@ -3069,7 +3101,7 @@ func (m *CloudFileTagMutation) RemovedCloudFilesIDs() (ids []uuid.UUID) {
 }
 
 // CloudFilesIDs returns the "cloud_files" edge IDs in the mutation.
-func (m *CloudFileTagMutation) CloudFilesIDs() (ids []uuid.UUID) {
+func (m *CloudFileTagMutation) CloudFilesIDs() (ids []uint64) {
 	for id := range m.cloud_files {
 		ids = append(ids, id)
 	}
@@ -3430,7 +3462,7 @@ type FileMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *uuid.UUID
+	id            *uint64
 	created_at    *time.Time
 	updated_at    *time.Time
 	status        *uint8
@@ -3474,7 +3506,7 @@ func newFileMutation(c config, op Op, opts ...fileOption) *FileMutation {
 }
 
 // withFileID sets the ID field of the mutation.
-func withFileID(id uuid.UUID) fileOption {
+func withFileID(id uint64) fileOption {
 	return func(m *FileMutation) {
 		var (
 			err   error
@@ -3526,13 +3558,13 @@ func (m FileMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of File entities.
-func (m *FileMutation) SetID(id uuid.UUID) {
+func (m *FileMutation) SetID(id uint64) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *FileMutation) ID() (id uuid.UUID, exists bool) {
+func (m *FileMutation) ID() (id uint64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3543,12 +3575,12 @@ func (m *FileMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *FileMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *FileMutation) IDs(ctx context.Context) ([]uint64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []uint64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -4509,8 +4541,8 @@ type FileTagMutation struct {
 	name          *string
 	remark        *string
 	clearedFields map[string]struct{}
-	files         map[uuid.UUID]struct{}
-	removedfiles  map[uuid.UUID]struct{}
+	files         map[uint64]struct{}
+	removedfiles  map[uint64]struct{}
 	clearedfiles  bool
 	done          bool
 	oldValue      func(context.Context) (*FileTag, error)
@@ -4905,9 +4937,9 @@ func (m *FileTagMutation) ResetRemark() {
 }
 
 // AddFileIDs adds the "files" edge to the File entity by ids.
-func (m *FileTagMutation) AddFileIDs(ids ...uuid.UUID) {
+func (m *FileTagMutation) AddFileIDs(ids ...uint64) {
 	if m.files == nil {
-		m.files = make(map[uuid.UUID]struct{})
+		m.files = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		m.files[ids[i]] = struct{}{}
@@ -4925,9 +4957,9 @@ func (m *FileTagMutation) FilesCleared() bool {
 }
 
 // RemoveFileIDs removes the "files" edge to the File entity by IDs.
-func (m *FileTagMutation) RemoveFileIDs(ids ...uuid.UUID) {
+func (m *FileTagMutation) RemoveFileIDs(ids ...uint64) {
 	if m.removedfiles == nil {
-		m.removedfiles = make(map[uuid.UUID]struct{})
+		m.removedfiles = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		delete(m.files, ids[i])
@@ -4936,7 +4968,7 @@ func (m *FileTagMutation) RemoveFileIDs(ids ...uuid.UUID) {
 }
 
 // RemovedFiles returns the removed IDs of the "files" edge to the File entity.
-func (m *FileTagMutation) RemovedFilesIDs() (ids []uuid.UUID) {
+func (m *FileTagMutation) RemovedFilesIDs() (ids []uint64) {
 	for id := range m.removedfiles {
 		ids = append(ids, id)
 	}
@@ -4944,7 +4976,7 @@ func (m *FileTagMutation) RemovedFilesIDs() (ids []uuid.UUID) {
 }
 
 // FilesIDs returns the "files" edge IDs in the mutation.
-func (m *FileTagMutation) FilesIDs() (ids []uuid.UUID) {
+func (m *FileTagMutation) FilesIDs() (ids []uint64) {
 	for id := range m.files {
 		ids = append(ids, id)
 	}
@@ -5322,8 +5354,8 @@ type StorageProviderMutation struct {
 	use_cdn           *bool
 	cdn_url           *string
 	clearedFields     map[string]struct{}
-	cloudfiles        map[uuid.UUID]struct{}
-	removedcloudfiles map[uuid.UUID]struct{}
+	cloudfiles        map[uint64]struct{}
+	removedcloudfiles map[uint64]struct{}
 	clearedcloudfiles bool
 	done              bool
 	oldValue          func(context.Context) (*StorageProvider, error)
@@ -5998,9 +6030,9 @@ func (m *StorageProviderMutation) ResetCdnURL() {
 }
 
 // AddCloudfileIDs adds the "cloudfiles" edge to the CloudFile entity by ids.
-func (m *StorageProviderMutation) AddCloudfileIDs(ids ...uuid.UUID) {
+func (m *StorageProviderMutation) AddCloudfileIDs(ids ...uint64) {
 	if m.cloudfiles == nil {
-		m.cloudfiles = make(map[uuid.UUID]struct{})
+		m.cloudfiles = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		m.cloudfiles[ids[i]] = struct{}{}
@@ -6018,9 +6050,9 @@ func (m *StorageProviderMutation) CloudfilesCleared() bool {
 }
 
 // RemoveCloudfileIDs removes the "cloudfiles" edge to the CloudFile entity by IDs.
-func (m *StorageProviderMutation) RemoveCloudfileIDs(ids ...uuid.UUID) {
+func (m *StorageProviderMutation) RemoveCloudfileIDs(ids ...uint64) {
 	if m.removedcloudfiles == nil {
-		m.removedcloudfiles = make(map[uuid.UUID]struct{})
+		m.removedcloudfiles = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		delete(m.cloudfiles, ids[i])
@@ -6029,7 +6061,7 @@ func (m *StorageProviderMutation) RemoveCloudfileIDs(ids ...uuid.UUID) {
 }
 
 // RemovedCloudfiles returns the removed IDs of the "cloudfiles" edge to the CloudFile entity.
-func (m *StorageProviderMutation) RemovedCloudfilesIDs() (ids []uuid.UUID) {
+func (m *StorageProviderMutation) RemovedCloudfilesIDs() (ids []uint64) {
 	for id := range m.removedcloudfiles {
 		ids = append(ids, id)
 	}
@@ -6037,7 +6069,7 @@ func (m *StorageProviderMutation) RemovedCloudfilesIDs() (ids []uuid.UUID) {
 }
 
 // CloudfilesIDs returns the "cloudfiles" edge IDs in the mutation.
-func (m *StorageProviderMutation) CloudfilesIDs() (ids []uuid.UUID) {
+func (m *StorageProviderMutation) CloudfilesIDs() (ids []uint64) {
 	for id := range m.cloudfiles {
 		ids = append(ids, id)
 	}

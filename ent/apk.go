@@ -34,7 +34,7 @@ type Apk struct {
 	// 文件id
 	FileSize uint64 `json:"file_size,omitempty"`
 	// 下载地址
-	FileID string `json:"file_id,omitempty"`
+	FileID uint64 `json:"file_id,omitempty"`
 	// 文件存储路径
 	FilePath string `json:"file_path,omitempty"`
 	// 文件MD5值
@@ -63,9 +63,9 @@ func (*Apk) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apk.FieldIsForceUpdate:
 			values[i] = new(sql.NullBool)
-		case apk.FieldID, apk.FieldStatus, apk.FieldTenantID, apk.FieldFileSize, apk.FieldDownloadCount:
+		case apk.FieldID, apk.FieldStatus, apk.FieldTenantID, apk.FieldFileSize, apk.FieldFileID, apk.FieldDownloadCount:
 			values[i] = new(sql.NullInt64)
-		case apk.FieldName, apk.FieldVersion, apk.FieldVersionCode, apk.FieldFileID, apk.FieldFilePath, apk.FieldMd5, apk.FieldSha1, apk.FieldSha256, apk.FieldPackageName, apk.FieldDescription, apk.FieldUpdateLog:
+		case apk.FieldName, apk.FieldVersion, apk.FieldVersionCode, apk.FieldFilePath, apk.FieldMd5, apk.FieldSha1, apk.FieldSha256, apk.FieldPackageName, apk.FieldDescription, apk.FieldUpdateLog:
 			values[i] = new(sql.NullString)
 		case apk.FieldCreatedAt, apk.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -139,10 +139,10 @@ func (_m *Apk) assignValues(columns []string, values []any) error {
 				_m.FileSize = uint64(value.Int64)
 			}
 		case apk.FieldFileID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field file_id", values[i])
 			} else if value.Valid {
-				_m.FileID = value.String
+				_m.FileID = uint64(value.Int64)
 			}
 		case apk.FieldFilePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -259,7 +259,7 @@ func (_m *Apk) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.FileSize))
 	builder.WriteString(", ")
 	builder.WriteString("file_id=")
-	builder.WriteString(_m.FileID)
+	builder.WriteString(fmt.Sprintf("%v", _m.FileID))
 	builder.WriteString(", ")
 	builder.WriteString("file_path=")
 	builder.WriteString(_m.FilePath)

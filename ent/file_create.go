@@ -12,7 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // FileCreate is the builder for creating a File entity.
@@ -115,16 +114,8 @@ func (_c *FileCreate) SetMd5(v string) *FileCreate {
 }
 
 // SetID sets the "id" field.
-func (_c *FileCreate) SetID(v uuid.UUID) *FileCreate {
+func (_c *FileCreate) SetID(v uint64) *FileCreate {
 	_c.mutation.SetID(v)
-	return _c
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (_c *FileCreate) SetNillableID(v *uuid.UUID) *FileCreate {
-	if v != nil {
-		_c.SetID(*v)
-	}
 	return _c
 }
 
@@ -202,13 +193,6 @@ func (_c *FileCreate) defaults() error {
 		v := file.DefaultTenantID
 		_c.mutation.SetTenantID(v)
 	}
-	if _, ok := _c.mutation.ID(); !ok {
-		if file.DefaultID == nil {
-			return fmt.Errorf("ent: uninitialized file.DefaultID (forgotten import ent/runtime?)")
-		}
-		v := file.DefaultID()
-		_c.mutation.SetID(v)
-	}
 	return nil
 }
 
@@ -255,12 +239,9 @@ func (_c *FileCreate) sqlSave(ctx context.Context) (*File, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
-		}
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint64(id)
 	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
@@ -270,11 +251,11 @@ func (_c *FileCreate) sqlSave(ctx context.Context) (*File, error) {
 func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	var (
 		_node = &File{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(file.Table, sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID))
+		_spec = sqlgraph.NewCreateSpec(file.Table, sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64))
 	)
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(file.FieldCreatedAt, field.TypeTime, value)
@@ -380,6 +361,10 @@ func (_c *FileCreateBulk) Save(ctx context.Context) ([]*File, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = uint64(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})

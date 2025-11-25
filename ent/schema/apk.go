@@ -25,7 +25,7 @@ func (Apk) Fields() []ent.Field {
 		field.Uint64("file_size").
 			Default(0).
 			Comment("文件id"),
-		field.String("file_id").
+		field.Uint64("file_id").
 			Comment("下载地址"),
 		field.String("file_path").
 			Optional().

@@ -14,7 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // CloudFileTagUpdate is the builder for updating CloudFileTag entities.
@@ -98,14 +97,14 @@ func (_u *CloudFileTagUpdate) ClearRemark() *CloudFileTagUpdate {
 }
 
 // AddCloudFileIDs adds the "cloud_files" edge to the CloudFile entity by IDs.
-func (_u *CloudFileTagUpdate) AddCloudFileIDs(ids ...uuid.UUID) *CloudFileTagUpdate {
+func (_u *CloudFileTagUpdate) AddCloudFileIDs(ids ...uint64) *CloudFileTagUpdate {
 	_u.mutation.AddCloudFileIDs(ids...)
 	return _u
 }
 
 // AddCloudFiles adds the "cloud_files" edges to the CloudFile entity.
 func (_u *CloudFileTagUpdate) AddCloudFiles(v ...*CloudFile) *CloudFileTagUpdate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -124,14 +123,14 @@ func (_u *CloudFileTagUpdate) ClearCloudFiles() *CloudFileTagUpdate {
 }
 
 // RemoveCloudFileIDs removes the "cloud_files" edge to CloudFile entities by IDs.
-func (_u *CloudFileTagUpdate) RemoveCloudFileIDs(ids ...uuid.UUID) *CloudFileTagUpdate {
+func (_u *CloudFileTagUpdate) RemoveCloudFileIDs(ids ...uint64) *CloudFileTagUpdate {
 	_u.mutation.RemoveCloudFileIDs(ids...)
 	return _u
 }
 
 // RemoveCloudFiles removes "cloud_files" edges to CloudFile entities.
 func (_u *CloudFileTagUpdate) RemoveCloudFiles(v ...*CloudFile) *CloudFileTagUpdate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -218,7 +217,7 @@ func (_u *CloudFileTagUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Columns: cloudfiletag.CloudFilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -231,7 +230,7 @@ func (_u *CloudFileTagUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Columns: cloudfiletag.CloudFilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -247,7 +246,7 @@ func (_u *CloudFileTagUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Columns: cloudfiletag.CloudFilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -343,14 +342,14 @@ func (_u *CloudFileTagUpdateOne) ClearRemark() *CloudFileTagUpdateOne {
 }
 
 // AddCloudFileIDs adds the "cloud_files" edge to the CloudFile entity by IDs.
-func (_u *CloudFileTagUpdateOne) AddCloudFileIDs(ids ...uuid.UUID) *CloudFileTagUpdateOne {
+func (_u *CloudFileTagUpdateOne) AddCloudFileIDs(ids ...uint64) *CloudFileTagUpdateOne {
 	_u.mutation.AddCloudFileIDs(ids...)
 	return _u
 }
 
 // AddCloudFiles adds the "cloud_files" edges to the CloudFile entity.
 func (_u *CloudFileTagUpdateOne) AddCloudFiles(v ...*CloudFile) *CloudFileTagUpdateOne {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -369,14 +368,14 @@ func (_u *CloudFileTagUpdateOne) ClearCloudFiles() *CloudFileTagUpdateOne {
 }
 
 // RemoveCloudFileIDs removes the "cloud_files" edge to CloudFile entities by IDs.
-func (_u *CloudFileTagUpdateOne) RemoveCloudFileIDs(ids ...uuid.UUID) *CloudFileTagUpdateOne {
+func (_u *CloudFileTagUpdateOne) RemoveCloudFileIDs(ids ...uint64) *CloudFileTagUpdateOne {
 	_u.mutation.RemoveCloudFileIDs(ids...)
 	return _u
 }
 
 // RemoveCloudFiles removes "cloud_files" edges to CloudFile entities.
 func (_u *CloudFileTagUpdateOne) RemoveCloudFiles(v ...*CloudFile) *CloudFileTagUpdateOne {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -493,7 +492,7 @@ func (_u *CloudFileTagUpdateOne) sqlSave(ctx context.Context) (_node *CloudFileT
 			Columns: cloudfiletag.CloudFilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -506,7 +505,7 @@ func (_u *CloudFileTagUpdateOne) sqlSave(ctx context.Context) (_node *CloudFileT
 			Columns: cloudfiletag.CloudFilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -522,7 +521,7 @@ func (_u *CloudFileTagUpdateOne) sqlSave(ctx context.Context) (_node *CloudFileT
 			Columns: cloudfiletag.CloudFilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

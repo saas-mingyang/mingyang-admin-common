@@ -14,7 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // FileTagUpdate is the builder for updating FileTag entities.
@@ -98,14 +97,14 @@ func (_u *FileTagUpdate) ClearRemark() *FileTagUpdate {
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *FileTagUpdate) AddFileIDs(ids ...uuid.UUID) *FileTagUpdate {
+func (_u *FileTagUpdate) AddFileIDs(ids ...uint64) *FileTagUpdate {
 	_u.mutation.AddFileIDs(ids...)
 	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
 func (_u *FileTagUpdate) AddFiles(v ...*File) *FileTagUpdate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -124,14 +123,14 @@ func (_u *FileTagUpdate) ClearFiles() *FileTagUpdate {
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *FileTagUpdate) RemoveFileIDs(ids ...uuid.UUID) *FileTagUpdate {
+func (_u *FileTagUpdate) RemoveFileIDs(ids ...uint64) *FileTagUpdate {
 	_u.mutation.RemoveFileIDs(ids...)
 	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
 func (_u *FileTagUpdate) RemoveFiles(v ...*File) *FileTagUpdate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -218,7 +217,7 @@ func (_u *FileTagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -231,7 +230,7 @@ func (_u *FileTagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -247,7 +246,7 @@ func (_u *FileTagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -343,14 +342,14 @@ func (_u *FileTagUpdateOne) ClearRemark() *FileTagUpdateOne {
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *FileTagUpdateOne) AddFileIDs(ids ...uuid.UUID) *FileTagUpdateOne {
+func (_u *FileTagUpdateOne) AddFileIDs(ids ...uint64) *FileTagUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
 	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
 func (_u *FileTagUpdateOne) AddFiles(v ...*File) *FileTagUpdateOne {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -369,14 +368,14 @@ func (_u *FileTagUpdateOne) ClearFiles() *FileTagUpdateOne {
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *FileTagUpdateOne) RemoveFileIDs(ids ...uuid.UUID) *FileTagUpdateOne {
+func (_u *FileTagUpdateOne) RemoveFileIDs(ids ...uint64) *FileTagUpdateOne {
 	_u.mutation.RemoveFileIDs(ids...)
 	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
 func (_u *FileTagUpdateOne) RemoveFiles(v ...*File) *FileTagUpdateOne {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -493,7 +492,7 @@ func (_u *FileTagUpdateOne) sqlSave(ctx context.Context) (_node *FileTag, err er
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -506,7 +505,7 @@ func (_u *FileTagUpdateOne) sqlSave(ctx context.Context) (_node *FileTag, err er
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -522,7 +521,7 @@ func (_u *FileTagUpdateOne) sqlSave(ctx context.Context) (_node *FileTag, err er
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 const (
@@ -113,8 +112,6 @@ var (
 	DefaultState bool
 	// DefaultTenantID holds the default value on creation for the "tenant_id" field.
 	DefaultTenantID uint64
-	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the CloudFile queries.

@@ -47,7 +47,7 @@ func (CloudFile) Edges() []ent.Edge {
 // Mixin of the CloudFile.
 func (CloudFile) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixins.UUIDMixin{},
+		mixins.IDMixin{},
 		mixins.StateMixin{},
 		mixins.TenantMixin{},
 	}

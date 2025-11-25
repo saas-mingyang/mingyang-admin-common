@@ -12,7 +12,6 @@ import (
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -40,7 +39,7 @@ func (l *UpdateCloudFileLogic) UpdateCloudFile(req *types.CloudFileInfo) (*types
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
 
-	query := l.svcCtx.DB.CloudFile.UpdateOneID(uuidx.ParseUUIDString(*req.Id)).
+	query := l.svcCtx.DB.CloudFile.UpdateOneID(*req.Id).
 		SetNotNilState(req.State).
 		SetNotNilName(req.Name).
 		SetNotNilURL(req.Url).

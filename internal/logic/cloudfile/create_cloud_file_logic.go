@@ -2,6 +2,7 @@ package cloudfile
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 
 	"github.com/zeromicro/go-zero/core/errorx"
 
@@ -44,6 +45,7 @@ func (l *CreateCloudFileLogic) CreateCloudFile(req *types.CloudFileInfo) (*types
 		SetNotNilState(req.State).
 		SetNotNilName(req.Name).
 		SetNotNilURL(req.Url).
+		SetID(sonyflake.NextID()).
 		SetNotNilSize(req.Size).
 		SetNotNilFileType(req.FileType).
 		SetNotNilUserID(req.UserId)

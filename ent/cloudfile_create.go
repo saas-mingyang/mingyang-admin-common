@@ -13,7 +13,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // CloudFileCreate is the builder for creating a CloudFile entity.
@@ -110,16 +109,8 @@ func (_c *CloudFileCreate) SetUserID(v string) *CloudFileCreate {
 }
 
 // SetID sets the "id" field.
-func (_c *CloudFileCreate) SetID(v uuid.UUID) *CloudFileCreate {
+func (_c *CloudFileCreate) SetID(v uint64) *CloudFileCreate {
 	_c.mutation.SetID(v)
-	return _c
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (_c *CloudFileCreate) SetNillableID(v *uuid.UUID) *CloudFileCreate {
-	if v != nil {
-		_c.SetID(*v)
-	}
 	return _c
 }
 
@@ -216,13 +207,6 @@ func (_c *CloudFileCreate) defaults() error {
 		v := cloudfile.DefaultTenantID
 		_c.mutation.SetTenantID(v)
 	}
-	if _, ok := _c.mutation.ID(); !ok {
-		if cloudfile.DefaultID == nil {
-			return fmt.Errorf("ent: uninitialized cloudfile.DefaultID (forgotten import ent/runtime?)")
-		}
-		v := cloudfile.DefaultID()
-		_c.mutation.SetID(v)
-	}
 	return nil
 }
 
@@ -266,12 +250,9 @@ func (_c *CloudFileCreate) sqlSave(ctx context.Context) (*CloudFile, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
-		}
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint64(id)
 	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
@@ -281,11 +262,11 @@ func (_c *CloudFileCreate) sqlSave(ctx context.Context) (*CloudFile, error) {
 func (_c *CloudFileCreate) createSpec() (*CloudFile, *sqlgraph.CreateSpec) {
 	var (
 		_node = &CloudFile{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(cloudfile.Table, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID))
+		_spec = sqlgraph.NewCreateSpec(cloudfile.Table, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64))
 	)
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(cloudfile.FieldCreatedAt, field.TypeTime, value)
@@ -404,6 +385,10 @@ func (_c *CloudFileCreateBulk) Save(ctx context.Context) ([]*CloudFile, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = uint64(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})

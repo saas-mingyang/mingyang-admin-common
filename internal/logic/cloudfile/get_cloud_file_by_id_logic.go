@@ -10,7 +10,6 @@ import (
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 
 	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -30,8 +29,8 @@ func NewGetCloudFileByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *GetCloudFileByIdLogic) GetCloudFileById(req *types.UUIDReq) (*types.CloudFileInfoResp, error) {
-	data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDEQ(uuidx.ParseUUIDString(req.Id))).WithStorageProviders().
+func (l *GetCloudFileByIdLogic) GetCloudFileById(req *types.BaseIDInfo) (*types.CloudFileInfoResp, error) {
+	data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDEQ(*req.Id)).WithStorageProviders().
 		First(l.ctx)
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
@@ -43,8 +42,8 @@ func (l *GetCloudFileByIdLogic) GetCloudFileById(req *types.UUIDReq) (*types.Clo
 			Msg:  l.svcCtx.Trans.Trans(l.ctx, i18n.Success),
 		},
 		Data: types.CloudFileInfo{
-			BaseUUIDInfo: types.BaseUUIDInfo{
-				Id:        pointy.GetPointer(data.ID.String()),
+			BaseIDInfo: types.BaseIDInfo{
+				Id:        &data.ID,
 				CreatedAt: pointy.GetPointer(data.CreatedAt.UnixMilli()),
 				UpdatedAt: pointy.GetPointer(data.UpdatedAt.UnixMilli()),
 			},

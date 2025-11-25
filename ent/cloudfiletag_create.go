@@ -12,7 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // CloudFileTagCreate is the builder for creating a CloudFileTag entity.
@@ -105,14 +104,14 @@ func (_c *CloudFileTagCreate) SetID(v uint64) *CloudFileTagCreate {
 }
 
 // AddCloudFileIDs adds the "cloud_files" edge to the CloudFile entity by IDs.
-func (_c *CloudFileTagCreate) AddCloudFileIDs(ids ...uuid.UUID) *CloudFileTagCreate {
+func (_c *CloudFileTagCreate) AddCloudFileIDs(ids ...uint64) *CloudFileTagCreate {
 	_c.mutation.AddCloudFileIDs(ids...)
 	return _c
 }
 
 // AddCloudFiles adds the "cloud_files" edges to the CloudFile entity.
 func (_c *CloudFileTagCreate) AddCloudFiles(v ...*CloudFile) *CloudFileTagCreate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -259,7 +258,7 @@ func (_c *CloudFileTagCreate) createSpec() (*CloudFileTag, *sqlgraph.CreateSpec)
 			Columns: cloudfiletag.CloudFilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

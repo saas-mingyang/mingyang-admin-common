@@ -16,7 +16,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // CloudFileTagQuery is the builder for querying CloudFileTag entities.
@@ -414,7 +413,7 @@ func (_q *CloudFileTagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 func (_q *CloudFileTagQuery) loadCloudFiles(ctx context.Context, query *CloudFileQuery, nodes []*CloudFileTag, init func(*CloudFileTag), assign func(*CloudFileTag, *CloudFile)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[uint64]*CloudFileTag)
-	nids := make(map[uuid.UUID]map[*CloudFileTag]struct{})
+	nids := make(map[uint64]map[*CloudFileTag]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -447,7 +446,7 @@ func (_q *CloudFileTagQuery) loadCloudFiles(ctx context.Context, query *CloudFil
 			}
 			spec.Assign = func(columns []string, values []any) error {
 				outValue := uint64(values[0].(*sql.NullInt64).Int64)
-				inValue := *values[1].(*uuid.UUID)
+				inValue := uint64(values[1].(*sql.NullInt64).Int64)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*CloudFileTag]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])

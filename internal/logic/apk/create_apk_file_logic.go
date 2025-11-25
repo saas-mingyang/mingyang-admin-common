@@ -43,7 +43,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		return nil, errorx.NewCodeError(400, "版本号 "+req.VersionCode+" 已存在")
 	}
 	downloadUrlLogic := cloudfile.NewGetCloudFileDownloadUrlLogic(l.ctx, l.svcCtx)
-	result, err := downloadUrlLogic.GetCloudFileDownloadUrl(&types.UUIDReq{Id: req.FileId})
+	result, err := downloadUrlLogic.GetCloudFileDownloadUrl(&types.BaseIDInfo{Id: req.FileId})
 	if err != nil {
 		return nil, errorx.NewCodeInternalError(err.Error())
 	}
@@ -53,7 +53,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		SetName(req.Name).
 		SetVersion(req.Version).
 		SetVersionCode(builder.String()).
-		SetFileID(req.FileId).
+		SetFileID(*req.FileId).
 		SetFilePath(*data.Url).
 		SetDescription(req.Description).
 		SetUpdateLog(req.UpdateLog).

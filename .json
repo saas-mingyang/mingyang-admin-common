@@ -1110,7 +1110,6 @@
         "file_id": {
           "description": "FileId | 文件ID",
           "type": "string",
-          "format": "uint64",
           "x-go-name": "FileId"
         },
         "file_path": {
@@ -1126,8 +1125,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
-          "format": "uint64",
+          "type": "string",
           "x-go-name": "Id"
         },
         "is_force_update": {
@@ -1328,8 +1326,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
-          "format": "uint64",
+          "type": "string",
           "x-go-name": "Id"
         },
         "name": {
@@ -1687,8 +1684,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
-          "format": "uint64",
+          "type": "string",
           "x-go-name": "Id"
         },
         "name": {
@@ -2015,7 +2011,7 @@
       "properties": {
         "id": {
           "description": "ID",
-          "type": "string",
+          "type": "integer",
           "format": "uint64",
           "x-go-name": "Id"
         }
@@ -2052,8 +2048,7 @@
           "description": "Ids",
           "type": "array",
           "items": {
-            "type": "integer",
-            "format": "uint64"
+            "type": "string"
           },
           "x-go-name": "Ids"
         }
@@ -2092,7 +2087,6 @@
         "id": {
           "description": "ID",
           "type": "string",
-          "format": "uint64",
           "x-go-name": "Id"
         },
         "status": {
@@ -2324,7 +2318,6 @@
         "id": {
           "description": "ID",
           "type": "string",
-          "format": "uint64",
           "x-go-name": "ID"
         },
         "name": {

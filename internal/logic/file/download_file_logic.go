@@ -4,8 +4,6 @@ import (
 	"context"
 	"path"
 
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
-
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
 	"mingyang-admin-simple-admin-file/internal/svc"
@@ -28,8 +26,8 @@ func NewDownloadFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Down
 	}
 }
 
-func (l *DownloadFileLogic) DownloadFile(req *types.UUIDPathReq) (filePath string, err error) {
-	file, err := l.svcCtx.DB.File.Get(l.ctx, uuidx.ParseUUIDString(req.Id))
+func (l *DownloadFileLogic) DownloadFile(req *types.BaseIDInfo) (filePath string, err error) {
+	file, err := l.svcCtx.DB.File.Get(l.ctx, *req.Id)
 
 	if err != nil {
 		return "", dberrorhandler.DefaultEntError(l.Logger, err, req)

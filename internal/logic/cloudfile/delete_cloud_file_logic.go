@@ -17,7 +17,6 @@ import (
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -48,7 +47,7 @@ func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.IdsReq) (*types.BaseMs
 			}
 		}
 
-		data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).
+		data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDIn(req.Ids...)).
 			WithStorageProviders().All(l.ctx)
 		if err != nil {
 			return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
@@ -85,7 +84,7 @@ func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.IdsReq) (*types.BaseMs
 		}
 	}
 
-	_, err := l.svcCtx.DB.CloudFile.Delete().Where(cloudfile.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).Exec(l.ctx)
+	_, err := l.svcCtx.DB.CloudFile.Delete().Where(cloudfile.IDIn(req.Ids...)).Exec(l.ctx)
 
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)

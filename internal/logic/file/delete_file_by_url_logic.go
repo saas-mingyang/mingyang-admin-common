@@ -25,11 +25,11 @@ func NewDeleteFileByUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) *D
 }
 
 func (l *DeleteFileByUrlLogic) DeleteFileByUrl(req *types.FileDeleteReq) (resp *types.BaseMsgResp, err error) {
-	fileId, err := filex.ConvertUrlStringToFileUUID(req.Url)
+	fileId, err := filex.ConvertUrlStringToFileUint64(req.Url)
 	if err != nil {
 		return nil, err
 	}
 
 	logic := NewDeleteFileLogic(l.ctx, l.svcCtx)
-	return logic.DeleteFile(&types.IdsReq{Ids: []string{fileId}})
+	return logic.DeleteFile(&types.IdsReq{Ids: []uint64{fileId}})
 }

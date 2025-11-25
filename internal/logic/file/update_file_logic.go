@@ -3,8 +3,6 @@ package file
 import (
 	"context"
 
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
-
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
@@ -31,7 +29,7 @@ func NewUpdateFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 }
 
 func (l *UpdateFileLogic) UpdateFile(req *types.UpdateFileReq) (resp *types.BaseMsgResp, err error) {
-	query := l.svcCtx.DB.File.UpdateOneID(uuidx.ParseUUIDString(req.ID)).SetNotNilName(req.Name)
+	query := l.svcCtx.DB.File.UpdateOneID(req.ID).SetNotNilName(req.Name)
 
 	if req.FileTagIds != nil {
 		query.AddTagIDs(req.FileTagIds...)

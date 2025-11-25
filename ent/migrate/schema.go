@@ -20,7 +20,7 @@ var (
 		{Name: "version", Type: field.TypeString, Comment: "版本号"},
 		{Name: "version_code", Type: field.TypeString, Unique: true, Comment: "版本代码(内部版本号)"},
 		{Name: "file_size", Type: field.TypeUint64, Comment: "文件id", Default: 0},
-		{Name: "file_id", Type: field.TypeString, Comment: "下载地址"},
+		{Name: "file_id", Type: field.TypeUint64, Comment: "下载地址"},
 		{Name: "file_path", Type: field.TypeString, Nullable: true, Comment: "文件存储路径"},
 		{Name: "md5", Type: field.TypeString, Nullable: true, Comment: "文件MD5值"},
 		{Name: "sha1", Type: field.TypeString, Nullable: true, Comment: "文件SHA1值"},
@@ -47,7 +47,7 @@ var (
 	}
 	// FmsCloudFilesColumns holds the columns for the "fms_cloud_files" table.
 	FmsCloudFilesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID, Comment: "UUID"},
+		{Name: "id", Type: field.TypeUint64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "state", Type: field.TypeBool, Nullable: true, Comment: "State true: normal false: ban | 状态 true 正常 false 禁用", Default: true},
@@ -117,7 +117,7 @@ var (
 	}
 	// FmsFilesColumns holds the columns for the "fms_files" table.
 	FmsFilesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID, Comment: "UUID"},
+		{Name: "id", Type: field.TypeUint64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
@@ -205,7 +205,7 @@ var (
 	// CloudFileTagCloudFilesColumns holds the columns for the "cloud_file_tag_cloud_files" table.
 	CloudFileTagCloudFilesColumns = []*schema.Column{
 		{Name: "cloud_file_tag_id", Type: field.TypeUint64},
-		{Name: "cloud_file_id", Type: field.TypeUUID},
+		{Name: "cloud_file_id", Type: field.TypeUint64},
 	}
 	// CloudFileTagCloudFilesTable holds the schema information for the "cloud_file_tag_cloud_files" table.
 	CloudFileTagCloudFilesTable = &schema.Table{
@@ -230,7 +230,7 @@ var (
 	// FileTagFilesColumns holds the columns for the "file_tag_files" table.
 	FileTagFilesColumns = []*schema.Column{
 		{Name: "file_tag_id", Type: field.TypeUint64},
-		{Name: "file_id", Type: field.TypeUUID},
+		{Name: "file_id", Type: field.TypeUint64},
 	}
 	// FileTagFilesTable holds the schema information for the "file_tag_files" table.
 	FileTagFilesTable = &schema.Table{

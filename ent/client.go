@@ -22,7 +22,6 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	uuid "github.com/gofrs/uuid/v5"
 
 	stdsql "database/sql"
 )
@@ -443,7 +442,7 @@ func (c *CloudFileClient) UpdateOne(_m *CloudFile) *CloudFileUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CloudFileClient) UpdateOneID(id uuid.UUID) *CloudFileUpdateOne {
+func (c *CloudFileClient) UpdateOneID(id uint64) *CloudFileUpdateOne {
 	mutation := newCloudFileMutation(c.config, OpUpdateOne, withCloudFileID(id))
 	return &CloudFileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -460,7 +459,7 @@ func (c *CloudFileClient) DeleteOne(_m *CloudFile) *CloudFileDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CloudFileClient) DeleteOneID(id uuid.UUID) *CloudFileDeleteOne {
+func (c *CloudFileClient) DeleteOneID(id uint64) *CloudFileDeleteOne {
 	builder := c.Delete().Where(cloudfile.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -477,12 +476,12 @@ func (c *CloudFileClient) Query() *CloudFileQuery {
 }
 
 // Get returns a CloudFile entity by its id.
-func (c *CloudFileClient) Get(ctx context.Context, id uuid.UUID) (*CloudFile, error) {
+func (c *CloudFileClient) Get(ctx context.Context, id uint64) (*CloudFile, error) {
 	return c.Query().Where(cloudfile.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CloudFileClient) GetX(ctx context.Context, id uuid.UUID) *CloudFile {
+func (c *CloudFileClient) GetX(ctx context.Context, id uint64) *CloudFile {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -759,7 +758,7 @@ func (c *FileClient) UpdateOne(_m *File) *FileUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *FileClient) UpdateOneID(id uuid.UUID) *FileUpdateOne {
+func (c *FileClient) UpdateOneID(id uint64) *FileUpdateOne {
 	mutation := newFileMutation(c.config, OpUpdateOne, withFileID(id))
 	return &FileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -776,7 +775,7 @@ func (c *FileClient) DeleteOne(_m *File) *FileDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *FileClient) DeleteOneID(id uuid.UUID) *FileDeleteOne {
+func (c *FileClient) DeleteOneID(id uint64) *FileDeleteOne {
 	builder := c.Delete().Where(file.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -793,12 +792,12 @@ func (c *FileClient) Query() *FileQuery {
 }
 
 // Get returns a File entity by its id.
-func (c *FileClient) Get(ctx context.Context, id uuid.UUID) (*File, error) {
+func (c *FileClient) Get(ctx context.Context, id uint64) (*File, error) {
 	return c.Query().Where(file.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *FileClient) GetX(ctx context.Context, id uuid.UUID) *File {
+func (c *FileClient) GetX(ctx context.Context, id uint64) *File {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

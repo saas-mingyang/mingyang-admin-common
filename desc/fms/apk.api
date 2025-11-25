@@ -2,7 +2,7 @@ import "../base.api"
 
 type (
 	ApkInfo {
-		BaseUUIDInfo
+		BaseIDInfo
 		// Name | APK名称
 		Name string `json:"name"`
 		// Version | APK版本
@@ -12,7 +12,7 @@ type (
 		// FileSize | 文件大小
 		FileSize uint64 `json:"file_size"`
 		// FileId | 文件ID
-		FileId string `json:"file_id"`
+		FileId *uint64 `json:"file_id,string"`
 		// FilePath | 文件路径
 		FilePath string `json:"file_path,optional"`
 		// UploadTime | 上传时间

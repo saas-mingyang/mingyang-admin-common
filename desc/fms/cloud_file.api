@@ -3,7 +3,7 @@ import "../base.api"
 type (
 	// The response data of cloud file information | 云文件信息
 	CloudFileInfo {
-		BaseUUIDInfo
+		BaseIDInfo
 		// State | 状态
 		State *bool `json:"state,optional"`
 		// Name | 名称

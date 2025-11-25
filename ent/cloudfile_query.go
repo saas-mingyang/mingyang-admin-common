@@ -17,7 +17,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // CloudFileQuery is the builder for querying CloudFile entities.
@@ -134,8 +133,8 @@ func (_q *CloudFileQuery) FirstX(ctx context.Context) *CloudFile {
 
 // FirstID returns the first CloudFile ID from the query.
 // Returns a *NotFoundError when no CloudFile ID was found.
-func (_q *CloudFileQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (_q *CloudFileQuery) FirstID(ctx context.Context) (id uint64, err error) {
+	var ids []uint64
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -147,7 +146,7 @@ func (_q *CloudFileQuery) FirstID(ctx context.Context) (id uuid.UUID, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *CloudFileQuery) FirstIDX(ctx context.Context) uuid.UUID {
+func (_q *CloudFileQuery) FirstIDX(ctx context.Context) uint64 {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -185,8 +184,8 @@ func (_q *CloudFileQuery) OnlyX(ctx context.Context) *CloudFile {
 // OnlyID is like Only, but returns the only CloudFile ID in the query.
 // Returns a *NotSingularError when more than one CloudFile ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *CloudFileQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (_q *CloudFileQuery) OnlyID(ctx context.Context) (id uint64, err error) {
+	var ids []uint64
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -202,7 +201,7 @@ func (_q *CloudFileQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *CloudFileQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+func (_q *CloudFileQuery) OnlyIDX(ctx context.Context) uint64 {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -230,7 +229,7 @@ func (_q *CloudFileQuery) AllX(ctx context.Context) []*CloudFile {
 }
 
 // IDs executes the query and returns a list of CloudFile IDs.
-func (_q *CloudFileQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+func (_q *CloudFileQuery) IDs(ctx context.Context) (ids []uint64, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -242,7 +241,7 @@ func (_q *CloudFileQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) 
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *CloudFileQuery) IDsX(ctx context.Context) []uuid.UUID {
+func (_q *CloudFileQuery) IDsX(ctx context.Context) []uint64 {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -496,7 +495,7 @@ func (_q *CloudFileQuery) loadStorageProviders(ctx context.Context, query *Stora
 }
 func (_q *CloudFileQuery) loadTags(ctx context.Context, query *CloudFileTagQuery, nodes []*CloudFile, init func(*CloudFile), assign func(*CloudFile, *CloudFileTag)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[uuid.UUID]*CloudFile)
+	byID := make(map[uint64]*CloudFile)
 	nids := make(map[uint64]map[*CloudFile]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
@@ -526,10 +525,10 @@ func (_q *CloudFileQuery) loadTags(ctx context.Context, query *CloudFileTagQuery
 				if err != nil {
 					return nil, err
 				}
-				return append([]any{new(uuid.UUID)}, values...), nil
+				return append([]any{new(sql.NullInt64)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := *values[0].(*uuid.UUID)
+				outValue := uint64(values[0].(*sql.NullInt64).Int64)
 				inValue := uint64(values[1].(*sql.NullInt64).Int64)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*CloudFile]struct{}{byID[outValue]: {}}
@@ -566,7 +565,7 @@ func (_q *CloudFileQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *CloudFileQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(cloudfile.Table, cloudfile.Columns, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewQuerySpec(cloudfile.Table, cloudfile.Columns, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

@@ -28,7 +28,7 @@ type (
 	UpdateFileReq {
 		// ID
 		// Required : true
-		ID string `json:"id"`
+		ID uint64 `json:"id,string"`
 		// File name | 文件名
 		// Required : true
 		Name *string `json:"name,optional" validate:"max=50"`
@@ -51,7 +51,7 @@ type (
 	}
 	// The response data of file information | 文件信息数据
 	FileInfo {
-		BaseUUIDInfo
+		BaseIDInfo
 		// User's UUID | 用户的UUID
 		UserUUID *string `json:"userUUID"`
 		// File name | 文件名

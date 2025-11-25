@@ -48,7 +48,7 @@ type PageInfo struct {
 type IDReq struct {
 	// ID
 	// Required: true
-	Id uint64 `json:"id" validate:"number"`
+	Id uint64 `json:"id,string" validate:"number"`
 }
 
 // Basic IDs request | 基础ID数组参数请求
@@ -56,7 +56,7 @@ type IDReq struct {
 type IDsReq struct {
 	// IDs
 	// Required: true
-	Ids []uint64 `json:"ids"`
+	Ids []uint64 `json:"ids,string"`
 }
 
 // Basic ID request | 基础ID地址参数请求
@@ -89,14 +89,14 @@ type UUIDReq struct {
 type IdsReq struct {
 	// Ids
 	// Required: true
-	Ids []string `json:"ids"`
+	Ids []uint64 `json:"ids,[]string"`
 }
 
 // The base ID response data | 基础ID信息
 // swagger:model BaseIDInfo
 type BaseIDInfo struct {
 	// ID
-	Id *uint64 `json:"id,optional"`
+	Id *uint64 `json:"id,optional, string"`
 	// Create date | 创建日期
 	CreatedAt *int64 `json:"createdAt,optional"`
 	// Update date | 更新日期
@@ -118,7 +118,7 @@ type BaseUUIDInfo struct {
 // swagger:model StatusCodeReq
 type StatusCodeReq struct {
 	// ID
-	Id string `json:"id"`
+	Id uint64 `json:"id,string"`
 	// Status code | 状态码
 	Status uint64 `json:"status" validate:"number"`
 }
@@ -145,7 +145,7 @@ type UploadResp struct {
 type UpdateFileReq struct {
 	// ID
 	// Required : true
-	ID string `json:"id"`
+	ID uint64 `json:"id,string"`
 	// File name | 文件名
 	// Required : true
 	Name *string `json:"name,optional" validate:"max=50"`
@@ -174,7 +174,7 @@ type FileListReq struct {
 // The response data of file information | 文件信息数据
 // swagger:model FileInfo
 type FileInfo struct {
-	BaseUUIDInfo
+	BaseIDInfo
 	// User's UUID | 用户的UUID
 	UserUUID *string `json:"userUUID"`
 	// File name | 文件名
@@ -265,7 +265,7 @@ type FileTagInfoResp struct {
 // The response data of cloud file information | 云文件信息
 // swagger:model CloudFileInfo
 type CloudFileInfo struct {
-	BaseUUIDInfo
+	BaseIDInfo
 	// State | 状态
 	State *bool `json:"state,optional"`
 	// Name | 名称
@@ -441,7 +441,7 @@ type CloudFileTagInfoResp struct {
 
 // swagger:model ApkInfo
 type ApkInfo struct {
-	BaseUUIDInfo
+	BaseIDInfo
 	// Name | APK名称
 	Name string `json:"name"`
 	// Version | APK版本
@@ -451,7 +451,7 @@ type ApkInfo struct {
 	// FileSize | 文件大小
 	FileSize uint64 `json:"file_size"`
 	// FileId | 文件ID
-	FileId string `json:"file_id"`
+	FileId *uint64 `json:"file_id,string"`
 	// FilePath | 文件路径
 	FilePath string `json:"file_path,optional"`
 	// UploadTime | 上传时间

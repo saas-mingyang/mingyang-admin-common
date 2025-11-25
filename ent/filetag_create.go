@@ -12,7 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // FileTagCreate is the builder for creating a FileTag entity.
@@ -105,14 +104,14 @@ func (_c *FileTagCreate) SetID(v uint64) *FileTagCreate {
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_c *FileTagCreate) AddFileIDs(ids ...uuid.UUID) *FileTagCreate {
+func (_c *FileTagCreate) AddFileIDs(ids ...uint64) *FileTagCreate {
 	_c.mutation.AddFileIDs(ids...)
 	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
 func (_c *FileTagCreate) AddFiles(v ...*File) *FileTagCreate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -259,7 +258,7 @@ func (_c *FileTagCreate) createSpec() (*FileTag, *sqlgraph.CreateSpec) {
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

@@ -2,6 +2,8 @@ package apk
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
 	"mingyang-admin-simple-admin-file/internal/svc"
 	"mingyang-admin-simple-admin-file/internal/types"
@@ -24,7 +26,8 @@ func NewDeleteApkFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 }
 
 func (l *DeleteApkFileLogic) DeleteApkFile(req *types.IdsReq) (resp *types.BaseMsgResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	if err != nil {
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
+	}
+	return &types.BaseMsgResp{Msg: l.svcCtx.Trans.Trans(l.ctx, i18n.DeleteSuccess)}, nil
 }

@@ -14,7 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // StorageProviderUpdate is the builder for updating StorageProvider entities.
@@ -209,14 +208,14 @@ func (_u *StorageProviderUpdate) ClearCdnURL() *StorageProviderUpdate {
 }
 
 // AddCloudfileIDs adds the "cloudfiles" edge to the CloudFile entity by IDs.
-func (_u *StorageProviderUpdate) AddCloudfileIDs(ids ...uuid.UUID) *StorageProviderUpdate {
+func (_u *StorageProviderUpdate) AddCloudfileIDs(ids ...uint64) *StorageProviderUpdate {
 	_u.mutation.AddCloudfileIDs(ids...)
 	return _u
 }
 
 // AddCloudfiles adds the "cloudfiles" edges to the CloudFile entity.
 func (_u *StorageProviderUpdate) AddCloudfiles(v ...*CloudFile) *StorageProviderUpdate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -235,14 +234,14 @@ func (_u *StorageProviderUpdate) ClearCloudfiles() *StorageProviderUpdate {
 }
 
 // RemoveCloudfileIDs removes the "cloudfiles" edge to CloudFile entities by IDs.
-func (_u *StorageProviderUpdate) RemoveCloudfileIDs(ids ...uuid.UUID) *StorageProviderUpdate {
+func (_u *StorageProviderUpdate) RemoveCloudfileIDs(ids ...uint64) *StorageProviderUpdate {
 	_u.mutation.RemoveCloudfileIDs(ids...)
 	return _u
 }
 
 // RemoveCloudfiles removes "cloudfiles" edges to CloudFile entities.
 func (_u *StorageProviderUpdate) RemoveCloudfiles(v ...*CloudFile) *StorageProviderUpdate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -353,7 +352,7 @@ func (_u *StorageProviderUpdate) sqlSave(ctx context.Context) (_node int, err er
 			Columns: []string{storageprovider.CloudfilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -366,7 +365,7 @@ func (_u *StorageProviderUpdate) sqlSave(ctx context.Context) (_node int, err er
 			Columns: []string{storageprovider.CloudfilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -382,7 +381,7 @@ func (_u *StorageProviderUpdate) sqlSave(ctx context.Context) (_node int, err er
 			Columns: []string{storageprovider.CloudfilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -589,14 +588,14 @@ func (_u *StorageProviderUpdateOne) ClearCdnURL() *StorageProviderUpdateOne {
 }
 
 // AddCloudfileIDs adds the "cloudfiles" edge to the CloudFile entity by IDs.
-func (_u *StorageProviderUpdateOne) AddCloudfileIDs(ids ...uuid.UUID) *StorageProviderUpdateOne {
+func (_u *StorageProviderUpdateOne) AddCloudfileIDs(ids ...uint64) *StorageProviderUpdateOne {
 	_u.mutation.AddCloudfileIDs(ids...)
 	return _u
 }
 
 // AddCloudfiles adds the "cloudfiles" edges to the CloudFile entity.
 func (_u *StorageProviderUpdateOne) AddCloudfiles(v ...*CloudFile) *StorageProviderUpdateOne {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -615,14 +614,14 @@ func (_u *StorageProviderUpdateOne) ClearCloudfiles() *StorageProviderUpdateOne 
 }
 
 // RemoveCloudfileIDs removes the "cloudfiles" edge to CloudFile entities by IDs.
-func (_u *StorageProviderUpdateOne) RemoveCloudfileIDs(ids ...uuid.UUID) *StorageProviderUpdateOne {
+func (_u *StorageProviderUpdateOne) RemoveCloudfileIDs(ids ...uint64) *StorageProviderUpdateOne {
 	_u.mutation.RemoveCloudfileIDs(ids...)
 	return _u
 }
 
 // RemoveCloudfiles removes "cloudfiles" edges to CloudFile entities.
 func (_u *StorageProviderUpdateOne) RemoveCloudfiles(v ...*CloudFile) *StorageProviderUpdateOne {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -763,7 +762,7 @@ func (_u *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *Storage
 			Columns: []string{storageprovider.CloudfilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -776,7 +775,7 @@ func (_u *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *Storage
 			Columns: []string{storageprovider.CloudfilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -792,7 +791,7 @@ func (_u *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *Storage
 			Columns: []string{storageprovider.CloudfilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

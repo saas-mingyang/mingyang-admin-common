@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 	"mingyang-admin-simple-admin-file/ent/cloudfile"
@@ -29,10 +27,10 @@ func NewGetCloudFileDownloadUrlLogic(ctx context.Context, svcCtx *svc.ServiceCon
 	}
 }
 
-func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.UUIDReq) (resp *types.CloudFileInfoResp, err error) {
+func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.BaseIDInfo) (resp *types.CloudFileInfoResp, err error) {
 	file, err := l.svcCtx.DB.CloudFile.
 		Query().
-		Where(cloudfile.ID(uuidx.ParseUUIDString(req.Id))).
+		Where(cloudfile.ID(*req.Id)).
 		WithStorageProviders().
 		First(l.ctx)
 	if err != nil || file == nil {
@@ -52,8 +50,8 @@ func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.UUIDRe
 	id := file.ID
 	resp.Data = types.CloudFileInfo{
 		Url: &privateURL,
-		BaseUUIDInfo: types.BaseUUIDInfo{
-			Id: pointy.GetPointer(id.String()),
+		BaseIDInfo: types.BaseIDInfo{
+			Id: &id,
 		},
 	}
 

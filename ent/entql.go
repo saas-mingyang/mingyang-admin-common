@@ -39,7 +39,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			apk.FieldVersion:       {Type: field.TypeString, Column: apk.FieldVersion},
 			apk.FieldVersionCode:   {Type: field.TypeString, Column: apk.FieldVersionCode},
 			apk.FieldFileSize:      {Type: field.TypeUint64, Column: apk.FieldFileSize},
-			apk.FieldFileID:        {Type: field.TypeString, Column: apk.FieldFileID},
+			apk.FieldFileID:        {Type: field.TypeUint64, Column: apk.FieldFileID},
 			apk.FieldFilePath:      {Type: field.TypeString, Column: apk.FieldFilePath},
 			apk.FieldMd5:           {Type: field.TypeString, Column: apk.FieldMd5},
 			apk.FieldSha1:          {Type: field.TypeString, Column: apk.FieldSha1},
@@ -56,7 +56,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Table:   cloudfile.Table,
 			Columns: cloudfile.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUUID,
+				Type:   field.TypeUint64,
 				Column: cloudfile.FieldID,
 			},
 		},
@@ -97,7 +97,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Table:   file.Table,
 			Columns: file.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUUID,
+				Type:   field.TypeUint64,
 				Column: file.FieldID,
 			},
 		},
@@ -322,8 +322,8 @@ func (f *ApkFilter) WhereFileSize(p entql.Uint64P) {
 	f.Where(p.Field(apk.FieldFileSize))
 }
 
-// WhereFileID applies the entql string predicate on the file_id field.
-func (f *ApkFilter) WhereFileID(p entql.StringP) {
+// WhereFileID applies the entql uint64 predicate on the file_id field.
+func (f *ApkFilter) WhereFileID(p entql.Uint64P) {
 	f.Where(p.Field(apk.FieldFileID))
 }
 
@@ -407,8 +407,8 @@ func (f *CloudFileFilter) Where(p entql.P) {
 	})
 }
 
-// WhereID applies the entql [16]byte predicate on the id field.
-func (f *CloudFileFilter) WhereID(p entql.ValueP) {
+// WhereID applies the entql uint64 predicate on the id field.
+func (f *CloudFileFilter) WhereID(p entql.Uint64P) {
 	f.Where(p.Field(cloudfile.FieldID))
 }
 
@@ -604,8 +604,8 @@ func (f *FileFilter) Where(p entql.P) {
 	})
 }
 
-// WhereID applies the entql [16]byte predicate on the id field.
-func (f *FileFilter) WhereID(p entql.ValueP) {
+// WhereID applies the entql uint64 predicate on the id field.
+func (f *FileFilter) WhereID(p entql.Uint64P) {
 	f.Where(p.Field(file.FieldID))
 }
 

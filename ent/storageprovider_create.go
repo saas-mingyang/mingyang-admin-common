@@ -12,7 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // StorageProviderCreate is the builder for creating a StorageProvider entity.
@@ -177,14 +176,14 @@ func (_c *StorageProviderCreate) SetID(v uint64) *StorageProviderCreate {
 }
 
 // AddCloudfileIDs adds the "cloudfiles" edge to the CloudFile entity by IDs.
-func (_c *StorageProviderCreate) AddCloudfileIDs(ids ...uuid.UUID) *StorageProviderCreate {
+func (_c *StorageProviderCreate) AddCloudfileIDs(ids ...uint64) *StorageProviderCreate {
 	_c.mutation.AddCloudfileIDs(ids...)
 	return _c
 }
 
 // AddCloudfiles adds the "cloudfiles" edges to the CloudFile entity.
 func (_c *StorageProviderCreate) AddCloudfiles(v ...*CloudFile) *StorageProviderCreate {
-	ids := make([]uuid.UUID, len(v))
+	ids := make([]uint64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -392,7 +391,7 @@ func (_c *StorageProviderCreate) createSpec() (*StorageProvider, *sqlgraph.Creat
 			Columns: []string{storageprovider.CloudfilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

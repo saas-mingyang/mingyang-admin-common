@@ -125,16 +125,23 @@ func (_u *ApkUpdate) AddFileSize(v int64) *ApkUpdate {
 }
 
 // SetFileID sets the "file_id" field.
-func (_u *ApkUpdate) SetFileID(v string) *ApkUpdate {
+func (_u *ApkUpdate) SetFileID(v uint64) *ApkUpdate {
+	_u.mutation.ResetFileID()
 	_u.mutation.SetFileID(v)
 	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ApkUpdate) SetNillableFileID(v *string) *ApkUpdate {
+func (_u *ApkUpdate) SetNillableFileID(v *uint64) *ApkUpdate {
 	if v != nil {
 		_u.SetFileID(*v)
 	}
+	return _u
+}
+
+// AddFileID adds value to the "file_id" field.
+func (_u *ApkUpdate) AddFileID(v int64) *ApkUpdate {
+	_u.mutation.AddFileID(v)
 	return _u
 }
 
@@ -391,7 +398,10 @@ func (_u *ApkUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		_spec.AddField(apk.FieldFileSize, field.TypeUint64, value)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(apk.FieldFileID, field.TypeString, value)
+		_spec.SetField(apk.FieldFileID, field.TypeUint64, value)
+	}
+	if value, ok := _u.mutation.AddedFileID(); ok {
+		_spec.AddField(apk.FieldFileID, field.TypeUint64, value)
 	}
 	if value, ok := _u.mutation.FilePath(); ok {
 		_spec.SetField(apk.FieldFilePath, field.TypeString, value)
@@ -561,16 +571,23 @@ func (_u *ApkUpdateOne) AddFileSize(v int64) *ApkUpdateOne {
 }
 
 // SetFileID sets the "file_id" field.
-func (_u *ApkUpdateOne) SetFileID(v string) *ApkUpdateOne {
+func (_u *ApkUpdateOne) SetFileID(v uint64) *ApkUpdateOne {
+	_u.mutation.ResetFileID()
 	_u.mutation.SetFileID(v)
 	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ApkUpdateOne) SetNillableFileID(v *string) *ApkUpdateOne {
+func (_u *ApkUpdateOne) SetNillableFileID(v *uint64) *ApkUpdateOne {
 	if v != nil {
 		_u.SetFileID(*v)
 	}
+	return _u
+}
+
+// AddFileID adds value to the "file_id" field.
+func (_u *ApkUpdateOne) AddFileID(v int64) *ApkUpdateOne {
+	_u.mutation.AddFileID(v)
 	return _u
 }
 
@@ -857,7 +874,10 @@ func (_u *ApkUpdateOne) sqlSave(ctx context.Context) (_node *Apk, err error) {
 		_spec.AddField(apk.FieldFileSize, field.TypeUint64, value)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(apk.FieldFileID, field.TypeString, value)
+		_spec.SetField(apk.FieldFileID, field.TypeUint64, value)
+	}
+	if value, ok := _u.mutation.AddedFileID(); ok {
+		_spec.AddField(apk.FieldFileID, field.TypeUint64, value)
 	}
 	if value, ok := _u.mutation.FilePath(); ok {
 		_spec.SetField(apk.FieldFilePath, field.TypeString, value)

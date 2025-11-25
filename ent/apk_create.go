@@ -109,7 +109,7 @@ func (_c *ApkCreate) SetNillableFileSize(v *uint64) *ApkCreate {
 }
 
 // SetFileID sets the "file_id" field.
-func (_c *ApkCreate) SetFileID(v string) *ApkCreate {
+func (_c *ApkCreate) SetFileID(v uint64) *ApkCreate {
 	_c.mutation.SetFileID(v)
 	return _c
 }
@@ -408,7 +408,7 @@ func (_c *ApkCreate) createSpec() (*Apk, *sqlgraph.CreateSpec) {
 		_node.FileSize = value
 	}
 	if value, ok := _c.mutation.FileID(); ok {
-		_spec.SetField(apk.FieldFileID, field.TypeString, value)
+		_spec.SetField(apk.FieldFileID, field.TypeUint64, value)
 		_node.FileID = value
 	}
 	if value, ok := _c.mutation.FilePath(); ok {

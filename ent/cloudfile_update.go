@@ -249,7 +249,7 @@ func (_u *CloudFileUpdate) defaults() error {
 }
 
 func (_u *CloudFileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(cloudfile.Table, cloudfile.Columns, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(cloudfile.Table, cloudfile.Columns, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -613,7 +613,7 @@ func (_u *CloudFileUpdateOne) defaults() error {
 }
 
 func (_u *CloudFileUpdateOne) sqlSave(ctx context.Context) (_node *CloudFile, err error) {
-	_spec := sqlgraph.NewUpdateSpec(cloudfile.Table, cloudfile.Columns, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(cloudfile.Table, cloudfile.Columns, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CloudFile.id" for update`)}

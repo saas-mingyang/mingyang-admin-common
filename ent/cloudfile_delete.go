@@ -40,7 +40,7 @@ func (_d *CloudFileDelete) ExecX(ctx context.Context) int {
 }
 
 func (_d *CloudFileDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(cloudfile.Table, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewDeleteSpec(cloudfile.Table, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64))
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

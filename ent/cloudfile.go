@@ -11,15 +11,13 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // Cloud File Table | 云文件表
 type CloudFile struct {
 	config `json:"-"`
 	// ID of the ent.
-	// UUID
-	ID uuid.UUID `json:"id,omitempty"`
+	ID uint64 `json:"id,omitempty"`
 	// Create Time | 创建日期
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Update Time | 修改日期
@@ -83,14 +81,12 @@ func (*CloudFile) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case cloudfile.FieldState:
 			values[i] = new(sql.NullBool)
-		case cloudfile.FieldTenantID, cloudfile.FieldSize, cloudfile.FieldFileType:
+		case cloudfile.FieldID, cloudfile.FieldTenantID, cloudfile.FieldSize, cloudfile.FieldFileType:
 			values[i] = new(sql.NullInt64)
 		case cloudfile.FieldName, cloudfile.FieldURL, cloudfile.FieldUserID:
 			values[i] = new(sql.NullString)
 		case cloudfile.FieldCreatedAt, cloudfile.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case cloudfile.FieldID:
-			values[i] = new(uuid.UUID)
 		case cloudfile.ForeignKeys[0]: // cloud_file_storage_providers
 			values[i] = new(sql.NullInt64)
 		default:
@@ -109,11 +105,11 @@ func (_m *CloudFile) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case cloudfile.FieldID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[i])
-			} else if value != nil {
-				_m.ID = *value
+			value, ok := values[i].(*sql.NullInt64)
+			if !ok {
+				return fmt.Errorf("unexpected type %T for field id", value)
 			}
+			_m.ID = uint64(value.Int64)
 		case cloudfile.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])

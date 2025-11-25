@@ -16,7 +16,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 // FileTagQuery is the builder for querying FileTag entities.
@@ -414,7 +413,7 @@ func (_q *FileTagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File
 func (_q *FileTagQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*FileTag, init func(*FileTag), assign func(*FileTag, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[uint64]*FileTag)
-	nids := make(map[uuid.UUID]map[*FileTag]struct{})
+	nids := make(map[uint64]map[*FileTag]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -447,7 +446,7 @@ func (_q *FileTagQuery) loadFiles(ctx context.Context, query *FileQuery, nodes [
 			}
 			spec.Assign = func(columns []string, values []any) error {
 				outValue := uint64(values[0].(*sql.NullInt64).Int64)
-				inValue := *values[1].(*uuid.UUID)
+				inValue := uint64(values[1].(*sql.NullInt64).Int64)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*FileTag]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])

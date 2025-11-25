@@ -3,6 +3,7 @@ package file
 import (
 	"context"
 	"fmt"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"io"
 	"net/http"
 	"os"
@@ -16,7 +17,6 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/enum/errorcode"
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/uuidx"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 
@@ -67,8 +67,8 @@ func (l *UploadLogic) Upload() (resp *types.UploadResp, err error) {
 	}
 
 	fileName, fileSuffix := handler.Filename[:dotIndex], handler.Filename[dotIndex+1:]
-	fileUUID := uuidx.NewUUID()
-	storeFileName := fileUUID.String() + "." + fileSuffix
+	fileUUID := sonyflake.NextID()
+	storeFileName := fmt.Sprint(fileUUID) + "." + fileSuffix
 	timeString := datetime.FormatTimeToStr(time.Now(), "yyyy-mm-dd")
 	userId := l.ctx.Value("userId").(string)
 

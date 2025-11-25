@@ -40,7 +40,7 @@ func (File) Fields() []ent.Field {
 
 func (File) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixins.UUIDMixin{},
+		mixins.IDMixin{},
 		mixins.StatusMixin{},
 		mixins.TenantMixin{},
 	}

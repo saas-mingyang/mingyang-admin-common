@@ -64,8 +64,8 @@ func (l *GetCloudFileListLogic) GetCloudFileList(req *types.CloudFileListReq) (*
 	for _, v := range data.List {
 		resp.Data.Data = append(resp.Data.Data,
 			types.CloudFileInfo{
-				BaseUUIDInfo: types.BaseUUIDInfo{
-					Id:        pointy.GetPointer(v.ID.String()),
+				BaseIDInfo: types.BaseIDInfo{
+					Id:        &v.ID,
 					CreatedAt: pointy.GetPointer(v.CreatedAt.UnixMilli()),
 					UpdatedAt: pointy.GetPointer(v.UpdatedAt.UnixMilli()),
 				},

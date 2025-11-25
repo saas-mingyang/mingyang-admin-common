@@ -27,7 +27,7 @@ import (
 
 func GetCloudFileDownloadUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UUIDReq
+		var req types.BaseIDInfo
 		if err := httpx.Parse(r, &req, true); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return

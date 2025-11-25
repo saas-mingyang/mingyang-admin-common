@@ -13,8 +13,6 @@ import (
 	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"time"
 
-	uuid "github.com/gofrs/uuid/v5"
-
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
 )
@@ -101,10 +99,6 @@ func init() {
 	cloudfileDescTenantID := cloudfileMixinFields2[0].Descriptor()
 	// cloudfile.DefaultTenantID holds the default value on creation for the tenant_id field.
 	cloudfile.DefaultTenantID = cloudfileDescTenantID.Default.(uint64)
-	// cloudfileDescID is the schema descriptor for id field.
-	cloudfileDescID := cloudfileMixinFields0[0].Descriptor()
-	// cloudfile.DefaultID holds the default value on creation for the id field.
-	cloudfile.DefaultID = cloudfileDescID.Default.(func() uuid.UUID)
 	cloudfiletagMixin := schema.CloudFileTag{}.Mixin()
 	cloudfiletag.Policy = privacy.NewPolicies(schema.CloudFileTag{})
 	cloudfiletag.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -183,10 +177,6 @@ func init() {
 	fileDescTenantID := fileMixinFields2[0].Descriptor()
 	// file.DefaultTenantID holds the default value on creation for the tenant_id field.
 	file.DefaultTenantID = fileDescTenantID.Default.(uint64)
-	// fileDescID is the schema descriptor for id field.
-	fileDescID := fileMixinFields0[0].Descriptor()
-	// file.DefaultID holds the default value on creation for the id field.
-	file.DefaultID = fileDescID.Default.(func() uuid.UUID)
 	filetagMixin := schema.FileTag{}.Mixin()
 	filetag.Policy = privacy.NewPolicies(schema.FileTag{})
 	filetag.Hooks[0] = func(next ent.Mutator) ent.Mutator {
