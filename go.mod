@@ -10,7 +10,7 @@ require (
 	github.com/gofrs/uuid/v5 v5.4.0
 	github.com/qiniu/go-sdk/v7 v7.25.4
 	github.com/redis/go-redis/v9 v9.16.0
-	github.com/saas-mingyang/mingyang-admin-common v0.2.1
+	github.com/saas-mingyang/mingyang-admin-common v0.2.2
 	github.com/zeromicro/go-zero v1.9.1
 	google.golang.org/grpc v1.76.0
 	mingyang-admin-simple-admin-core v0.0.1
