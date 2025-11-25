@@ -93,5 +93,7 @@ func containsMethod(methods []string, target string) bool {
 // SetTokenToContext 将token设置到Context,作为RPC认证的方式
 func SetTokenToContext(r *http.Request) context.Context {
 	token := r.Header.Get(Authorization)
-	return metadata.NewOutgoingContext(r.Context(), metadata.Pairs(Authorization, token))
+	ctx := metadata.AppendToOutgoingContext(r.Context(), Authorization, token)
+	newCtx := context.WithValue(ctx, Authorization, token)
+	return newCtx
 }
