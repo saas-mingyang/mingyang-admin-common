@@ -3,12 +3,12 @@
 package file
 
 import (
+	"mingyang-admin-simple-admin-file/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	uuid "github.com/gofrs/uuid/v5"
-	"mingyang-admin-simple-admin-file/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

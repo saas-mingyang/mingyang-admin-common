@@ -9,18 +9,20 @@ import (
 	"log"
 	"reflect"
 
-	uuid "github.com/gofrs/uuid/v5"
 	"mingyang-admin-simple-admin-file/ent/migrate"
 
-	"entgo.io/ent"
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
+	"mingyang-admin-simple-admin-file/ent/apk"
 	"mingyang-admin-simple-admin-file/ent/cloudfile"
 	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
 	"mingyang-admin-simple-admin-file/ent/file"
 	"mingyang-admin-simple-admin-file/ent/filetag"
 	"mingyang-admin-simple-admin-file/ent/storageprovider"
+
+	"entgo.io/ent"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	uuid "github.com/gofrs/uuid/v5"
 
 	stdsql "database/sql"
 )
@@ -30,6 +32,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Apk is the client for interacting with the Apk builders.
+	Apk *ApkClient
 	// CloudFile is the client for interacting with the CloudFile builders.
 	CloudFile *CloudFileClient
 	// CloudFileTag is the client for interacting with the CloudFileTag builders.
@@ -51,6 +55,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.Apk = NewApkClient(c.config)
 	c.CloudFile = NewCloudFileClient(c.config)
 	c.CloudFileTag = NewCloudFileTagClient(c.config)
 	c.File = NewFileClient(c.config)
@@ -148,6 +153,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:             ctx,
 		config:          cfg,
+		Apk:             NewApkClient(cfg),
 		CloudFile:       NewCloudFileClient(cfg),
 		CloudFileTag:    NewCloudFileTagClient(cfg),
 		File:            NewFileClient(cfg),
@@ -172,6 +178,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:             ctx,
 		config:          cfg,
+		Apk:             NewApkClient(cfg),
 		CloudFile:       NewCloudFileClient(cfg),
 		CloudFileTag:    NewCloudFileTagClient(cfg),
 		File:            NewFileClient(cfg),
@@ -183,7 +190,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		CloudFile.
+//		Apk.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -205,26 +212,28 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.CloudFile.Use(hooks...)
-	c.CloudFileTag.Use(hooks...)
-	c.File.Use(hooks...)
-	c.FileTag.Use(hooks...)
-	c.StorageProvider.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.Apk, c.CloudFile, c.CloudFileTag, c.File, c.FileTag, c.StorageProvider,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.CloudFile.Intercept(interceptors...)
-	c.CloudFileTag.Intercept(interceptors...)
-	c.File.Intercept(interceptors...)
-	c.FileTag.Intercept(interceptors...)
-	c.StorageProvider.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.Apk, c.CloudFile, c.CloudFileTag, c.File, c.FileTag, c.StorageProvider,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *ApkMutation:
+		return c.Apk.mutate(ctx, m)
 	case *CloudFileMutation:
 		return c.CloudFile.mutate(ctx, m)
 	case *CloudFileTagMutation:
@@ -237,6 +246,139 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.StorageProvider.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// ApkClient is a client for the Apk schema.
+type ApkClient struct {
+	config
+}
+
+// NewApkClient returns a client for the Apk from the given config.
+func NewApkClient(c config) *ApkClient {
+	return &ApkClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `apk.Hooks(f(g(h())))`.
+func (c *ApkClient) Use(hooks ...Hook) {
+	c.hooks.Apk = append(c.hooks.Apk, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `apk.Intercept(f(g(h())))`.
+func (c *ApkClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Apk = append(c.inters.Apk, interceptors...)
+}
+
+// Create returns a builder for creating a Apk entity.
+func (c *ApkClient) Create() *ApkCreate {
+	mutation := newApkMutation(c.config, OpCreate)
+	return &ApkCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Apk entities.
+func (c *ApkClient) CreateBulk(builders ...*ApkCreate) *ApkCreateBulk {
+	return &ApkCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ApkClient) MapCreateBulk(slice any, setFunc func(*ApkCreate, int)) *ApkCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ApkCreateBulk{err: fmt.Errorf("calling to ApkClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ApkCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ApkCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Apk.
+func (c *ApkClient) Update() *ApkUpdate {
+	mutation := newApkMutation(c.config, OpUpdate)
+	return &ApkUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApkClient) UpdateOne(_m *Apk) *ApkUpdateOne {
+	mutation := newApkMutation(c.config, OpUpdateOne, withApk(_m))
+	return &ApkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApkClient) UpdateOneID(id uint64) *ApkUpdateOne {
+	mutation := newApkMutation(c.config, OpUpdateOne, withApkID(id))
+	return &ApkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Apk.
+func (c *ApkClient) Delete() *ApkDelete {
+	mutation := newApkMutation(c.config, OpDelete)
+	return &ApkDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ApkClient) DeleteOne(_m *Apk) *ApkDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ApkClient) DeleteOneID(id uint64) *ApkDeleteOne {
+	builder := c.Delete().Where(apk.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApkDeleteOne{builder}
+}
+
+// Query returns a query builder for Apk.
+func (c *ApkClient) Query() *ApkQuery {
+	return &ApkQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeApk},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Apk entity by its id.
+func (c *ApkClient) Get(ctx context.Context, id uint64) (*Apk, error) {
+	return c.Query().Where(apk.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApkClient) GetX(ctx context.Context, id uint64) *Apk {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApkClient) Hooks() []Hook {
+	return c.hooks.Apk
+}
+
+// Interceptors returns the client interceptors.
+func (c *ApkClient) Interceptors() []Interceptor {
+	return c.inters.Apk
+}
+
+func (c *ApkClient) mutate(ctx context.Context, m *ApkMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ApkCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ApkUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ApkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ApkDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Apk mutation op: %q", m.Op())
 	}
 }
 
@@ -1009,10 +1151,10 @@ func (c *StorageProviderClient) mutate(ctx context.Context, m *StorageProviderMu
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Hook
+		Apk, CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Hook
 	}
 	inters struct {
-		CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Interceptor
+		Apk, CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Interceptor
 	}
 )
 

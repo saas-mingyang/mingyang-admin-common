@@ -6,6 +6,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Apk is the predicate function for apk builders.
+type Apk func(*sql.Selector)
+
 // CloudFile is the predicate function for cloudfile builders.
 type CloudFile func(*sql.Selector)
 

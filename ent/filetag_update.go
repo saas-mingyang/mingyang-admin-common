@@ -6,15 +6,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"mingyang-admin-simple-admin-file/ent/file"
-	"mingyang-admin-simple-admin-file/ent/filetag"
-	"mingyang-admin-simple-admin-file/ent/predicate"
 )
 
 // FileTagUpdate is the builder for updating FileTag entities.

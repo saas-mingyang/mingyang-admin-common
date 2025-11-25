@@ -21,6 +21,34 @@
   "host": "localhost:9102",
   "basePath": "/",
   "paths": {
+    "/apk/create": {
+      "post": {
+        "description": "Create apk file information | 创建apk文件",
+        "tags": [
+          "apk"
+        ],
+        "summary": "Create apk file information | 创建apk文件",
+        "operationId": "CreateApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ApkInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
     "/cloud_file": {
       "post": {
         "description": "Get cloud file by ID | 通过ID获取云文件",
@@ -857,6 +885,107 @@
     }
   },
   "definitions": {
+    "ApkInfo": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "description": {
+          "description": "Description | 版本描述",
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "download_count": {
+          "description": "DownloadCount | 下载次数",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DownloadCount"
+        },
+        "file_id": {
+          "description": "FileId | 文件ID",
+          "type": "string",
+          "x-go-name": "FileId"
+        },
+        "file_path": {
+          "description": "FilePath | 文件路径",
+          "type": "string",
+          "x-go-name": "FilePath"
+        },
+        "file_size": {
+          "description": "FileSize | 文件大小",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "FileSize"
+        },
+        "id": {
+          "description": "ID",
+          "type": "string",
+          "x-go-name": "Id"
+        },
+        "is_force_update": {
+          "description": "IsForceUpdate | 是否强制更新",
+          "type": "boolean",
+          "x-go-name": "IsForceUpdate"
+        },
+        "md5": {
+          "description": "Md5 | 文件MD5值",
+          "type": "string",
+          "x-go-name": "Md5"
+        },
+        "name": {
+          "description": "Name | APK名称",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "package_name": {
+          "description": "PackageName | 应用包名",
+          "type": "string",
+          "x-go-name": "PackageName"
+        },
+        "sha1": {
+          "description": "Sha1 | 文件SHA1值",
+          "type": "string",
+          "x-go-name": "Sha1"
+        },
+        "sha256": {
+          "description": "Sha256 | 文件SHA256值",
+          "type": "string",
+          "x-go-name": "Sha256"
+        },
+        "update_log": {
+          "description": "UpdateLog | 更新日志",
+          "type": "string",
+          "x-go-name": "UpdateLog"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        },
+        "upload_time": {
+          "description": "UploadTime | 上传时间",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UploadTime"
+        },
+        "version": {
+          "description": "Version | APK版本",
+          "type": "string",
+          "x-go-name": "Version"
+        },
+        "version_code": {
+          "description": "VersionCode | 版本代码(内部版本号)",
+          "type": "string",
+          "x-go-name": "VersionCode"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
     "BaseDataInfo": {
       "description": "The basic response with data | 基础带数据信息",
       "type": "object",

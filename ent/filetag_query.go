@@ -8,15 +8,15 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/predicate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"mingyang-admin-simple-admin-file/ent/file"
-	"mingyang-admin-simple-admin-file/ent/filetag"
-	"mingyang-admin-simple-admin-file/ent/predicate"
 )
 
 // FileTagQuery is the builder for querying FileTag entities.

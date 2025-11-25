@@ -5,7 +5,7 @@ package ent
 import (
 	"context"
 	"fmt"
-
+	"mingyang-admin-simple-admin-file/ent/apk"
 	"mingyang-admin-simple-admin-file/ent/cloudfile"
 	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
 	"mingyang-admin-simple-admin-file/ent/file"
@@ -58,6 +58,87 @@ func (o OrderDirection) reverse() OrderDirection {
 }
 
 const errInvalidPagination = "INVALID_PAGINATION"
+
+type ApkPager struct {
+	Order  apk.OrderOption
+	Filter func(*ApkQuery) (*ApkQuery, error)
+}
+
+// ApkPaginateOption enables pagination customization.
+type ApkPaginateOption func(*ApkPager)
+
+// DefaultApkOrder is the default ordering of Apk.
+var DefaultApkOrder = Desc(apk.FieldID)
+
+func newApkPager(opts []ApkPaginateOption) (*ApkPager, error) {
+	pager := &ApkPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultApkOrder
+	}
+	return pager, nil
+}
+
+func (p *ApkPager) ApplyFilter(query *ApkQuery) (*ApkQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// ApkPageList is Apk PageList result.
+type ApkPageList struct {
+	List        []*Apk       `json:"list"`
+	PageDetails *PageDetails `json:"pageDetails"`
+}
+
+func (_m *ApkQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...ApkPaginateOption,
+) (*ApkPageList, error) {
+
+	pager, err := newApkPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if _m, err = pager.ApplyFilter(_m); err != nil {
+		return nil, err
+	}
+
+	ret := &ApkPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	query := _m.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		_m = _m.Order(pager.Order)
+	} else {
+		_m = _m.Order(DefaultApkOrder)
+	}
+
+	_m = _m.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
 
 type CloudFilePager struct {
 	Order  cloudfile.OrderOption

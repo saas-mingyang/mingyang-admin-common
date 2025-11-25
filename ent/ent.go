@@ -6,17 +6,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/apk"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"reflect"
 	"sync"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang-admin-simple-admin-file/ent/file"
-	"mingyang-admin-simple-admin-file/ent/filetag"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -77,6 +78,7 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
+			apk.Table:             apk.ValidColumn,
 			cloudfile.Table:       cloudfile.ValidColumn,
 			cloudfiletag.Table:    cloudfiletag.ValidColumn,
 			file.Table:            file.ValidColumn,

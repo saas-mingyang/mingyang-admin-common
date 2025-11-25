@@ -6,15 +6,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/predicate"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 // StorageProviderUpdate is the builder for updating StorageProvider entities.

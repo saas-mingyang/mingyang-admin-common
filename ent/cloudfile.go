@@ -4,14 +4,14 @@ package ent
 
 import (
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	uuid "github.com/gofrs/uuid/v5"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 // Cloud File Table | 云文件表

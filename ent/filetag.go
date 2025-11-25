@@ -4,12 +4,12 @@ package ent
 
 import (
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/filetag"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"mingyang-admin-simple-admin-file/ent/filetag"
 )
 
 // File's Tags Table | 文件标签表

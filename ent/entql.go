@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"mingyang-admin-simple-admin-file/ent/apk"
 	"mingyang-admin-simple-admin-file/ent/cloudfile"
 	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
 	"mingyang-admin-simple-admin-file/ent/file"
@@ -18,8 +19,39 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 5)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 6)}
 	graph.Nodes[0] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   apk.Table,
+			Columns: apk.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeUint64,
+				Column: apk.FieldID,
+			},
+		},
+		Type: "Apk",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			apk.FieldCreatedAt:     {Type: field.TypeTime, Column: apk.FieldCreatedAt},
+			apk.FieldUpdatedAt:     {Type: field.TypeTime, Column: apk.FieldUpdatedAt},
+			apk.FieldStatus:        {Type: field.TypeUint8, Column: apk.FieldStatus},
+			apk.FieldTenantID:      {Type: field.TypeUint64, Column: apk.FieldTenantID},
+			apk.FieldName:          {Type: field.TypeString, Column: apk.FieldName},
+			apk.FieldVersion:       {Type: field.TypeString, Column: apk.FieldVersion},
+			apk.FieldVersionCode:   {Type: field.TypeString, Column: apk.FieldVersionCode},
+			apk.FieldFileSize:      {Type: field.TypeUint64, Column: apk.FieldFileSize},
+			apk.FieldFileID:        {Type: field.TypeString, Column: apk.FieldFileID},
+			apk.FieldFilePath:      {Type: field.TypeString, Column: apk.FieldFilePath},
+			apk.FieldMd5:           {Type: field.TypeString, Column: apk.FieldMd5},
+			apk.FieldSha1:          {Type: field.TypeString, Column: apk.FieldSha1},
+			apk.FieldSha256:        {Type: field.TypeString, Column: apk.FieldSha256},
+			apk.FieldPackageName:   {Type: field.TypeString, Column: apk.FieldPackageName},
+			apk.FieldDescription:   {Type: field.TypeString, Column: apk.FieldDescription},
+			apk.FieldUpdateLog:     {Type: field.TypeString, Column: apk.FieldUpdateLog},
+			apk.FieldIsForceUpdate: {Type: field.TypeBool, Column: apk.FieldIsForceUpdate},
+			apk.FieldDownloadCount: {Type: field.TypeInt64, Column: apk.FieldDownloadCount},
+		},
+	}
+	graph.Nodes[1] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   cloudfile.Table,
 			Columns: cloudfile.Columns,
@@ -41,7 +73,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			cloudfile.FieldUserID:    {Type: field.TypeString, Column: cloudfile.FieldUserID},
 		},
 	}
-	graph.Nodes[1] = &sqlgraph.Node{
+	graph.Nodes[2] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   cloudfiletag.Table,
 			Columns: cloudfiletag.Columns,
@@ -60,7 +92,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			cloudfiletag.FieldRemark:    {Type: field.TypeString, Column: cloudfiletag.FieldRemark},
 		},
 	}
-	graph.Nodes[2] = &sqlgraph.Node{
+	graph.Nodes[3] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   file.Table,
 			Columns: file.Columns,
@@ -83,7 +115,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldMd5:       {Type: field.TypeString, Column: file.FieldMd5},
 		},
 	}
-	graph.Nodes[3] = &sqlgraph.Node{
+	graph.Nodes[4] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   filetag.Table,
 			Columns: filetag.Columns,
@@ -102,7 +134,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filetag.FieldRemark:    {Type: field.TypeString, Column: filetag.FieldRemark},
 		},
 	}
-	graph.Nodes[4] = &sqlgraph.Node{
+	graph.Nodes[5] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   storageprovider.Table,
 			Columns: storageprovider.Columns,
@@ -211,6 +243,136 @@ type predicateAdder interface {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *ApkQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the ApkQuery builder.
+func (_q *ApkQuery) Filter() *ApkFilter {
+	return &ApkFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *ApkMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the ApkMutation builder.
+func (m *ApkMutation) Filter() *ApkFilter {
+	return &ApkFilter{config: m.config, predicateAdder: m}
+}
+
+// ApkFilter provides a generic filtering capability at runtime for ApkQuery.
+type ApkFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *ApkFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[0].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql uint64 predicate on the id field.
+func (f *ApkFilter) WhereID(p entql.Uint64P) {
+	f.Where(p.Field(apk.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *ApkFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(apk.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *ApkFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(apk.FieldUpdatedAt))
+}
+
+// WhereStatus applies the entql uint8 predicate on the status field.
+func (f *ApkFilter) WhereStatus(p entql.Uint8P) {
+	f.Where(p.Field(apk.FieldStatus))
+}
+
+// WhereTenantID applies the entql uint64 predicate on the tenant_id field.
+func (f *ApkFilter) WhereTenantID(p entql.Uint64P) {
+	f.Where(p.Field(apk.FieldTenantID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *ApkFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(apk.FieldName))
+}
+
+// WhereVersion applies the entql string predicate on the version field.
+func (f *ApkFilter) WhereVersion(p entql.StringP) {
+	f.Where(p.Field(apk.FieldVersion))
+}
+
+// WhereVersionCode applies the entql string predicate on the version_code field.
+func (f *ApkFilter) WhereVersionCode(p entql.StringP) {
+	f.Where(p.Field(apk.FieldVersionCode))
+}
+
+// WhereFileSize applies the entql uint64 predicate on the file_size field.
+func (f *ApkFilter) WhereFileSize(p entql.Uint64P) {
+	f.Where(p.Field(apk.FieldFileSize))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ApkFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(apk.FieldFileID))
+}
+
+// WhereFilePath applies the entql string predicate on the file_path field.
+func (f *ApkFilter) WhereFilePath(p entql.StringP) {
+	f.Where(p.Field(apk.FieldFilePath))
+}
+
+// WhereMd5 applies the entql string predicate on the md5 field.
+func (f *ApkFilter) WhereMd5(p entql.StringP) {
+	f.Where(p.Field(apk.FieldMd5))
+}
+
+// WhereSha1 applies the entql string predicate on the sha1 field.
+func (f *ApkFilter) WhereSha1(p entql.StringP) {
+	f.Where(p.Field(apk.FieldSha1))
+}
+
+// WhereSha256 applies the entql string predicate on the sha256 field.
+func (f *ApkFilter) WhereSha256(p entql.StringP) {
+	f.Where(p.Field(apk.FieldSha256))
+}
+
+// WherePackageName applies the entql string predicate on the package_name field.
+func (f *ApkFilter) WherePackageName(p entql.StringP) {
+	f.Where(p.Field(apk.FieldPackageName))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *ApkFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(apk.FieldDescription))
+}
+
+// WhereUpdateLog applies the entql string predicate on the update_log field.
+func (f *ApkFilter) WhereUpdateLog(p entql.StringP) {
+	f.Where(p.Field(apk.FieldUpdateLog))
+}
+
+// WhereIsForceUpdate applies the entql bool predicate on the is_force_update field.
+func (f *ApkFilter) WhereIsForceUpdate(p entql.BoolP) {
+	f.Where(p.Field(apk.FieldIsForceUpdate))
+}
+
+// WhereDownloadCount applies the entql int64 predicate on the download_count field.
+func (f *ApkFilter) WhereDownloadCount(p entql.Int64P) {
+	f.Where(p.Field(apk.FieldDownloadCount))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *CloudFileQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -239,7 +401,7 @@ type CloudFileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *CloudFileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[0].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[1].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -352,7 +514,7 @@ type CloudFileTagFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *CloudFileTagFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[1].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -436,7 +598,7 @@ type FileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -540,7 +702,7 @@ type FileTagFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileTagFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -624,7 +786,7 @@ type StorageProviderFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StorageProviderFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

@@ -6,15 +6,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang-admin-simple-admin-file/ent/predicate"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 // CloudFileUpdate is the builder for updating CloudFile entities.

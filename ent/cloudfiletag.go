@@ -4,12 +4,12 @@ package ent
 
 import (
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
 )
 
 // Cloud File's Tags Table | 云文件标签表

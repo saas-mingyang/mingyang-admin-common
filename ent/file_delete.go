@@ -4,12 +4,12 @@ package ent
 
 import (
 	"context"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"mingyang-admin-simple-admin-file/ent/file"
-	"mingyang-admin-simple-admin-file/ent/predicate"
 )
 
 // FileDelete is the builder for deleting a File entity.

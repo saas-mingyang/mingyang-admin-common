@@ -1,0 +1,84 @@
+import "../base.api"
+
+type (
+	ApkInfo {
+		BaseUUIDInfo
+		// Name | APK名称
+		Name string `json:"name"`
+		// Version | APK版本
+		Version string `json:"version"`
+		// VersionCode | 版本代码(内部版本号)
+		VersionCode string `json:"version_code"` // 版本代码(内部版本号)
+		// FileSize | 文件大小
+		FileSize uint64 `json:"file_size"`
+		// FileId | 文件ID
+		FileId string `json:"file_id"`
+		// FilePath | 文件路径
+		FilePath string `json:"file_path,optional"`
+		// UploadTime | 上传时间
+		UploadTime int64 `json:"upload_time,optional"`
+		// Md5 | 文件MD5值
+		Md5 string `json:"md5,optional"` // 文件MD5值
+		// Sha1 | 文件SHA1值
+		Sha1 string `json:"sha1,optional"` // 文件SHA1值
+		// Sha256 | 文件SHA256值
+		Sha256 string `json:"sha256,optional"` // 文件SHA256值
+		// PackageName | 应用包名
+		PackageName string `json:"package_name,optional"` // 应用包名
+		// Description | 版本描述
+		Description string `json:"description,optional"` // 版本描述
+		// UpdateLog | 更新日志
+		UpdateLog string `json:"update_log,optional"` // 更新日志
+		// IsForceUpdate | 是否强制更新
+		IsForceUpdate bool `json:"is_force_update"` // 是否强制更新
+		// DownloadCount | 下载次数
+		DownloadCount int `json:"download_count"` // 下载次数
+	}
+	// Get cloud file list request params | 云文件列表请求参数
+	ApkFileListReq {
+		PageInfo
+		// Name | APK名称
+		Name *string `json:"name,optional"`
+		// Version| 版本号
+		Version *string `json:"version,optional"`
+		// version_code| 版本代码(内部版本号)
+		VersionCode *string `json:"VersionCode,optional"`
+	}
+	ApkFileListResp {
+		BaseDataInfo
+		// CloudFile list data | 云文件列表数据
+		Data ApkInfo `json:"data"`
+	}
+)
+
+@server (
+	jwt:        Auth
+	group:      apk
+	middleware: Authority
+)
+service Fms {
+	// Create apk file information | 创建apk文件
+	@handler createApkFile
+	post /apk/create (ApkInfo) returns (BaseMsgResp)
+
+	// update apk file information | 创建apk文件
+	@handler updateApkFile
+	post /apk/update (ApkInfo) returns (BaseMsgResp)
+
+	// Delete apk file information | 删除apk文件
+	@handler deleteApkFile
+	post /apk/delete (IdsReq) returns (BaseMsgResp)
+
+	// Get apk file information | 获取apk文件
+	@handler getApkFile
+	post /apk/get (IdsReq) returns (BaseMsgResp)
+
+	// List apk file information | 获取apk文件列表
+	@handler listApkFile
+	post /apk/list (ApkFileListReq) returns (ApkFileListResp)
+
+	// Download apk file | 下载apk文件
+	@handler downloadApkFile
+	get /apk/download (IdsReq) returns (BaseMsgResp)
+}
+

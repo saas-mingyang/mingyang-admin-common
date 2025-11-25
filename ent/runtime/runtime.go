@@ -4,15 +4,16 @@ package runtime
 
 import (
 	"context"
-	"time"
-
-	uuid "github.com/gofrs/uuid/v5"
+	"mingyang-admin-simple-admin-file/ent/apk"
 	"mingyang-admin-simple-admin-file/ent/cloudfile"
 	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
 	"mingyang-admin-simple-admin-file/ent/file"
 	"mingyang-admin-simple-admin-file/ent/filetag"
 	"mingyang-admin-simple-admin-file/ent/schema"
 	"mingyang-admin-simple-admin-file/ent/storageprovider"
+	"time"
+
+	uuid "github.com/gofrs/uuid/v5"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -22,6 +23,45 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	apkMixin := schema.Apk{}.Mixin()
+	apkMixinFields0 := apkMixin[0].Fields()
+	_ = apkMixinFields0
+	apkMixinFields1 := apkMixin[1].Fields()
+	_ = apkMixinFields1
+	apkMixinFields2 := apkMixin[2].Fields()
+	_ = apkMixinFields2
+	apkFields := schema.Apk{}.Fields()
+	_ = apkFields
+	// apkDescCreatedAt is the schema descriptor for created_at field.
+	apkDescCreatedAt := apkMixinFields0[1].Descriptor()
+	// apk.DefaultCreatedAt holds the default value on creation for the created_at field.
+	apk.DefaultCreatedAt = apkDescCreatedAt.Default.(func() time.Time)
+	// apkDescUpdatedAt is the schema descriptor for updated_at field.
+	apkDescUpdatedAt := apkMixinFields0[2].Descriptor()
+	// apk.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	apk.DefaultUpdatedAt = apkDescUpdatedAt.Default.(func() time.Time)
+	// apk.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	apk.UpdateDefaultUpdatedAt = apkDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// apkDescStatus is the schema descriptor for status field.
+	apkDescStatus := apkMixinFields1[0].Descriptor()
+	// apk.DefaultStatus holds the default value on creation for the status field.
+	apk.DefaultStatus = apkDescStatus.Default.(uint8)
+	// apkDescTenantID is the schema descriptor for tenant_id field.
+	apkDescTenantID := apkMixinFields2[0].Descriptor()
+	// apk.DefaultTenantID holds the default value on creation for the tenant_id field.
+	apk.DefaultTenantID = apkDescTenantID.Default.(uint64)
+	// apkDescFileSize is the schema descriptor for file_size field.
+	apkDescFileSize := apkFields[3].Descriptor()
+	// apk.DefaultFileSize holds the default value on creation for the file_size field.
+	apk.DefaultFileSize = apkDescFileSize.Default.(uint64)
+	// apkDescIsForceUpdate is the schema descriptor for is_force_update field.
+	apkDescIsForceUpdate := apkFields[12].Descriptor()
+	// apk.DefaultIsForceUpdate holds the default value on creation for the is_force_update field.
+	apk.DefaultIsForceUpdate = apkDescIsForceUpdate.Default.(bool)
+	// apkDescDownloadCount is the schema descriptor for download_count field.
+	apkDescDownloadCount := apkFields[13].Descriptor()
+	// apk.DefaultDownloadCount holds the default value on creation for the download_count field.
+	apk.DefaultDownloadCount = apkDescDownloadCount.Default.(int64)
 	cloudfileMixin := schema.CloudFile{}.Mixin()
 	cloudfile.Policy = privacy.NewPolicies(schema.CloudFile{})
 	cloudfile.Hooks[0] = func(next ent.Mutator) ent.Mutator {

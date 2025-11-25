@@ -4,12 +4,12 @@ package ent
 
 import (
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 // Cloud File's Provider Configuration Table | 云文件服务商配置表

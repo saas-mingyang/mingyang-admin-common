@@ -5,6 +5,390 @@ package ent
 import "time"
 
 // set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilUpdatedAt(value *time.Time) *ApkUpdate {
+	if value != nil {
+		return _m.SetUpdatedAt(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilUpdatedAt(value *time.Time) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetUpdatedAt(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilUpdatedAt(value *time.Time) *ApkCreate {
+	if value != nil {
+		return _m.SetUpdatedAt(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilStatus(value *uint8) *ApkUpdate {
+	if value != nil {
+		return _m.SetStatus(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilStatus(value *uint8) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetStatus(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilStatus(value *uint8) *ApkCreate {
+	if value != nil {
+		return _m.SetStatus(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilName(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetName(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilName(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetName(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilName(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetName(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilVersion(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetVersion(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilVersion(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetVersion(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilVersion(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetVersion(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilVersionCode(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetVersionCode(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilVersionCode(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetVersionCode(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilVersionCode(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetVersionCode(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilFileSize(value *uint64) *ApkUpdate {
+	if value != nil {
+		return _m.SetFileSize(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilFileSize(value *uint64) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetFileSize(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilFileSize(value *uint64) *ApkCreate {
+	if value != nil {
+		return _m.SetFileSize(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilFileID(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetFileID(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilFileID(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetFileID(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilFileID(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetFileID(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilFilePath(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetFilePath(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilFilePath(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetFilePath(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilFilePath(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetFilePath(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilMd5(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetMd5(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilMd5(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetMd5(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilMd5(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetMd5(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilSha1(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetSha1(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilSha1(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetSha1(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilSha1(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetSha1(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilSha256(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetSha256(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilSha256(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetSha256(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilSha256(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetSha256(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilPackageName(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetPackageName(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilPackageName(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetPackageName(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilPackageName(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetPackageName(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilDescription(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetDescription(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilDescription(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetDescription(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilDescription(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetDescription(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilUpdateLog(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetUpdateLog(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilUpdateLog(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetUpdateLog(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilUpdateLog(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetUpdateLog(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilIsForceUpdate(value *bool) *ApkUpdate {
+	if value != nil {
+		return _m.SetIsForceUpdate(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilIsForceUpdate(value *bool) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetIsForceUpdate(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilIsForceUpdate(value *bool) *ApkCreate {
+	if value != nil {
+		return _m.SetIsForceUpdate(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilDownloadCount(value *int64) *ApkUpdate {
+	if value != nil {
+		return _m.SetDownloadCount(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilDownloadCount(value *int64) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetDownloadCount(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilDownloadCount(value *int64) *ApkCreate {
+	if value != nil {
+		return _m.SetDownloadCount(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
 func (_m *CloudFileUpdate) SetNotNilUpdatedAt(value *time.Time) *CloudFileUpdate {
 	if value != nil {
 		return _m.SetUpdatedAt(*value)

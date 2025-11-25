@@ -5,9 +5,20 @@ package hook
 import (
 	"context"
 	"fmt"
-
 	"mingyang-admin-simple-admin-file/ent"
 )
+
+// The ApkFunc type is an adapter to allow the use of ordinary
+// function as Apk mutator.
+type ApkFunc func(context.Context, *ent.ApkMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ApkFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ApkMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApkMutation", m)
+}
 
 // The CloudFileFunc type is an adapter to allow the use of ordinary
 // function as CloudFile mutator.
