@@ -2,6 +2,7 @@ package filetag
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 
 	"mingyang-admin-simple-admin-file/ent/filetag"
 	"mingyang-admin-simple-admin-file/internal/svc"
@@ -27,7 +28,7 @@ func NewDeleteFileTagLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 }
 
 func (l *DeleteFileTagLogic) DeleteFileTag(req *types.IDsReq) (*types.BaseMsgResp, error) {
-	_, err := l.svcCtx.DB.FileTag.Delete().Where(filetag.IDIn(req.Ids...)).Exec(l.ctx)
+	_, err := l.svcCtx.DB.FileTag.Delete().Where(filetag.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).Exec(l.ctx)
 
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)

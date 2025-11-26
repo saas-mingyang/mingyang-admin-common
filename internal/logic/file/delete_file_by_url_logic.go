@@ -2,6 +2,7 @@ package file
 
 import (
 	"context"
+	"fmt"
 
 	"mingyang-admin-simple-admin-file/internal/svc"
 	"mingyang-admin-simple-admin-file/internal/types"
@@ -31,5 +32,5 @@ func (l *DeleteFileByUrlLogic) DeleteFileByUrl(req *types.FileDeleteReq) (resp *
 	}
 
 	logic := NewDeleteFileLogic(l.ctx, l.svcCtx)
-	return logic.DeleteFile(&types.IdsReq{Ids: []uint64{fileId}})
+	return logic.DeleteFile(&types.IdsReq{Ids: []string{fmt.Sprint(fileId)}})
 }

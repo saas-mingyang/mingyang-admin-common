@@ -7,10 +7,9 @@ require (
 	github.com/aws/aws-sdk-go v1.55.8
 	github.com/casbin/casbin/v2 v2.131.0
 	github.com/duke-git/lancet/v2 v2.3.7
-	github.com/gofrs/uuid/v5 v5.4.0
 	github.com/qiniu/go-sdk/v7 v7.25.4
 	github.com/redis/go-redis/v9 v9.16.0
-	github.com/saas-mingyang/mingyang-admin-common v0.2.4
+	github.com/saas-mingyang/mingyang-admin-common v0.2.6
 	github.com/zeromicro/go-zero v1.9.1
 	google.golang.org/grpc v1.76.0
 	mingyang-admin-simple-admin-core v0.0.1
@@ -62,6 +61,7 @@ require (
 	github.com/go-playground/validator/v10 v10.27.0 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/gofrs/flock v0.8.1 // indirect
+	github.com/gofrs/uuid/v5 v5.4.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect

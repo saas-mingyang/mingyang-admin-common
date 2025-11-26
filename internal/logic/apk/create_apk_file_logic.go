@@ -2,15 +2,15 @@ package apk
 
 import (
 	"context"
+	"fmt"
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
-	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
-	"mingyang-admin-simple-admin-core/rpc/ent"
 	"mingyang-admin-simple-admin-file/ent/apk"
 	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
 	"mingyang-admin-simple-admin-file/internal/svc"
 	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 	"strings"
 )
 
@@ -36,16 +36,14 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 	existing, err := l.svcCtx.DB.Apk.Query().
 		Where(apk.VersionCode(builder.String())).
 		First(l.ctx)
-	if err != nil && !ent.IsNotFound(err) {
-		return nil, errorx.NewCodeInternalError("查询版本号失败: " + err.Error())
-	}
 	if existing != nil {
-		return nil, errorx.NewCodeError(400, "版本号 "+req.VersionCode+" 已存在")
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
 	downloadUrlLogic := cloudfile.NewGetCloudFileDownloadUrlLogic(l.ctx, l.svcCtx)
 	result, err := downloadUrlLogic.GetCloudFileDownloadUrl(&types.BaseIDInfo{Id: req.FileId})
 	if err != nil {
-		return nil, errorx.NewCodeInternalError(err.Error())
+		fmt.Printf("get cloud file download url error: %v", err)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
 	data := result.Data
 	_, err = l.svcCtx.DB.Apk.Create().
@@ -62,7 +60,8 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		SetFileSize(*data.Size).
 		Save(l.ctx)
 	if err != nil {
-		return nil, errorx.NewCodeInternalError(err.Error())
+		fmt.Printf("create apk error: %v", err)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
 	return &types.BaseMsgResp{Msg: l.svcCtx.Trans.Trans(l.ctx, i18n.CreateSuccess)}, nil
 }

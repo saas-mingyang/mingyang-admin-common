@@ -91,8 +91,8 @@ func batchCheck(cbn *casbin.Enforcer, roleIds []string, act, obj, domain string)
 		checkReq = append(checkReq, []any{v, obj, act, domain})
 	}
 	fmt.Printf("checkReq: %v\n", checkReq)
-
 	result, err := cbn.BatchEnforce(checkReq)
+
 	if err != nil {
 		logx.Errorw("Casbin enforce error", logx.Field("detail", err.Error()))
 		return false

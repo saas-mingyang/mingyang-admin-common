@@ -77,34 +77,6 @@
         }
       }
     },
-    "/apk/download": {
-      "get": {
-        "description": "Download apk file | 下载apk文件",
-        "tags": [
-          "apk"
-        ],
-        "summary": "Download apk file | 下载apk文件",
-        "operationId": "DownloadApkFile",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/IdsReq"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "BaseMsgResp",
-            "schema": {
-              "$ref": "#/definitions/BaseMsgResp"
-            }
-          }
-        }
-      }
-    },
     "/apk/get": {
       "post": {
         "description": "Get apk file information | 获取apk文件",
@@ -1025,6 +997,51 @@
     }
   },
   "definitions": {
+    "ApkFileInfoResp": {
+      "description": "CloudFile information response | 云文件信息返回体",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/ApkInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "ApkFileListInfo": {
+      "description": "ApkFile list data | ApkFile",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "ApkFile list data | ApkFil",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApkInfo"
+          },
+          "x-go-name": "Data"
+        },
+        "total": {
+          "description": "The total number of data | 数据总数",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Total"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
     "ApkFileListReq": {
       "description": "Get cloud file list request params | 云文件列表请求参数",
       "type": "object",
@@ -1077,7 +1094,7 @@
           "description": "Data | 数据",
           "type": "string",
           "x-go-name": "Data",
-          "$ref": "#/definitions/ApkInfo"
+          "$ref": "#/definitions/ApkFileListInfo"
         },
         "msg": {
           "description": "Message | 提示信息",
@@ -1135,30 +1152,15 @@
           "type": "boolean",
           "x-go-name": "IsForceUpdate"
         },
-        "md5": {
-          "description": "Md5 | 文件MD5值",
-          "type": "string",
-          "x-go-name": "Md5"
-        },
         "name": {
           "description": "Name | APK名称",
           "type": "string",
           "x-go-name": "Name"
         },
         "package_name": {
-          "description": "PackageName | 应用包名",
+          "description": "UploadTime | 上传时间\nUploadTime int64 `json:\"upload_time,optional\"`\nMd5 | 文件MD5值\nMd5 string `json:\"md5,optional\"` // 文件MD5值\nSha1 | 文件SHA1值\nSha1 string `json:\"sha1,optional\"` // 文件SHA1值\nSha256 | 文件SHA256值\nSha256 string `json:\"sha256,optional\"` // 文件SHA256值\nPackageName | 应用包名",
           "type": "string",
           "x-go-name": "PackageName"
-        },
-        "sha1": {
-          "description": "Sha1 | 文件SHA1值",
-          "type": "string",
-          "x-go-name": "Sha1"
-        },
-        "sha256": {
-          "description": "Sha256 | 文件SHA256值",
-          "type": "string",
-          "x-go-name": "Sha256"
         },
         "update_log": {
           "description": "UpdateLog | 更新日志",
@@ -1171,12 +1173,6 @@
           "format": "int64",
           "x-go-name": "UpdatedAt"
         },
-        "upload_time": {
-          "description": "UploadTime | 上传时间",
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "UploadTime"
-        },
         "version": {
           "description": "Version | APK版本",
           "type": "string",
@@ -1186,6 +1182,45 @@
           "description": "VersionCode | 版本代码(内部版本号)",
           "type": "string",
           "x-go-name": "VersionCode"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "ApkUpdateReq": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "description": {
+          "description": "Description | 版本描述",
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "id": {
+          "description": "ID",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "package_name": {
+          "description": "PackageName | 应用包名",
+          "type": "string",
+          "x-go-name": "PackageName"
+        },
+        "update_log": {
+          "description": "UpdateLog | 更新日志",
+          "type": "string",
+          "x-go-name": "UpdateLog"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
         }
       },
       "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
@@ -2033,8 +2068,7 @@
           "description": "IDs",
           "type": "array",
           "items": {
-            "type": "integer",
-            "format": "uint64"
+            "type": "string"
           },
           "x-go-name": "Ids"
         }
@@ -2052,8 +2086,7 @@
           "description": "Ids",
           "type": "array",
           "items": {
-            "type": "integer",
-            "format": "uint64"
+            "type": "string"
           },
           "x-go-name": "Ids"
         }

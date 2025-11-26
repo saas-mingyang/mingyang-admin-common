@@ -49,7 +49,7 @@ CasbinDatabaseConf:
   Type: postgres
   Host: 192.168.201.188
   Port: 5432
-  DBName: simple_admin_dev
+  DBName: Lei_dev
   Username: postgres
   Password: AM38xymTdFree4Fh
   MaxOpenConn: 100

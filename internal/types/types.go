@@ -56,7 +56,7 @@ type IDReq struct {
 type IDsReq struct {
 	// IDs
 	// Required: true
-	Ids []uint64 `json:"ids,string"`
+	Ids []string `json:"ids"`
 }
 
 // Basic ID request | 基础ID地址参数请求
@@ -89,7 +89,7 @@ type UUIDReq struct {
 type IdsReq struct {
 	// Ids
 	// Required: true
-	Ids []uint64 `json:"ids,[]string"`
+	Ids []string `json:"ids,[]string"`
 }
 
 // The base ID response data | 基础ID信息

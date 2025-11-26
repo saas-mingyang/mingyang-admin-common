@@ -2,6 +2,7 @@ package cloudfile
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/zeromicro/go-zero/core/logx"
 
@@ -30,5 +31,5 @@ func (l *DeleteCloudFileByUrlLogic) DeleteCloudFileByUrl(req *types.CloudFileDel
 		return nil, err
 	}
 	logic := NewDeleteCloudFileLogic(l.ctx, l.svcCtx)
-	return logic.DeleteCloudFile(&types.IdsReq{Ids: []uint64{fileId}})
+	return logic.DeleteCloudFile(&types.IdsReq{Ids: []string{fmt.Sprint(fileId)}})
 }

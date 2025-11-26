@@ -34,11 +34,11 @@ func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.BaseID
 		WithStorageProviders().
 		First(l.ctx)
 	if err != nil || file == nil {
-		return nil, errorx.NewCodeInvalidArgumentError("cloud_file.CloudFileNotExist")
+		return nil, errorx.NewCodeInvalidArgumentError(err.Error())
 	}
 	providers := file.Edges.StorageProviders
 	if providers == nil {
-		return nil, errorx.NewCodeInvalidArgumentError("cloud_file.CloudFileNotExist")
+		return nil, errorx.NewCodeInvalidArgumentError(err.Error())
 	}
 	privateURL, err := GetPrivateURLExact(providers.CdnURL, file.URL, providers.SecretID, providers.SecretKey)
 	if err != nil {

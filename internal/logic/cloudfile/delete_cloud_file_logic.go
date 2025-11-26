@@ -2,6 +2,7 @@ package cloudfile
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -47,7 +48,7 @@ func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.IdsReq) (*types.BaseMs
 			}
 		}
 
-		data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDIn(req.Ids...)).
+		data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).
 			WithStorageProviders().All(l.ctx)
 		if err != nil {
 			return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
@@ -84,7 +85,7 @@ func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.IdsReq) (*types.BaseMs
 		}
 	}
 
-	_, err := l.svcCtx.DB.CloudFile.Delete().Where(cloudfile.IDIn(req.Ids...)).Exec(l.ctx)
+	_, err := l.svcCtx.DB.CloudFile.Delete().Where(cloudfile.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).Exec(l.ctx)
 
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
