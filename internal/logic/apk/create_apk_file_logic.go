@@ -58,9 +58,6 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		SetDescription(req.Description).
 		SetUpdateLog(req.UpdateLog).
 		SetIsForceUpdate(req.IsForceUpdate).
-		SetMd5(req.Md5).
-		SetSha1(req.Sha1).
-		SetSha256(req.Sha256).
 		SetPackageName(req.PackageName).
 		SetFileSize(*data.Size).
 		Save(l.ctx)

@@ -265,11 +265,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/apk/list",
 					Handler: apk.ListApkFileHandler(serverCtx),
 				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/apk/download",
-					Handler: apk.DownloadApkFileHandler(serverCtx),
-				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

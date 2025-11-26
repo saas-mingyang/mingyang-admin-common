@@ -455,13 +455,13 @@ type ApkInfo struct {
 	// FilePath | 文件路径
 	FilePath string `json:"file_path,optional"`
 	// UploadTime | 上传时间
-	UploadTime int64 `json:"upload_time,optional"`
+	//UploadTime int64 `json:"upload_time,optional"`
 	// Md5 | 文件MD5值
-	Md5 string `json:"md5,optional"` // 文件MD5值
+	//Md5 string `json:"md5,optional"` // 文件MD5值
 	// Sha1 | 文件SHA1值
-	Sha1 string `json:"sha1,optional"` // 文件SHA1值
+	//Sha1 string `json:"sha1,optional"` // 文件SHA1值
 	// Sha256 | 文件SHA256值
-	Sha256 string `json:"sha256,optional"` // 文件SHA256值
+	//Sha256 string `json:"sha256,optional"` // 文件SHA256值
 	// PackageName | 应用包名
 	PackageName string `json:"package_name,optional"` // 应用包名
 	// Description | 版本描述
@@ -471,7 +471,7 @@ type ApkInfo struct {
 	// IsForceUpdate | 是否强制更新
 	IsForceUpdate bool `json:"is_force_update"` // 是否强制更新
 	// DownloadCount | 下载次数
-	DownloadCount int `json:"download_count"` // 下载次数
+	DownloadCount int64 `json:"download_count"` // 下载次数
 }
 
 // Get cloud file list request params | 云文件列表请求参数
@@ -489,6 +489,33 @@ type ApkFileListReq struct {
 // swagger:model ApkFileListResp
 type ApkFileListResp struct {
 	BaseDataInfo
-	// CloudFile list data | 云文件列表数据
+	// ApkFile list data | ApkFile
+	Data ApkFileListInfo `json:"data"`
+}
+
+// ApkFile list data | ApkFile
+// swagger:model ApkFileListInfo
+type ApkFileListInfo struct {
+	BaseListInfo
+	// ApkFile list data | ApkFil
+	Data []ApkInfo `json:"data"`
+}
+
+// CloudFile information response | 云文件信息返回体
+// swagger:model ApkFileInfoResp
+type ApkFileInfoResp struct {
+	BaseDataInfo
+	// CloudFile information | 云文件数据
 	Data ApkInfo `json:"data"`
+}
+
+// swagger:model ApkUpdateReq
+type ApkUpdateReq struct {
+	BaseIDInfo
+	// PackageName | 应用包名
+	PackageName string `json:"package_name,optional"` // 应用包名
+	// Description | 版本描述
+	Description string `json:"description,optional"` // 版本描述
+	// UpdateLog | 更新日志
+	UpdateLog string `json:"update_log,optional"` // 更新日志
 }
