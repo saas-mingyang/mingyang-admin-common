@@ -9,7 +9,7 @@ func StringSliceToUint64Slice(strSlice []string) []uint64 {
 	for _, str := range strSlice {
 		val, err := strconv.ParseUint(str, 10, 64)
 		if err != nil {
-			return nil
+			return result
 		}
 		result = append(result, val)
 	}
