@@ -1,6 +1,7 @@
 package base
 
 import (
+	"github.com/saas-mingyang/mingyang-admin-common/rpc/auth"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
@@ -20,7 +21,7 @@ import (
 
 func InitDatabaseHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		l := base.NewInitDatabaseLogic(r.Context(), svcCtx)
+		l := base.NewInitDatabaseLogic(auth.SetTokenToContext(r), svcCtx)
 		resp, err := l.InitDatabase()
 		if err != nil {
 			err = svcCtx.Trans.TransError(r.Context(), err)

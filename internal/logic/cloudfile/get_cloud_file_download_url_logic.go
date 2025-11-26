@@ -49,7 +49,12 @@ func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.BaseID
 
 	id := file.ID
 	resp.Data = types.CloudFileInfo{
-		Url: &privateURL,
+		Url:        &privateURL,
+		Size:       &file.Size,
+		Name:       &file.Name,
+		FileType:   &file.FileType,
+		UserId:     &file.UserID,
+		ProviderId: &providers.ID,
 		BaseIDInfo: types.BaseIDInfo{
 			Id: &id,
 		},

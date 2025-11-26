@@ -41,9 +41,9 @@ type (
 		// Name | 文件名
 		Name *string `json:"name,optional"`
 		// Provider ID | 提供商 ID
-		ProviderId *uint64 `json:"providerId,optional"`
+		ProviderId *uint64 `json:"providerId,optional,string"`
 		// Tag ID | 标签 ID
-		TagIds []uint64 `json:"tagIds,optional"`
+		TagIds []string `json:"tagIds,optional"`
 		// File type | 文件类型
 		FileType *uint8 `json:"fileType,optional"`
 		// Provider name | 提供商名称

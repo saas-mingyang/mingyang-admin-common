@@ -97,5 +97,8 @@ service Fms {
 	// List apk file information | 获取apk文件列表
 	@handler listApkFile
 	post /apk/list (ApkFileListReq) returns (ApkFileListResp)
+
+	@handler downloadApkFile
+	post /apk/download (IDReq) returns (CloudFileInfoResp)
 }
 

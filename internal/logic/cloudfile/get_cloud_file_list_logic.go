@@ -2,6 +2,7 @@ package cloudfile
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 
 	"mingyang-admin-simple-admin-file/ent"
 	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
@@ -42,7 +43,7 @@ func (l *GetCloudFileListLogic) GetCloudFileList(req *types.CloudFileListReq) (*
 		predicates = append(predicates, cloudfile.HasStorageProvidersWith(storageprovider.IDEQ(*req.ProviderId)))
 	}
 	if req.TagIds != nil {
-		predicates = append(predicates, cloudfile.HasTagsWith(cloudfiletag.IDIn(req.TagIds...)))
+		predicates = append(predicates, cloudfile.HasTagsWith(cloudfiletag.IDIn(convert.StringSliceToUint64Slice(req.TagIds)...)))
 	}
 	if req.FileType != nil && *req.FileType != 0 {
 		predicates = append(predicates, cloudfile.FileTypeEQ(*req.FileType))

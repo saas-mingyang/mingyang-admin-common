@@ -82,13 +82,13 @@ type UUIDReq {
 type IdsReq {
 	// Ids
 	// Required: true
-	Ids []string `json:"ids,[]string"`
+	Ids []string `json:"ids"`
 }
 
 // The base ID response data | 基础ID信息
 type BaseIDInfo {
 	// ID
-	Id *uint64 `json:"id,optional, string"`
+	Id *uint64 `json:"id,optional,string"`
 	// Create date | 创建日期
 	CreatedAt *int64 `json:"createdAt,optional"`
 	// Update date | 更新日期

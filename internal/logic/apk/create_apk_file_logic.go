@@ -45,19 +45,18 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		fmt.Printf("get cloud file download url error: %v", err)
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
-	data := result.Data
 	_, err = l.svcCtx.DB.Apk.Create().
 		SetID(sonyflake.NextID()).
 		SetName(req.Name).
 		SetVersion(req.Version).
 		SetVersionCode(builder.String()).
 		SetFileID(*req.FileId).
-		SetFilePath(*data.Url).
+		SetFilePath(req.FilePath).
 		SetDescription(req.Description).
 		SetUpdateLog(req.UpdateLog).
 		SetIsForceUpdate(req.IsForceUpdate).
 		SetPackageName(req.PackageName).
-		SetFileSize(*data.Size).
+		SetFileSize(*result.Data.Size).
 		Save(l.ctx)
 	if err != nil {
 		fmt.Printf("create apk error: %v", err)

@@ -77,6 +77,14 @@
         }
       }
     },
+    "/apk/download": {
+      "get": {
+        "tags": [
+          "apk"
+        ],
+        "operationId": "DownloadApkFile"
+      }
+    },
     "/apk/get": {
       "post": {
         "description": "Get apk file information | 获取apk文件",
@@ -1143,7 +1151,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1202,7 +1210,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1260,7 +1268,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1363,7 +1371,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1502,7 +1510,7 @@
         },
         "providerId": {
           "description": "Provider ID | 提供商 ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "ProviderId"
         },
@@ -1515,8 +1523,7 @@
           "description": "Tag ID | 标签 ID",
           "type": "array",
           "items": {
-            "type": "integer",
-            "format": "uint64"
+            "type": "string"
           },
           "x-go-name": "TagIds"
         }
@@ -1559,7 +1566,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1722,7 +1729,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1893,7 +1900,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -2169,7 +2176,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },

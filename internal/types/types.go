@@ -89,14 +89,14 @@ type UUIDReq struct {
 type IdsReq struct {
 	// Ids
 	// Required: true
-	Ids []string `json:"ids,[]string"`
+	Ids []string `json:"ids"`
 }
 
 // The base ID response data | 基础ID信息
 // swagger:model BaseIDInfo
 type BaseIDInfo struct {
 	// ID
-	Id *uint64 `json:"id,optional, string"`
+	Id *uint64 `json:"id,optional,string"`
 	// Create date | 创建日期
 	CreatedAt *int64 `json:"createdAt,optional"`
 	// Update date | 更新日期
@@ -309,9 +309,9 @@ type CloudFileListReq struct {
 	// Name | 文件名
 	Name *string `json:"name,optional"`
 	// Provider ID | 提供商 ID
-	ProviderId *uint64 `json:"providerId,optional"`
+	ProviderId *uint64 `json:"providerId,optional,string"`
 	// Tag ID | 标签 ID
-	TagIds []uint64 `json:"tagIds,optional"`
+	TagIds []string `json:"tagIds,optional"`
 	// File type | 文件类型
 	FileType *uint8 `json:"fileType,optional"`
 	// Provider name | 提供商名称

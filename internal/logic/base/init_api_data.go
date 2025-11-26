@@ -355,6 +355,65 @@ func (l *InitDatabaseLogic) insertApiData() error {
 		return err
 	}
 
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/create"),
+		Description: pointy.GetPointer("apiDesc.createApkFile"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/delete"),
+		Description: pointy.GetPointer("apiDesc.deleteApkFileById"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/download"),
+		Description: pointy.GetPointer("apiDesc.downloadApkFile"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/get"),
+		Description: pointy.GetPointer("apiDesc.getApkFile"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/list"),
+		Description: pointy.GetPointer("apiDesc.getApkFileList"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -521,5 +580,31 @@ func (l *InitDatabaseLogic) insertMenuData() error {
 		return err
 	}
 
+	_, err = l.svcCtx.CoreRpc.CreateMenu(l.ctx, &core.MenuInfo{
+		Level:       pointy.GetPointer(uint32(2)),
+		ParentId:    pointy.GetPointer(menuData.Id),
+		Path:        pointy.GetPointer("/fms/apk"),
+		Name:        pointy.GetPointer("ApkFileTagManagement"),
+		Component:   pointy.GetPointer("/fms/apk/index"),
+		Sort:        pointy.GetPointer(uint32(5)),
+		Disabled:    pointy.GetPointer(false),
+		ServiceName: pointy.GetPointer("Fms"),
+		Meta: &core.Meta{
+			Title:              pointy.GetPointer("route.apkFileTagManagement"),
+			Icon:               pointy.GetPointer("ant-design:book-outlined"),
+			HideMenu:           pointy.GetPointer(false),
+			HideBreadcrumb:     pointy.GetPointer(false),
+			IgnoreKeepAlive:    pointy.GetPointer(false),
+			HideTab:            pointy.GetPointer(false),
+			CarryParam:         pointy.GetPointer(false),
+			HideChildrenInMenu: pointy.GetPointer(false),
+			Affix:              pointy.GetPointer(false),
+		},
+		MenuType: pointy.GetPointer(uint32(1)),
+	})
+
+	if err != nil {
+		return err
+	}
 	return err
 }
