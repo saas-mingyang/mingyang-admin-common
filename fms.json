@@ -1058,10 +1058,6 @@
         "pageSize"
       ],
       "properties": {
-        "VersionCode": {
-          "description": "version_code| 版本代码(内部版本号)",
-          "type": "string"
-        },
         "name": {
           "description": "Name | APK名称",
           "type": "string",
@@ -1085,6 +1081,11 @@
           "description": "Version| 版本号",
           "type": "string",
           "x-go-name": "Version"
+        },
+        "versionCode": {
+          "description": "version_code| 版本代码(内部版本号)",
+          "type": "string",
+          "x-go-name": "VersionCode"
         }
       },
       "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
@@ -1126,24 +1127,24 @@
           "type": "string",
           "x-go-name": "Description"
         },
-        "download_count": {
+        "downloadCount": {
           "description": "DownloadCount | 下载次数",
           "type": "integer",
           "format": "int64",
           "x-go-name": "DownloadCount"
         },
-        "file_id": {
-          "description": "FileId | 文件ID",
+        "fileId": {
+          "description": "FileId | 文件ID\nmax length : 19 numeric\nmin length : 19 numeric",
           "type": "string",
           "format": "uint64",
           "x-go-name": "FileId"
         },
-        "file_path": {
+        "filePath": {
           "description": "FilePath | 文件路径",
           "type": "string",
           "x-go-name": "FilePath"
         },
-        "file_size": {
+        "fileSize": {
           "description": "FileSize | 文件大小",
           "type": "integer",
           "format": "uint64",
@@ -1155,7 +1156,7 @@
           "format": "uint64",
           "x-go-name": "Id"
         },
-        "is_force_update": {
+        "isForceUpdate": {
           "description": "IsForceUpdate | 是否强制更新",
           "type": "boolean",
           "x-go-name": "IsForceUpdate"
@@ -1163,14 +1164,16 @@
         "name": {
           "description": "Name | APK名称",
           "type": "string",
+          "maxLength": 500,
+          "minLength": 1,
           "x-go-name": "Name"
         },
-        "package_name": {
+        "packageName": {
           "description": "UploadTime | 上传时间\nUploadTime int64 `json:\"upload_time,optional\"`\nMd5 | 文件MD5值\nMd5 string `json:\"md5,optional\"` // 文件MD5值\nSha1 | 文件SHA1值\nSha1 string `json:\"sha1,optional\"` // 文件SHA1值\nSha256 | 文件SHA256值\nSha256 string `json:\"sha256,optional\"` // 文件SHA256值\nPackageName | 应用包名",
           "type": "string",
           "x-go-name": "PackageName"
         },
-        "update_log": {
+        "updateLog": {
           "description": "UpdateLog | 更新日志",
           "type": "string",
           "x-go-name": "UpdateLog"
@@ -1184,6 +1187,8 @@
         "version": {
           "description": "Version | APK版本",
           "type": "string",
+          "maxLength": 200,
+          "minLength": 1,
           "x-go-name": "Version"
         },
         "version_code": {
@@ -1214,12 +1219,12 @@
           "format": "uint64",
           "x-go-name": "Id"
         },
-        "package_name": {
+        "packageName": {
           "description": "PackageName | 应用包名",
           "type": "string",
           "x-go-name": "PackageName"
         },
-        "update_log": {
+        "updateLog": {
           "description": "UpdateLog | 更新日志",
           "type": "string",
           "x-go-name": "UpdateLog"
