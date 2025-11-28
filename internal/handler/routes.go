@@ -267,7 +267,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/apk/download",
+					Path:    "/apk/download_url",
 					Handler: apk.DownloadApkFileHandler(serverCtx),
 				},
 			}...,

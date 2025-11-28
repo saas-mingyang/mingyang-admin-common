@@ -381,7 +381,7 @@ func (l *InitDatabaseLogic) insertApiData() error {
 
 	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
 		ServiceName: pointy.GetPointer("Fms"),
-		Path:        pointy.GetPointer("/apk/download"),
+		Path:        pointy.GetPointer("/apk/download_url"),
 		Description: pointy.GetPointer("apiDesc.downloadApkFile"),
 		ApiGroup:    pointy.GetPointer("apk"),
 		Method:      pointy.GetPointer("POST"),

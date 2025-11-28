@@ -31,12 +31,10 @@ type Apk struct {
 	Version string `json:"version,omitempty"`
 	// 版本代码(内部版本号)
 	VersionCode string `json:"version_code,omitempty"`
-	// 文件id
+	// 文件大小
 	FileSize uint64 `json:"file_size,omitempty"`
-	// 下载地址
-	FileID uint64 `json:"file_id,omitempty"`
-	// 文件存储路径
-	FilePath string `json:"file_path,omitempty"`
+	// 文件id ｜ 下载地址
+	FileURL string `json:"file_url,omitempty"`
 	// 文件MD5值
 	Md5 string `json:"md5,omitempty"`
 	// 文件SHA1值
@@ -53,7 +51,9 @@ type Apk struct {
 	IsForceUpdate bool `json:"is_force_update,omitempty"`
 	// 下载次数
 	DownloadCount int64 `json:"download_count,omitempty"`
-	selectValues  sql.SelectValues
+	// android ｜ ios
+	Category     string `json:"category,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -63,9 +63,9 @@ func (*Apk) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apk.FieldIsForceUpdate:
 			values[i] = new(sql.NullBool)
-		case apk.FieldID, apk.FieldStatus, apk.FieldTenantID, apk.FieldFileSize, apk.FieldFileID, apk.FieldDownloadCount:
+		case apk.FieldID, apk.FieldStatus, apk.FieldTenantID, apk.FieldFileSize, apk.FieldDownloadCount:
 			values[i] = new(sql.NullInt64)
-		case apk.FieldName, apk.FieldVersion, apk.FieldVersionCode, apk.FieldFilePath, apk.FieldMd5, apk.FieldSha1, apk.FieldSha256, apk.FieldPackageName, apk.FieldDescription, apk.FieldUpdateLog:
+		case apk.FieldName, apk.FieldVersion, apk.FieldVersionCode, apk.FieldFileURL, apk.FieldMd5, apk.FieldSha1, apk.FieldSha256, apk.FieldPackageName, apk.FieldDescription, apk.FieldUpdateLog, apk.FieldCategory:
 			values[i] = new(sql.NullString)
 		case apk.FieldCreatedAt, apk.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,17 +138,11 @@ func (_m *Apk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.FileSize = uint64(value.Int64)
 			}
-		case apk.FieldFileID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field file_id", values[i])
-			} else if value.Valid {
-				_m.FileID = uint64(value.Int64)
-			}
-		case apk.FieldFilePath:
+		case apk.FieldFileURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_path", values[i])
+				return fmt.Errorf("unexpected type %T for field file_url", values[i])
 			} else if value.Valid {
-				_m.FilePath = value.String
+				_m.FileURL = value.String
 			}
 		case apk.FieldMd5:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -197,6 +191,12 @@ func (_m *Apk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field download_count", values[i])
 			} else if value.Valid {
 				_m.DownloadCount = value.Int64
+			}
+		case apk.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				_m.Category = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -258,11 +258,8 @@ func (_m *Apk) String() string {
 	builder.WriteString("file_size=")
 	builder.WriteString(fmt.Sprintf("%v", _m.FileSize))
 	builder.WriteString(", ")
-	builder.WriteString("file_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.FileID))
-	builder.WriteString(", ")
-	builder.WriteString("file_path=")
-	builder.WriteString(_m.FilePath)
+	builder.WriteString("file_url=")
+	builder.WriteString(_m.FileURL)
 	builder.WriteString(", ")
 	builder.WriteString("md5=")
 	builder.WriteString(_m.Md5)
@@ -287,6 +284,9 @@ func (_m *Apk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("download_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DownloadCount))
+	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(_m.Category)
 	builder.WriteByte(')')
 	return builder.String()
 }

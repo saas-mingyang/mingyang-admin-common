@@ -10,11 +10,11 @@ import (
 	"mingyang-admin-simple-admin-file/internal/types"
 )
 
-// swagger:route get /apk/download apk DownloadApkFile
+// swagger:route post /apk/download_url apk DownloadApkFile
 //
-
+// Download apk file information | 下载apk文件
 //
-
+// Download apk file information | 下载apk文件
 //
 // Parameters:
 //  + name: body
@@ -23,7 +23,7 @@ import (
 //    type: IDReq
 //
 // Responses:
-//  200: BaseMsgResp
+//  200: CloudFileInfoResp
 
 func DownloadApkFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

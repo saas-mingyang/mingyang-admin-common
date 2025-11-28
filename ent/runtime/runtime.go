@@ -53,11 +53,11 @@ func init() {
 	// apk.DefaultFileSize holds the default value on creation for the file_size field.
 	apk.DefaultFileSize = apkDescFileSize.Default.(uint64)
 	// apkDescIsForceUpdate is the schema descriptor for is_force_update field.
-	apkDescIsForceUpdate := apkFields[12].Descriptor()
+	apkDescIsForceUpdate := apkFields[11].Descriptor()
 	// apk.DefaultIsForceUpdate holds the default value on creation for the is_force_update field.
 	apk.DefaultIsForceUpdate = apkDescIsForceUpdate.Default.(bool)
 	// apkDescDownloadCount is the schema descriptor for download_count field.
-	apkDescDownloadCount := apkFields[13].Descriptor()
+	apkDescDownloadCount := apkFields[12].Descriptor()
 	// apk.DefaultDownloadCount holds the default value on creation for the download_count field.
 	apk.DefaultDownloadCount = apkDescDownloadCount.Default.(int64)
 	cloudfileMixin := schema.CloudFile{}.Mixin()

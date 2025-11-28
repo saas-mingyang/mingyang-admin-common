@@ -24,12 +24,10 @@ func (Apk) Fields() []ent.Field {
 			Comment("版本代码(内部版本号)"),
 		field.Uint64("file_size").
 			Default(0).
-			Comment("文件id"),
-		field.Uint64("file_id").
-			Comment("下载地址"),
-		field.String("file_path").
 			Optional().
-			Comment("文件存储路径"),
+			Comment("文件大小"),
+		field.String("file_url").
+			Comment("文件id ｜ 下载地址"),
 		field.String("md5").
 			Optional().
 			Comment("文件MD5值"),
@@ -54,6 +52,7 @@ func (Apk) Fields() []ent.Field {
 		field.Int64("download_count").
 			Default(0).
 			Comment("下载次数"),
+		field.String("category").Comment("android ｜ ios"),
 	}
 }
 

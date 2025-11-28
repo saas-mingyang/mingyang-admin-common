@@ -2,8 +2,10 @@ package apk
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/errorx"
 	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+	"strconv"
 
 	"mingyang-admin-simple-admin-file/internal/svc"
 	"mingyang-admin-simple-admin-file/internal/types"
@@ -30,8 +32,12 @@ func (l *DownloadApkFileLogic) DownloadApkFile(req *types.IDReq) (resp *types.Cl
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
-	fileId := file.FileID
+	fileId, err := strconv.ParseUint(file.FileURL, 10, 64)
+	if err != nil {
+		return nil, errorx.NewInvalidArgumentError(l.svcCtx.Trans.Trans(l.ctx, "file.fileCategoryIsAndroid"))
+	}
 	downloadUrlLogic := cloudfile.NewGetCloudFileDownloadUrlLogic(l.ctx, l.svcCtx)
+
 	result, err := downloadUrlLogic.GetCloudFileDownloadUrl(&types.BaseIDInfo{Id: &fileId})
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)

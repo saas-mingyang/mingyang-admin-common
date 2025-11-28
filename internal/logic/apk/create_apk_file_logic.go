@@ -7,7 +7,6 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"github.com/zeromicro/go-zero/core/logx"
 	"mingyang-admin-simple-admin-file/ent/apk"
-	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
 	"mingyang-admin-simple-admin-file/internal/svc"
 	"mingyang-admin-simple-admin-file/internal/types"
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
@@ -39,8 +38,6 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 	if existing != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
 	}
-	downloadUrlLogic := cloudfile.NewGetCloudFileDownloadUrlLogic(l.ctx, l.svcCtx)
-	result, err := downloadUrlLogic.GetCloudFileDownloadUrl(&types.BaseIDInfo{Id: req.FileId})
 	if err != nil {
 		fmt.Printf("get cloud file download url error: %v", err)
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
@@ -50,13 +47,13 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		SetName(req.Name).
 		SetVersion(req.Version).
 		SetVersionCode(builder.String()).
-		SetFileID(*req.FileId).
-		SetFilePath(req.FilePath).
-		SetDescription(req.Description).
-		SetUpdateLog(req.UpdateLog).
-		SetIsForceUpdate(req.IsForceUpdate).
+		SetFileURL(req.FileUrl).
+		SetDescription(*req.Description).
+		SetNillableUpdateLog(req.UpdateLog).
+		SetNillableIsForceUpdate(req.IsForceUpdate).
 		SetPackageName(req.PackageName).
-		SetFileSize(*result.Data.Size).
+		SetNillableFileSize(req.FileSize).
+		SetCategory(req.Category).
 		Save(l.ctx)
 	if err != nil {
 		fmt.Printf("create apk error: %v", err)

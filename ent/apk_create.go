@@ -108,23 +108,9 @@ func (_c *ApkCreate) SetNillableFileSize(v *uint64) *ApkCreate {
 	return _c
 }
 
-// SetFileID sets the "file_id" field.
-func (_c *ApkCreate) SetFileID(v uint64) *ApkCreate {
-	_c.mutation.SetFileID(v)
-	return _c
-}
-
-// SetFilePath sets the "file_path" field.
-func (_c *ApkCreate) SetFilePath(v string) *ApkCreate {
-	_c.mutation.SetFilePath(v)
-	return _c
-}
-
-// SetNillableFilePath sets the "file_path" field if the given value is not nil.
-func (_c *ApkCreate) SetNillableFilePath(v *string) *ApkCreate {
-	if v != nil {
-		_c.SetFilePath(*v)
-	}
+// SetFileURL sets the "file_url" field.
+func (_c *ApkCreate) SetFileURL(v string) *ApkCreate {
+	_c.mutation.SetFileURL(v)
 	return _c
 }
 
@@ -240,6 +226,12 @@ func (_c *ApkCreate) SetNillableDownloadCount(v *int64) *ApkCreate {
 	return _c
 }
 
+// SetCategory sets the "category" field.
+func (_c *ApkCreate) SetCategory(v string) *ApkCreate {
+	_c.mutation.SetCategory(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ApkCreate) SetID(v uint64) *ApkCreate {
 	_c.mutation.SetID(v)
@@ -331,17 +323,17 @@ func (_c *ApkCreate) check() error {
 	if _, ok := _c.mutation.VersionCode(); !ok {
 		return &ValidationError{Name: "version_code", err: errors.New(`ent: missing required field "Apk.version_code"`)}
 	}
-	if _, ok := _c.mutation.FileSize(); !ok {
-		return &ValidationError{Name: "file_size", err: errors.New(`ent: missing required field "Apk.file_size"`)}
-	}
-	if _, ok := _c.mutation.FileID(); !ok {
-		return &ValidationError{Name: "file_id", err: errors.New(`ent: missing required field "Apk.file_id"`)}
+	if _, ok := _c.mutation.FileURL(); !ok {
+		return &ValidationError{Name: "file_url", err: errors.New(`ent: missing required field "Apk.file_url"`)}
 	}
 	if _, ok := _c.mutation.IsForceUpdate(); !ok {
 		return &ValidationError{Name: "is_force_update", err: errors.New(`ent: missing required field "Apk.is_force_update"`)}
 	}
 	if _, ok := _c.mutation.DownloadCount(); !ok {
 		return &ValidationError{Name: "download_count", err: errors.New(`ent: missing required field "Apk.download_count"`)}
+	}
+	if _, ok := _c.mutation.Category(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`ent: missing required field "Apk.category"`)}
 	}
 	return nil
 }
@@ -407,13 +399,9 @@ func (_c *ApkCreate) createSpec() (*Apk, *sqlgraph.CreateSpec) {
 		_spec.SetField(apk.FieldFileSize, field.TypeUint64, value)
 		_node.FileSize = value
 	}
-	if value, ok := _c.mutation.FileID(); ok {
-		_spec.SetField(apk.FieldFileID, field.TypeUint64, value)
-		_node.FileID = value
-	}
-	if value, ok := _c.mutation.FilePath(); ok {
-		_spec.SetField(apk.FieldFilePath, field.TypeString, value)
-		_node.FilePath = value
+	if value, ok := _c.mutation.FileURL(); ok {
+		_spec.SetField(apk.FieldFileURL, field.TypeString, value)
+		_node.FileURL = value
 	}
 	if value, ok := _c.mutation.Md5(); ok {
 		_spec.SetField(apk.FieldMd5, field.TypeString, value)
@@ -446,6 +434,10 @@ func (_c *ApkCreate) createSpec() (*Apk, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DownloadCount(); ok {
 		_spec.SetField(apk.FieldDownloadCount, field.TypeInt64, value)
 		_node.DownloadCount = value
+	}
+	if value, ok := _c.mutation.Category(); ok {
+		_spec.SetField(apk.FieldCategory, field.TypeString, value)
+		_node.Category = value
 	}
 	return _node, _spec
 }

@@ -124,44 +124,23 @@ func (_u *ApkUpdate) AddFileSize(v int64) *ApkUpdate {
 	return _u
 }
 
-// SetFileID sets the "file_id" field.
-func (_u *ApkUpdate) SetFileID(v uint64) *ApkUpdate {
-	_u.mutation.ResetFileID()
-	_u.mutation.SetFileID(v)
+// ClearFileSize clears the value of the "file_size" field.
+func (_u *ApkUpdate) ClearFileSize() *ApkUpdate {
+	_u.mutation.ClearFileSize()
 	return _u
 }
 
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ApkUpdate) SetNillableFileID(v *uint64) *ApkUpdate {
+// SetFileURL sets the "file_url" field.
+func (_u *ApkUpdate) SetFileURL(v string) *ApkUpdate {
+	_u.mutation.SetFileURL(v)
+	return _u
+}
+
+// SetNillableFileURL sets the "file_url" field if the given value is not nil.
+func (_u *ApkUpdate) SetNillableFileURL(v *string) *ApkUpdate {
 	if v != nil {
-		_u.SetFileID(*v)
+		_u.SetFileURL(*v)
 	}
-	return _u
-}
-
-// AddFileID adds value to the "file_id" field.
-func (_u *ApkUpdate) AddFileID(v int64) *ApkUpdate {
-	_u.mutation.AddFileID(v)
-	return _u
-}
-
-// SetFilePath sets the "file_path" field.
-func (_u *ApkUpdate) SetFilePath(v string) *ApkUpdate {
-	_u.mutation.SetFilePath(v)
-	return _u
-}
-
-// SetNillableFilePath sets the "file_path" field if the given value is not nil.
-func (_u *ApkUpdate) SetNillableFilePath(v *string) *ApkUpdate {
-	if v != nil {
-		_u.SetFilePath(*v)
-	}
-	return _u
-}
-
-// ClearFilePath clears the value of the "file_path" field.
-func (_u *ApkUpdate) ClearFilePath() *ApkUpdate {
-	_u.mutation.ClearFilePath()
 	return _u
 }
 
@@ -320,6 +299,20 @@ func (_u *ApkUpdate) AddDownloadCount(v int64) *ApkUpdate {
 	return _u
 }
 
+// SetCategory sets the "category" field.
+func (_u *ApkUpdate) SetCategory(v string) *ApkUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *ApkUpdate) SetNillableCategory(v *string) *ApkUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ApkMutation object of the builder.
 func (_u *ApkUpdate) Mutation() *ApkMutation {
 	return _u.mutation
@@ -397,17 +390,11 @@ func (_u *ApkUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.AddedFileSize(); ok {
 		_spec.AddField(apk.FieldFileSize, field.TypeUint64, value)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(apk.FieldFileID, field.TypeUint64, value)
+	if _u.mutation.FileSizeCleared() {
+		_spec.ClearField(apk.FieldFileSize, field.TypeUint64)
 	}
-	if value, ok := _u.mutation.AddedFileID(); ok {
-		_spec.AddField(apk.FieldFileID, field.TypeUint64, value)
-	}
-	if value, ok := _u.mutation.FilePath(); ok {
-		_spec.SetField(apk.FieldFilePath, field.TypeString, value)
-	}
-	if _u.mutation.FilePathCleared() {
-		_spec.ClearField(apk.FieldFilePath, field.TypeString)
+	if value, ok := _u.mutation.FileURL(); ok {
+		_spec.SetField(apk.FieldFileURL, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Md5(); ok {
 		_spec.SetField(apk.FieldMd5, field.TypeString, value)
@@ -453,6 +440,9 @@ func (_u *ApkUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedDownloadCount(); ok {
 		_spec.AddField(apk.FieldDownloadCount, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(apk.FieldCategory, field.TypeString, value)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -570,44 +560,23 @@ func (_u *ApkUpdateOne) AddFileSize(v int64) *ApkUpdateOne {
 	return _u
 }
 
-// SetFileID sets the "file_id" field.
-func (_u *ApkUpdateOne) SetFileID(v uint64) *ApkUpdateOne {
-	_u.mutation.ResetFileID()
-	_u.mutation.SetFileID(v)
+// ClearFileSize clears the value of the "file_size" field.
+func (_u *ApkUpdateOne) ClearFileSize() *ApkUpdateOne {
+	_u.mutation.ClearFileSize()
 	return _u
 }
 
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ApkUpdateOne) SetNillableFileID(v *uint64) *ApkUpdateOne {
+// SetFileURL sets the "file_url" field.
+func (_u *ApkUpdateOne) SetFileURL(v string) *ApkUpdateOne {
+	_u.mutation.SetFileURL(v)
+	return _u
+}
+
+// SetNillableFileURL sets the "file_url" field if the given value is not nil.
+func (_u *ApkUpdateOne) SetNillableFileURL(v *string) *ApkUpdateOne {
 	if v != nil {
-		_u.SetFileID(*v)
+		_u.SetFileURL(*v)
 	}
-	return _u
-}
-
-// AddFileID adds value to the "file_id" field.
-func (_u *ApkUpdateOne) AddFileID(v int64) *ApkUpdateOne {
-	_u.mutation.AddFileID(v)
-	return _u
-}
-
-// SetFilePath sets the "file_path" field.
-func (_u *ApkUpdateOne) SetFilePath(v string) *ApkUpdateOne {
-	_u.mutation.SetFilePath(v)
-	return _u
-}
-
-// SetNillableFilePath sets the "file_path" field if the given value is not nil.
-func (_u *ApkUpdateOne) SetNillableFilePath(v *string) *ApkUpdateOne {
-	if v != nil {
-		_u.SetFilePath(*v)
-	}
-	return _u
-}
-
-// ClearFilePath clears the value of the "file_path" field.
-func (_u *ApkUpdateOne) ClearFilePath() *ApkUpdateOne {
-	_u.mutation.ClearFilePath()
 	return _u
 }
 
@@ -766,6 +735,20 @@ func (_u *ApkUpdateOne) AddDownloadCount(v int64) *ApkUpdateOne {
 	return _u
 }
 
+// SetCategory sets the "category" field.
+func (_u *ApkUpdateOne) SetCategory(v string) *ApkUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *ApkUpdateOne) SetNillableCategory(v *string) *ApkUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ApkMutation object of the builder.
 func (_u *ApkUpdateOne) Mutation() *ApkMutation {
 	return _u.mutation
@@ -873,17 +856,11 @@ func (_u *ApkUpdateOne) sqlSave(ctx context.Context) (_node *Apk, err error) {
 	if value, ok := _u.mutation.AddedFileSize(); ok {
 		_spec.AddField(apk.FieldFileSize, field.TypeUint64, value)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(apk.FieldFileID, field.TypeUint64, value)
+	if _u.mutation.FileSizeCleared() {
+		_spec.ClearField(apk.FieldFileSize, field.TypeUint64)
 	}
-	if value, ok := _u.mutation.AddedFileID(); ok {
-		_spec.AddField(apk.FieldFileID, field.TypeUint64, value)
-	}
-	if value, ok := _u.mutation.FilePath(); ok {
-		_spec.SetField(apk.FieldFilePath, field.TypeString, value)
-	}
-	if _u.mutation.FilePathCleared() {
-		_spec.ClearField(apk.FieldFilePath, field.TypeString)
+	if value, ok := _u.mutation.FileURL(); ok {
+		_spec.SetField(apk.FieldFileURL, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Md5(); ok {
 		_spec.SetField(apk.FieldMd5, field.TypeString, value)
@@ -929,6 +906,9 @@ func (_u *ApkUpdateOne) sqlSave(ctx context.Context) (_node *Apk, err error) {
 	}
 	if value, ok := _u.mutation.AddedDownloadCount(); ok {
 		_spec.AddField(apk.FieldDownloadCount, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(apk.FieldCategory, field.TypeString, value)
 	}
 	_node = &Apk{config: _u.config}
 	_spec.Assign = _node.assignValues

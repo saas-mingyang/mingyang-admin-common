@@ -56,11 +56,9 @@ func (l *ListApkFileLogic) ListApkFile(req *types.ApkFileListReq) (resp *types.A
 				Name:        v.Name,
 				Version:     v.Version,
 				VersionCode: v.VersionCode,
-				FileSize:    v.FileSize,
-				FilePath:    v.FilePath,
-				FileId:      pointy.GetPointer(v.FileID),
+				FileUrl:     v.FileURL,
 				PackageName: v.PackageName,
-				Description: v.Description,
+				Description: &v.Description,
 			})
 	}
 	return resp, nil

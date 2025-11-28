@@ -54,9 +54,7 @@ type ApkMutation struct {
 	version_code      *string
 	file_size         *uint64
 	addfile_size      *int64
-	file_id           *uint64
-	addfile_id        *int64
-	file_path         *string
+	file_url          *string
 	md5               *string
 	sha1              *string
 	sha256            *string
@@ -66,6 +64,7 @@ type ApkMutation struct {
 	is_force_update   *bool
 	download_count    *int64
 	adddownload_count *int64
+	category          *string
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*Apk, error)
@@ -532,115 +531,60 @@ func (m *ApkMutation) AddedFileSize() (r int64, exists bool) {
 	return *v, true
 }
 
+// ClearFileSize clears the value of the "file_size" field.
+func (m *ApkMutation) ClearFileSize() {
+	m.file_size = nil
+	m.addfile_size = nil
+	m.clearedFields[apk.FieldFileSize] = struct{}{}
+}
+
+// FileSizeCleared returns if the "file_size" field was cleared in this mutation.
+func (m *ApkMutation) FileSizeCleared() bool {
+	_, ok := m.clearedFields[apk.FieldFileSize]
+	return ok
+}
+
 // ResetFileSize resets all changes to the "file_size" field.
 func (m *ApkMutation) ResetFileSize() {
 	m.file_size = nil
 	m.addfile_size = nil
+	delete(m.clearedFields, apk.FieldFileSize)
 }
 
-// SetFileID sets the "file_id" field.
-func (m *ApkMutation) SetFileID(u uint64) {
-	m.file_id = &u
-	m.addfile_id = nil
+// SetFileURL sets the "file_url" field.
+func (m *ApkMutation) SetFileURL(s string) {
+	m.file_url = &s
 }
 
-// FileID returns the value of the "file_id" field in the mutation.
-func (m *ApkMutation) FileID() (r uint64, exists bool) {
-	v := m.file_id
+// FileURL returns the value of the "file_url" field in the mutation.
+func (m *ApkMutation) FileURL() (r string, exists bool) {
+	v := m.file_url
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldFileID returns the old "file_id" field's value of the Apk entity.
+// OldFileURL returns the old "file_url" field's value of the Apk entity.
 // If the Apk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApkMutation) OldFileID(ctx context.Context) (v uint64, err error) {
+func (m *ApkMutation) OldFileURL(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFileID is only allowed on UpdateOne operations")
+		return v, errors.New("OldFileURL is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFileID requires an ID field in the mutation")
+		return v, errors.New("OldFileURL requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFileID: %w", err)
+		return v, fmt.Errorf("querying old value for OldFileURL: %w", err)
 	}
-	return oldValue.FileID, nil
+	return oldValue.FileURL, nil
 }
 
-// AddFileID adds u to the "file_id" field.
-func (m *ApkMutation) AddFileID(u int64) {
-	if m.addfile_id != nil {
-		*m.addfile_id += u
-	} else {
-		m.addfile_id = &u
-	}
-}
-
-// AddedFileID returns the value that was added to the "file_id" field in this mutation.
-func (m *ApkMutation) AddedFileID() (r int64, exists bool) {
-	v := m.addfile_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetFileID resets all changes to the "file_id" field.
-func (m *ApkMutation) ResetFileID() {
-	m.file_id = nil
-	m.addfile_id = nil
-}
-
-// SetFilePath sets the "file_path" field.
-func (m *ApkMutation) SetFilePath(s string) {
-	m.file_path = &s
-}
-
-// FilePath returns the value of the "file_path" field in the mutation.
-func (m *ApkMutation) FilePath() (r string, exists bool) {
-	v := m.file_path
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFilePath returns the old "file_path" field's value of the Apk entity.
-// If the Apk object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApkMutation) OldFilePath(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFilePath is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFilePath requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFilePath: %w", err)
-	}
-	return oldValue.FilePath, nil
-}
-
-// ClearFilePath clears the value of the "file_path" field.
-func (m *ApkMutation) ClearFilePath() {
-	m.file_path = nil
-	m.clearedFields[apk.FieldFilePath] = struct{}{}
-}
-
-// FilePathCleared returns if the "file_path" field was cleared in this mutation.
-func (m *ApkMutation) FilePathCleared() bool {
-	_, ok := m.clearedFields[apk.FieldFilePath]
-	return ok
-}
-
-// ResetFilePath resets all changes to the "file_path" field.
-func (m *ApkMutation) ResetFilePath() {
-	m.file_path = nil
-	delete(m.clearedFields, apk.FieldFilePath)
+// ResetFileURL resets all changes to the "file_url" field.
+func (m *ApkMutation) ResetFileURL() {
+	m.file_url = nil
 }
 
 // SetMd5 sets the "md5" field.
@@ -1029,6 +973,42 @@ func (m *ApkMutation) ResetDownloadCount() {
 	m.adddownload_count = nil
 }
 
+// SetCategory sets the "category" field.
+func (m *ApkMutation) SetCategory(s string) {
+	m.category = &s
+}
+
+// Category returns the value of the "category" field in the mutation.
+func (m *ApkMutation) Category() (r string, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategory returns the old "category" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldCategory(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+	}
+	return oldValue.Category, nil
+}
+
+// ResetCategory resets all changes to the "category" field.
+func (m *ApkMutation) ResetCategory() {
+	m.category = nil
+}
+
 // Where appends a list predicates to the ApkMutation builder.
 func (m *ApkMutation) Where(ps ...predicate.Apk) {
 	m.predicates = append(m.predicates, ps...)
@@ -1088,11 +1068,8 @@ func (m *ApkMutation) Fields() []string {
 	if m.file_size != nil {
 		fields = append(fields, apk.FieldFileSize)
 	}
-	if m.file_id != nil {
-		fields = append(fields, apk.FieldFileID)
-	}
-	if m.file_path != nil {
-		fields = append(fields, apk.FieldFilePath)
+	if m.file_url != nil {
+		fields = append(fields, apk.FieldFileURL)
 	}
 	if m.md5 != nil {
 		fields = append(fields, apk.FieldMd5)
@@ -1118,6 +1095,9 @@ func (m *ApkMutation) Fields() []string {
 	if m.download_count != nil {
 		fields = append(fields, apk.FieldDownloadCount)
 	}
+	if m.category != nil {
+		fields = append(fields, apk.FieldCategory)
+	}
 	return fields
 }
 
@@ -1142,10 +1122,8 @@ func (m *ApkMutation) Field(name string) (ent.Value, bool) {
 		return m.VersionCode()
 	case apk.FieldFileSize:
 		return m.FileSize()
-	case apk.FieldFileID:
-		return m.FileID()
-	case apk.FieldFilePath:
-		return m.FilePath()
+	case apk.FieldFileURL:
+		return m.FileURL()
 	case apk.FieldMd5:
 		return m.Md5()
 	case apk.FieldSha1:
@@ -1162,6 +1140,8 @@ func (m *ApkMutation) Field(name string) (ent.Value, bool) {
 		return m.IsForceUpdate()
 	case apk.FieldDownloadCount:
 		return m.DownloadCount()
+	case apk.FieldCategory:
+		return m.Category()
 	}
 	return nil, false
 }
@@ -1187,10 +1167,8 @@ func (m *ApkMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldVersionCode(ctx)
 	case apk.FieldFileSize:
 		return m.OldFileSize(ctx)
-	case apk.FieldFileID:
-		return m.OldFileID(ctx)
-	case apk.FieldFilePath:
-		return m.OldFilePath(ctx)
+	case apk.FieldFileURL:
+		return m.OldFileURL(ctx)
 	case apk.FieldMd5:
 		return m.OldMd5(ctx)
 	case apk.FieldSha1:
@@ -1207,6 +1185,8 @@ func (m *ApkMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldIsForceUpdate(ctx)
 	case apk.FieldDownloadCount:
 		return m.OldDownloadCount(ctx)
+	case apk.FieldCategory:
+		return m.OldCategory(ctx)
 	}
 	return nil, fmt.Errorf("unknown Apk field %s", name)
 }
@@ -1272,19 +1252,12 @@ func (m *ApkMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetFileSize(v)
 		return nil
-	case apk.FieldFileID:
-		v, ok := value.(uint64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFileID(v)
-		return nil
-	case apk.FieldFilePath:
+	case apk.FieldFileURL:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetFilePath(v)
+		m.SetFileURL(v)
 		return nil
 	case apk.FieldMd5:
 		v, ok := value.(string)
@@ -1342,6 +1315,13 @@ func (m *ApkMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDownloadCount(v)
 		return nil
+	case apk.FieldCategory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategory(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Apk field %s", name)
 }
@@ -1358,9 +1338,6 @@ func (m *ApkMutation) AddedFields() []string {
 	}
 	if m.addfile_size != nil {
 		fields = append(fields, apk.FieldFileSize)
-	}
-	if m.addfile_id != nil {
-		fields = append(fields, apk.FieldFileID)
 	}
 	if m.adddownload_count != nil {
 		fields = append(fields, apk.FieldDownloadCount)
@@ -1379,8 +1356,6 @@ func (m *ApkMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedTenantID()
 	case apk.FieldFileSize:
 		return m.AddedFileSize()
-	case apk.FieldFileID:
-		return m.AddedFileID()
 	case apk.FieldDownloadCount:
 		return m.AddedDownloadCount()
 	}
@@ -1413,13 +1388,6 @@ func (m *ApkMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddFileSize(v)
 		return nil
-	case apk.FieldFileID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddFileID(v)
-		return nil
 	case apk.FieldDownloadCount:
 		v, ok := value.(int64)
 		if !ok {
@@ -1438,8 +1406,8 @@ func (m *ApkMutation) ClearedFields() []string {
 	if m.FieldCleared(apk.FieldStatus) {
 		fields = append(fields, apk.FieldStatus)
 	}
-	if m.FieldCleared(apk.FieldFilePath) {
-		fields = append(fields, apk.FieldFilePath)
+	if m.FieldCleared(apk.FieldFileSize) {
+		fields = append(fields, apk.FieldFileSize)
 	}
 	if m.FieldCleared(apk.FieldMd5) {
 		fields = append(fields, apk.FieldMd5)
@@ -1476,8 +1444,8 @@ func (m *ApkMutation) ClearField(name string) error {
 	case apk.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case apk.FieldFilePath:
-		m.ClearFilePath()
+	case apk.FieldFileSize:
+		m.ClearFileSize()
 		return nil
 	case apk.FieldMd5:
 		m.ClearMd5()
@@ -1529,11 +1497,8 @@ func (m *ApkMutation) ResetField(name string) error {
 	case apk.FieldFileSize:
 		m.ResetFileSize()
 		return nil
-	case apk.FieldFileID:
-		m.ResetFileID()
-		return nil
-	case apk.FieldFilePath:
-		m.ResetFilePath()
+	case apk.FieldFileURL:
+		m.ResetFileURL()
 		return nil
 	case apk.FieldMd5:
 		m.ResetMd5()
@@ -1558,6 +1523,9 @@ func (m *ApkMutation) ResetField(name string) error {
 		return nil
 	case apk.FieldDownloadCount:
 		m.ResetDownloadCount()
+		return nil
+	case apk.FieldCategory:
+		m.ResetCategory()
 		return nil
 	}
 	return fmt.Errorf("unknown Apk field %s", name)

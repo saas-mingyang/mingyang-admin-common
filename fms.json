@@ -77,12 +77,32 @@
         }
       }
     },
-    "/apk/download": {
-      "get": {
+    "/apk/download_url": {
+      "post": {
+        "description": "Download apk file information | 下载apk文件",
         "tags": [
           "apk"
         ],
-        "operationId": "DownloadApkFile"
+        "summary": "Download apk file information | 下载apk文件",
+        "operationId": "DownloadApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/IDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CloudFileInfoResp",
+            "schema": {
+              "$ref": "#/definitions/CloudFileInfoResp"
+            }
+          }
+        }
       }
     },
     "/apk/get": {
@@ -1116,6 +1136,11 @@
     "ApkInfo": {
       "type": "object",
       "properties": {
+        "category": {
+          "description": "category | 分类 android ｜ ios",
+          "type": "string",
+          "x-go-name": "Category"
+        },
         "createdAt": {
           "description": "Create date | 创建日期",
           "type": "integer",
@@ -1133,22 +1158,16 @@
           "format": "int64",
           "x-go-name": "DownloadCount"
         },
-        "fileId": {
-          "description": "FileId | 文件ID\nmax length : 19 numeric\nmin length : 19 numeric",
-          "type": "string",
-          "format": "uint64",
-          "x-go-name": "FileId"
-        },
-        "filePath": {
-          "description": "FilePath | 文件路径",
-          "type": "string",
-          "x-go-name": "FilePath"
-        },
         "fileSize": {
           "description": "FileSize | 文件大小",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "FileSize"
+        },
+        "fileUrl": {
+          "description": "FileId | 文件ID 或者 下载链接,具体看category",
+          "type": "string",
+          "x-go-name": "FileUrl"
         },
         "id": {
           "description": "ID",

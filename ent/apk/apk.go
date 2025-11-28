@@ -29,10 +29,8 @@ const (
 	FieldVersionCode = "version_code"
 	// FieldFileSize holds the string denoting the file_size field in the database.
 	FieldFileSize = "file_size"
-	// FieldFileID holds the string denoting the file_id field in the database.
-	FieldFileID = "file_id"
-	// FieldFilePath holds the string denoting the file_path field in the database.
-	FieldFilePath = "file_path"
+	// FieldFileURL holds the string denoting the file_url field in the database.
+	FieldFileURL = "file_url"
 	// FieldMd5 holds the string denoting the md5 field in the database.
 	FieldMd5 = "md5"
 	// FieldSha1 holds the string denoting the sha1 field in the database.
@@ -49,6 +47,8 @@ const (
 	FieldIsForceUpdate = "is_force_update"
 	// FieldDownloadCount holds the string denoting the download_count field in the database.
 	FieldDownloadCount = "download_count"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
 	// Table holds the table name of the apk in the database.
 	Table = "apk_file"
 )
@@ -64,8 +64,7 @@ var Columns = []string{
 	FieldVersion,
 	FieldVersionCode,
 	FieldFileSize,
-	FieldFileID,
-	FieldFilePath,
+	FieldFileURL,
 	FieldMd5,
 	FieldSha1,
 	FieldSha256,
@@ -74,6 +73,7 @@ var Columns = []string{
 	FieldUpdateLog,
 	FieldIsForceUpdate,
 	FieldDownloadCount,
+	FieldCategory,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -153,14 +153,9 @@ func ByFileSize(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileSize, opts...).ToFunc()
 }
 
-// ByFileID orders the results by the file_id field.
-func ByFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileID, opts...).ToFunc()
-}
-
-// ByFilePath orders the results by the file_path field.
-func ByFilePath(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFilePath, opts...).ToFunc()
+// ByFileURL orders the results by the file_url field.
+func ByFileURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileURL, opts...).ToFunc()
 }
 
 // ByMd5 orders the results by the md5 field.
@@ -201,4 +196,9 @@ func ByIsForceUpdate(opts ...sql.OrderTermOption) OrderOption {
 // ByDownloadCount orders the results by the download_count field.
 func ByDownloadCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDownloadCount, opts...).ToFunc()
+}
+
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }

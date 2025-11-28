@@ -39,8 +39,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			apk.FieldVersion:       {Type: field.TypeString, Column: apk.FieldVersion},
 			apk.FieldVersionCode:   {Type: field.TypeString, Column: apk.FieldVersionCode},
 			apk.FieldFileSize:      {Type: field.TypeUint64, Column: apk.FieldFileSize},
-			apk.FieldFileID:        {Type: field.TypeUint64, Column: apk.FieldFileID},
-			apk.FieldFilePath:      {Type: field.TypeString, Column: apk.FieldFilePath},
+			apk.FieldFileURL:       {Type: field.TypeString, Column: apk.FieldFileURL},
 			apk.FieldMd5:           {Type: field.TypeString, Column: apk.FieldMd5},
 			apk.FieldSha1:          {Type: field.TypeString, Column: apk.FieldSha1},
 			apk.FieldSha256:        {Type: field.TypeString, Column: apk.FieldSha256},
@@ -49,6 +48,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			apk.FieldUpdateLog:     {Type: field.TypeString, Column: apk.FieldUpdateLog},
 			apk.FieldIsForceUpdate: {Type: field.TypeBool, Column: apk.FieldIsForceUpdate},
 			apk.FieldDownloadCount: {Type: field.TypeInt64, Column: apk.FieldDownloadCount},
+			apk.FieldCategory:      {Type: field.TypeString, Column: apk.FieldCategory},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -322,14 +322,9 @@ func (f *ApkFilter) WhereFileSize(p entql.Uint64P) {
 	f.Where(p.Field(apk.FieldFileSize))
 }
 
-// WhereFileID applies the entql uint64 predicate on the file_id field.
-func (f *ApkFilter) WhereFileID(p entql.Uint64P) {
-	f.Where(p.Field(apk.FieldFileID))
-}
-
-// WhereFilePath applies the entql string predicate on the file_path field.
-func (f *ApkFilter) WhereFilePath(p entql.StringP) {
-	f.Where(p.Field(apk.FieldFilePath))
+// WhereFileURL applies the entql string predicate on the file_url field.
+func (f *ApkFilter) WhereFileURL(p entql.StringP) {
+	f.Where(p.Field(apk.FieldFileURL))
 }
 
 // WhereMd5 applies the entql string predicate on the md5 field.
@@ -370,6 +365,11 @@ func (f *ApkFilter) WhereIsForceUpdate(p entql.BoolP) {
 // WhereDownloadCount applies the entql int64 predicate on the download_count field.
 func (f *ApkFilter) WhereDownloadCount(p entql.Int64P) {
 	f.Where(p.Field(apk.FieldDownloadCount))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *ApkFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(apk.FieldCategory))
 }
 
 // addPredicate implements the predicateAdder interface.

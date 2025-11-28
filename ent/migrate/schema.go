@@ -19,9 +19,8 @@ var (
 		{Name: "name", Type: field.TypeString, Comment: "APK名称"},
 		{Name: "version", Type: field.TypeString, Comment: "版本号"},
 		{Name: "version_code", Type: field.TypeString, Unique: true, Comment: "版本代码(内部版本号)"},
-		{Name: "file_size", Type: field.TypeUint64, Comment: "文件id", Default: 0},
-		{Name: "file_id", Type: field.TypeUint64, Comment: "下载地址"},
-		{Name: "file_path", Type: field.TypeString, Nullable: true, Comment: "文件存储路径"},
+		{Name: "file_size", Type: field.TypeUint64, Nullable: true, Comment: "文件大小", Default: 0},
+		{Name: "file_url", Type: field.TypeString, Comment: "文件id ｜ 下载地址"},
 		{Name: "md5", Type: field.TypeString, Nullable: true, Comment: "文件MD5值"},
 		{Name: "sha1", Type: field.TypeString, Nullable: true, Comment: "文件SHA1值"},
 		{Name: "sha256", Type: field.TypeString, Nullable: true, Comment: "文件SHA256值"},
@@ -30,6 +29,7 @@ var (
 		{Name: "update_log", Type: field.TypeString, Nullable: true, Comment: "更新日志"},
 		{Name: "is_force_update", Type: field.TypeBool, Comment: "是否强制更新", Default: false},
 		{Name: "download_count", Type: field.TypeInt64, Comment: "下载次数", Default: 0},
+		{Name: "category", Type: field.TypeString, Comment: "android ｜ ios"},
 	}
 	// ApkFileTable holds the schema information for the "apk_file" table.
 	ApkFileTable = &schema.Table{

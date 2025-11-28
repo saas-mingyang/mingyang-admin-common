@@ -149,49 +149,25 @@ func (_m *ApkCreate) SetNotNilFileSize(value *uint64) *ApkCreate {
 }
 
 // set field if value's pointer is not nil.
-func (_m *ApkUpdate) SetNotNilFileID(value *uint64) *ApkUpdate {
+func (_m *ApkUpdate) SetNotNilFileURL(value *string) *ApkUpdate {
 	if value != nil {
-		return _m.SetFileID(*value)
+		return _m.SetFileURL(*value)
 	}
 	return _m
 }
 
 // set field if value's pointer is not nil.
-func (_m *ApkUpdateOne) SetNotNilFileID(value *uint64) *ApkUpdateOne {
+func (_m *ApkUpdateOne) SetNotNilFileURL(value *string) *ApkUpdateOne {
 	if value != nil {
-		return _m.SetFileID(*value)
+		return _m.SetFileURL(*value)
 	}
 	return _m
 }
 
 // set field if value's pointer is not nil.
-func (_m *ApkCreate) SetNotNilFileID(value *uint64) *ApkCreate {
+func (_m *ApkCreate) SetNotNilFileURL(value *string) *ApkCreate {
 	if value != nil {
-		return _m.SetFileID(*value)
-	}
-	return _m
-}
-
-// set field if value's pointer is not nil.
-func (_m *ApkUpdate) SetNotNilFilePath(value *string) *ApkUpdate {
-	if value != nil {
-		return _m.SetFilePath(*value)
-	}
-	return _m
-}
-
-// set field if value's pointer is not nil.
-func (_m *ApkUpdateOne) SetNotNilFilePath(value *string) *ApkUpdateOne {
-	if value != nil {
-		return _m.SetFilePath(*value)
-	}
-	return _m
-}
-
-// set field if value's pointer is not nil.
-func (_m *ApkCreate) SetNotNilFilePath(value *string) *ApkCreate {
-	if value != nil {
-		return _m.SetFilePath(*value)
+		return _m.SetFileURL(*value)
 	}
 	return _m
 }
@@ -384,6 +360,30 @@ func (_m *ApkUpdateOne) SetNotNilDownloadCount(value *int64) *ApkUpdateOne {
 func (_m *ApkCreate) SetNotNilDownloadCount(value *int64) *ApkCreate {
 	if value != nil {
 		return _m.SetDownloadCount(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilCategory(value *string) *ApkUpdate {
+	if value != nil {
+		return _m.SetCategory(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilCategory(value *string) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetCategory(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilCategory(value *string) *ApkCreate {
+	if value != nil {
+		return _m.SetCategory(*value)
 	}
 	return _m
 }

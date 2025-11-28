@@ -94,14 +94,9 @@ func FileSize(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldEQ(FieldFileSize, v))
 }
 
-// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
-func FileID(v uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldEQ(FieldFileID, v))
-}
-
-// FilePath applies equality check predicate on the "file_path" field. It's identical to FilePathEQ.
-func FilePath(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldEQ(FieldFilePath, v))
+// FileURL applies equality check predicate on the "file_url" field. It's identical to FileURLEQ.
+func FileURL(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldEQ(FieldFileURL, v))
 }
 
 // Md5 applies equality check predicate on the "md5" field. It's identical to Md5EQ.
@@ -142,6 +137,11 @@ func IsForceUpdate(v bool) predicate.Apk {
 // DownloadCount applies equality check predicate on the "download_count" field. It's identical to DownloadCountEQ.
 func DownloadCount(v int64) predicate.Apk {
 	return predicate.Apk(sql.FieldEQ(FieldDownloadCount, v))
+}
+
+// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
+func Category(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldEQ(FieldCategory, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -549,119 +549,79 @@ func FileSizeLTE(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldLTE(FieldFileSize, v))
 }
 
-// FileIDEQ applies the EQ predicate on the "file_id" field.
-func FileIDEQ(v uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldEQ(FieldFileID, v))
+// FileSizeIsNil applies the IsNil predicate on the "file_size" field.
+func FileSizeIsNil() predicate.Apk {
+	return predicate.Apk(sql.FieldIsNull(FieldFileSize))
 }
 
-// FileIDNEQ applies the NEQ predicate on the "file_id" field.
-func FileIDNEQ(v uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldNEQ(FieldFileID, v))
+// FileSizeNotNil applies the NotNil predicate on the "file_size" field.
+func FileSizeNotNil() predicate.Apk {
+	return predicate.Apk(sql.FieldNotNull(FieldFileSize))
 }
 
-// FileIDIn applies the In predicate on the "file_id" field.
-func FileIDIn(vs ...uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldIn(FieldFileID, vs...))
+// FileURLEQ applies the EQ predicate on the "file_url" field.
+func FileURLEQ(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldEQ(FieldFileURL, v))
 }
 
-// FileIDNotIn applies the NotIn predicate on the "file_id" field.
-func FileIDNotIn(vs ...uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldNotIn(FieldFileID, vs...))
+// FileURLNEQ applies the NEQ predicate on the "file_url" field.
+func FileURLNEQ(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldNEQ(FieldFileURL, v))
 }
 
-// FileIDGT applies the GT predicate on the "file_id" field.
-func FileIDGT(v uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldGT(FieldFileID, v))
+// FileURLIn applies the In predicate on the "file_url" field.
+func FileURLIn(vs ...string) predicate.Apk {
+	return predicate.Apk(sql.FieldIn(FieldFileURL, vs...))
 }
 
-// FileIDGTE applies the GTE predicate on the "file_id" field.
-func FileIDGTE(v uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldGTE(FieldFileID, v))
+// FileURLNotIn applies the NotIn predicate on the "file_url" field.
+func FileURLNotIn(vs ...string) predicate.Apk {
+	return predicate.Apk(sql.FieldNotIn(FieldFileURL, vs...))
 }
 
-// FileIDLT applies the LT predicate on the "file_id" field.
-func FileIDLT(v uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldLT(FieldFileID, v))
+// FileURLGT applies the GT predicate on the "file_url" field.
+func FileURLGT(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldGT(FieldFileURL, v))
 }
 
-// FileIDLTE applies the LTE predicate on the "file_id" field.
-func FileIDLTE(v uint64) predicate.Apk {
-	return predicate.Apk(sql.FieldLTE(FieldFileID, v))
+// FileURLGTE applies the GTE predicate on the "file_url" field.
+func FileURLGTE(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldGTE(FieldFileURL, v))
 }
 
-// FilePathEQ applies the EQ predicate on the "file_path" field.
-func FilePathEQ(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldEQ(FieldFilePath, v))
+// FileURLLT applies the LT predicate on the "file_url" field.
+func FileURLLT(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldLT(FieldFileURL, v))
 }
 
-// FilePathNEQ applies the NEQ predicate on the "file_path" field.
-func FilePathNEQ(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldNEQ(FieldFilePath, v))
+// FileURLLTE applies the LTE predicate on the "file_url" field.
+func FileURLLTE(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldLTE(FieldFileURL, v))
 }
 
-// FilePathIn applies the In predicate on the "file_path" field.
-func FilePathIn(vs ...string) predicate.Apk {
-	return predicate.Apk(sql.FieldIn(FieldFilePath, vs...))
+// FileURLContains applies the Contains predicate on the "file_url" field.
+func FileURLContains(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldContains(FieldFileURL, v))
 }
 
-// FilePathNotIn applies the NotIn predicate on the "file_path" field.
-func FilePathNotIn(vs ...string) predicate.Apk {
-	return predicate.Apk(sql.FieldNotIn(FieldFilePath, vs...))
+// FileURLHasPrefix applies the HasPrefix predicate on the "file_url" field.
+func FileURLHasPrefix(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldHasPrefix(FieldFileURL, v))
 }
 
-// FilePathGT applies the GT predicate on the "file_path" field.
-func FilePathGT(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldGT(FieldFilePath, v))
+// FileURLHasSuffix applies the HasSuffix predicate on the "file_url" field.
+func FileURLHasSuffix(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldHasSuffix(FieldFileURL, v))
 }
 
-// FilePathGTE applies the GTE predicate on the "file_path" field.
-func FilePathGTE(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldGTE(FieldFilePath, v))
+// FileURLEqualFold applies the EqualFold predicate on the "file_url" field.
+func FileURLEqualFold(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldEqualFold(FieldFileURL, v))
 }
 
-// FilePathLT applies the LT predicate on the "file_path" field.
-func FilePathLT(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldLT(FieldFilePath, v))
-}
-
-// FilePathLTE applies the LTE predicate on the "file_path" field.
-func FilePathLTE(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldLTE(FieldFilePath, v))
-}
-
-// FilePathContains applies the Contains predicate on the "file_path" field.
-func FilePathContains(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldContains(FieldFilePath, v))
-}
-
-// FilePathHasPrefix applies the HasPrefix predicate on the "file_path" field.
-func FilePathHasPrefix(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldHasPrefix(FieldFilePath, v))
-}
-
-// FilePathHasSuffix applies the HasSuffix predicate on the "file_path" field.
-func FilePathHasSuffix(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldHasSuffix(FieldFilePath, v))
-}
-
-// FilePathIsNil applies the IsNil predicate on the "file_path" field.
-func FilePathIsNil() predicate.Apk {
-	return predicate.Apk(sql.FieldIsNull(FieldFilePath))
-}
-
-// FilePathNotNil applies the NotNil predicate on the "file_path" field.
-func FilePathNotNil() predicate.Apk {
-	return predicate.Apk(sql.FieldNotNull(FieldFilePath))
-}
-
-// FilePathEqualFold applies the EqualFold predicate on the "file_path" field.
-func FilePathEqualFold(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldEqualFold(FieldFilePath, v))
-}
-
-// FilePathContainsFold applies the ContainsFold predicate on the "file_path" field.
-func FilePathContainsFold(v string) predicate.Apk {
-	return predicate.Apk(sql.FieldContainsFold(FieldFilePath, v))
+// FileURLContainsFold applies the ContainsFold predicate on the "file_url" field.
+func FileURLContainsFold(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldContainsFold(FieldFileURL, v))
 }
 
 // Md5EQ applies the EQ predicate on the "md5" field.
@@ -1162,6 +1122,71 @@ func DownloadCountLT(v int64) predicate.Apk {
 // DownloadCountLTE applies the LTE predicate on the "download_count" field.
 func DownloadCountLTE(v int64) predicate.Apk {
 	return predicate.Apk(sql.FieldLTE(FieldDownloadCount, v))
+}
+
+// CategoryEQ applies the EQ predicate on the "category" field.
+func CategoryEQ(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldEQ(FieldCategory, v))
+}
+
+// CategoryNEQ applies the NEQ predicate on the "category" field.
+func CategoryNEQ(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldNEQ(FieldCategory, v))
+}
+
+// CategoryIn applies the In predicate on the "category" field.
+func CategoryIn(vs ...string) predicate.Apk {
+	return predicate.Apk(sql.FieldIn(FieldCategory, vs...))
+}
+
+// CategoryNotIn applies the NotIn predicate on the "category" field.
+func CategoryNotIn(vs ...string) predicate.Apk {
+	return predicate.Apk(sql.FieldNotIn(FieldCategory, vs...))
+}
+
+// CategoryGT applies the GT predicate on the "category" field.
+func CategoryGT(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldGT(FieldCategory, v))
+}
+
+// CategoryGTE applies the GTE predicate on the "category" field.
+func CategoryGTE(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldGTE(FieldCategory, v))
+}
+
+// CategoryLT applies the LT predicate on the "category" field.
+func CategoryLT(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldLT(FieldCategory, v))
+}
+
+// CategoryLTE applies the LTE predicate on the "category" field.
+func CategoryLTE(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldLTE(FieldCategory, v))
+}
+
+// CategoryContains applies the Contains predicate on the "category" field.
+func CategoryContains(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldContains(FieldCategory, v))
+}
+
+// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
+func CategoryHasPrefix(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldHasPrefix(FieldCategory, v))
+}
+
+// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
+func CategoryHasSuffix(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldHasSuffix(FieldCategory, v))
+}
+
+// CategoryEqualFold applies the EqualFold predicate on the "category" field.
+func CategoryEqualFold(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldEqualFold(FieldCategory, v))
+}
+
+// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
+func CategoryContainsFold(v string) predicate.Apk {
+	return predicate.Apk(sql.FieldContainsFold(FieldCategory, v))
 }
 
 // And groups predicates with the AND operator between them.

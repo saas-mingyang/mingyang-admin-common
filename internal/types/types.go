@@ -453,13 +453,9 @@ type ApkInfo struct {
 	// VersionCode | 版本代码(内部版本号)
 	VersionCode string `json:"version_code,optional"`
 	// FileSize | 文件大小
-	FileSize uint64 `json:"fileSize,optional"`
-	// FileId | 文件ID
-	// max length : 19 numeric
-	// min length : 19 numeric
-	FileId *uint64 `json:"fileId,string" validate:"len=19 numeric"`
-	// FilePath | 文件路径
-	FilePath string `json:"filePath,optional"`
+	FileSize *uint64 `json:"fileSize,optional"`
+	// FileId | 文件ID 或者 下载链接,具体看category
+	FileUrl string `json:"fileUrl,string"`
 	// UploadTime | 上传时间
 	//UploadTime int64 `json:"upload_time,optional"`
 	// Md5 | 文件MD5值
@@ -469,15 +465,17 @@ type ApkInfo struct {
 	// Sha256 | 文件SHA256值
 	//Sha256 string `json:"sha256,optional"` // 文件SHA256值
 	// PackageName | 应用包名
-	PackageName string `json:"packageName,optional"` // 应用包名
+	PackageName string `json:"packageName"` // 应用包名
 	// Description | 版本描述
-	Description string `json:"description,optional"` // 版本描述
+	Description *string `json:"description,optional"` // 版本描述
 	// UpdateLog | 更新日志
-	UpdateLog string `json:"updateLog,optional"` // 更新日志
+	UpdateLog *string `json:"updateLog,optional"` // 更新日志
 	// IsForceUpdate | 是否强制更新
-	IsForceUpdate bool `json:"isForceUpdate"` // 是否强制更新
+	IsForceUpdate *bool `json:"isForceUpdate"` // 是否强制更新
 	// DownloadCount | 下载次数
 	DownloadCount int64 `json:"downloadCount"` // 下载次数
+	// category | 分类 android ｜ ios
+	Category string `json:"category"` // 分类 android ｜ ios
 }
 
 // Get cloud file list request params | 云文件列表请求参数
