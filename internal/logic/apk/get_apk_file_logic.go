@@ -54,6 +54,7 @@ func (l *GetApkFileLogic) GetApkFile(req *types.IDReq) (resp *types.ApkFileInfoR
 			UpdateLog:     &data.UpdateLog,
 			IsForceUpdate: &data.IsForceUpdate,
 			DownloadCount: data.DownloadCount,
+			Category:      data.Category,
 		},
 	}, nil
 }
