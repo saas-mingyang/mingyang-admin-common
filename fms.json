@@ -2412,6 +2412,12 @@
       "description": "The data when upload finished | 上传完成数据",
       "type": "object",
       "properties": {
+        "id": {
+          "description": "File id | 文件 id",
+          "type": "string",
+          "format": "uint64",
+          "x-go-name": "ID"
+        },
         "name": {
           "description": "File name | 文件名称",
           "type": "string",

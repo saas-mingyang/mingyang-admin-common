@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"io"
+	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
 	"net/http"
 	"os"
 	"path"
@@ -167,10 +168,13 @@ func (l *UploadLogic) Upload() (resp *types.UploadResp, err error) {
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, "upload failed")
 	}
-
+	logic := cloudfile.NewGetCloudFileDownloadUrlLogic(l.ctx, l.svcCtx)
+	url, err := logic.GetCloudFileDownloadUrl(&types.BaseIDInfo{Id: pointy.GetPointer(fileUUID)})
+	if err != nil {
+		return nil, err
+	}
 	return &types.UploadResp{
 		BaseDataInfo: types.BaseDataInfo{Msg: l.svcCtx.Trans.Trans(l.ctx, i18n.Success)},
-		Data: types.UploadInfo{Name: handler.Filename, Url: l.svcCtx.Config.UploadConf.ServerURL +
-			relativePath},
+		Data:         types.UploadInfo{Name: handler.Filename, Url: *url.Data.Url, ID: fileUUID},
 	}, nil
 }

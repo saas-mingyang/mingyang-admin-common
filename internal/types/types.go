@@ -130,6 +130,8 @@ type UploadInfo struct {
 	Name string `json:"name"`
 	// File path | 文件路径
 	Url string `json:"url"`
+	// File id | 文件 id
+	ID uint64 `json:"id,string,omitempty"`
 }
 
 // The response data when upload finished | 上传完成返回的数据

@@ -6,7 +6,6 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"github.com/zeromicro/go-zero/core/logx"
-	"mingyang-admin-simple-admin-file/ent/apk"
 	"mingyang-admin-simple-admin-file/internal/svc"
 	"mingyang-admin-simple-admin-file/internal/types"
 	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
@@ -32,16 +31,6 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 	builder.WriteString(req.Name)
 	builder.WriteString("_")
 	builder.WriteString(req.Version)
-	existing, err := l.svcCtx.DB.Apk.Query().
-		Where(apk.VersionCode(builder.String())).
-		First(l.ctx)
-	if existing != nil {
-		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
-	}
-	if err != nil {
-		fmt.Printf("get cloud file download url error: %v", err)
-		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
-	}
 	_, err = l.svcCtx.DB.Apk.Create().
 		SetID(sonyflake.NextID()).
 		SetName(req.Name).
