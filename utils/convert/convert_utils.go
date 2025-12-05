@@ -36,3 +36,12 @@ func GetUint8FromProto(protoField *uint32) *uint8 {
 	val := uint8(*protoField)
 	return &val
 }
+
+// GetUint32FromProto 从 protobuf 中获取 uint32
+func GetUint32FromProto(protoField *uint8) *uint32 {
+	if protoField == nil {
+		return nil
+	}
+	val := uint32(*protoField)
+	return &val
+}
