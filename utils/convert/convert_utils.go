@@ -27,3 +27,12 @@ func Uint64SliceToStringSlice(uintSlice []uint64) []string {
 
 	return result
 }
+
+// GetUint8FromProto 从 protobuf 中获取 uint8
+func GetUint8FromProto(protoField *uint32) *uint8 {
+	if protoField == nil {
+		return nil
+	}
+	val := uint8(*protoField)
+	return &val
+}
