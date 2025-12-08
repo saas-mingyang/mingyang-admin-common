@@ -7,6 +7,14 @@ import (
 	"time"
 )
 
+// Converter 提供 Protobuf 结构体转换功能
+type Converter struct{}
+
+// NewConverter 创建新的转换器实例
+func NewConverter() *Converter {
+	return &Converter{}
+}
+
 // TimePtrFromUnix 辅助函数：时间戳转指针，为0返回nil
 func TimePtrFromUnix(unix int64) *time.Time {
 	if unix == 0 {
@@ -34,7 +42,35 @@ func Uint8PtrToUint32(val *uint8) *uint32 {
 	return &u
 }
 
-func convertAnyToValue(v interface{}) (*structpb.Value, error) {
+// MapToStruct 将 map[string]interface{} 转换为 *structpb.Struct
+// 使用 structpb.NewStruct 的简单版本
+func (c *Converter) MapToStruct(m map[string]interface{}) (*structpb.Struct, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return structpb.NewStruct(m)
+}
+
+// MapToStructAdvanced 将 map[string]interface{} 转换为 *structpb.Struct
+// 支持更多数据类型的高级版本
+func (c *Converter) MapToStructAdvanced(m map[string]interface{}) (*structpb.Struct, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	fields := make(map[string]*structpb.Value)
+	for k, v := range m {
+		value, err := c.anyToValue(v)
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert field %s: %w", k, err)
+		}
+		fields[k] = value
+	}
+	return &structpb.Struct{Fields: fields}, nil
+}
+
+// anyToValue 将任意类型转换为 *structpb.Value
+func (c *Converter) anyToValue(v interface{}) (*structpb.Value, error) {
 	switch val := v.(type) {
 	case nil:
 		return structpb.NewNullValue(), nil
@@ -42,9 +78,23 @@ func convertAnyToValue(v interface{}) (*structpb.Value, error) {
 		return structpb.NewBoolValue(val), nil
 	case int:
 		return structpb.NewNumberValue(float64(val)), nil
+	case int8:
+		return structpb.NewNumberValue(float64(val)), nil
+	case int16:
+		return structpb.NewNumberValue(float64(val)), nil
 	case int32:
 		return structpb.NewNumberValue(float64(val)), nil
 	case int64:
+		return structpb.NewNumberValue(float64(val)), nil
+	case uint:
+		return structpb.NewNumberValue(float64(val)), nil
+	case uint8:
+		return structpb.NewNumberValue(float64(val)), nil
+	case uint16:
+		return structpb.NewNumberValue(float64(val)), nil
+	case uint32:
+		return structpb.NewNumberValue(float64(val)), nil
+	case uint64:
 		return structpb.NewNumberValue(float64(val)), nil
 	case float32:
 		return structpb.NewNumberValue(float64(val)), nil
@@ -54,7 +104,7 @@ func convertAnyToValue(v interface{}) (*structpb.Value, error) {
 		return structpb.NewStringValue(val), nil
 	case []interface{}:
 		// 处理数组
-		list, err := convertSliceToValue(val)
+		list, err := c.sliceToValue(val)
 		if err != nil {
 			return nil, err
 		}
@@ -65,10 +115,10 @@ func convertAnyToValue(v interface{}) (*structpb.Value, error) {
 		for _, m := range val {
 			items = append(items, m)
 		}
-		return convertAnyToValue(items)
+		return c.anyToValue(items)
 	case map[string]interface{}:
 		// 递归处理嵌套map
-		s, err := convertMapToStructPB(val)
+		s, err := c.MapToStructAdvanced(val)
 		if err != nil {
 			return nil, err
 		}
@@ -77,30 +127,86 @@ func convertAnyToValue(v interface{}) (*structpb.Value, error) {
 		// 尝试JSON序列化再解析
 		jsonBytes, err := json.Marshal(v)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("unsupported type: %T", v)
 		}
 		var decoded interface{}
 		if err := json.Unmarshal(jsonBytes, &decoded); err != nil {
 			return nil, err
 		}
-		return convertAnyToValue(decoded)
+		return c.anyToValue(decoded)
 	}
 }
 
-// convertMapToStructPB 将 map[string]interface{} 转换为 *structpb.Struct
-func convertMapToStructPB(m map[string]interface{}) (*structpb.Struct, error) {
-	if m == nil {
-		return nil, nil
+// ValueToAny 将 *structpb.Value 转换为 interface{}
+func (c *Converter) ValueToAny(v *structpb.Value) interface{} {
+	if v == nil {
+		return nil
 	}
 
-	// 使用 structpb 的标准转换方法
-	return structpb.NewStruct(m)
+	switch v.GetKind().(type) {
+	case *structpb.Value_NullValue:
+		return nil
+	case *structpb.Value_NumberValue:
+		return v.GetNumberValue()
+	case *structpb.Value_StringValue:
+		return v.GetStringValue()
+	case *structpb.Value_BoolValue:
+		return v.GetBoolValue()
+	case *structpb.Value_StructValue:
+		return c.StructToMap(v.GetStructValue())
+	case *structpb.Value_ListValue:
+		list := v.GetListValue()
+		result := make([]interface{}, len(list.GetValues()))
+		for i, item := range list.GetValues() {
+			result[i] = c.ValueToAny(item)
+		}
+		return result
+	default:
+		return nil
+	}
 }
 
-func convertSliceToValue(items []interface{}) (*structpb.ListValue, error) {
+// IsEmptyStruct 检查 structpb.Struct 是否为空
+func (c *Converter) IsEmptyStruct(s *structpb.Struct) bool {
+	return s == nil || len(s.Fields) == 0
+}
+
+// MergeStructs 合并多个 structpb.Struct
+func (c *Converter) MergeStructs(structs ...*structpb.Struct) (*structpb.Struct, error) {
+	merged := make(map[string]*structpb.Value)
+
+	for _, s := range structs {
+		if s == nil {
+			continue
+		}
+		for k, v := range s.Fields {
+			merged[k] = v
+		}
+	}
+
+	return &structpb.Struct{Fields: merged}, nil
+}
+
+// ConvertWithDefault 转换 map 到 structpb，提供默认值
+func (c *Converter) ConvertWithDefault(m map[string]interface{}, defaultValue *structpb.Struct) *structpb.Struct {
+	if m == nil || len(m) == 0 {
+		return defaultValue
+	}
+
+	result, err := c.MapToStructAdvanced(m)
+	if err != nil {
+		// 如果转换失败，返回默认值
+		return defaultValue
+	}
+
+	return result
+}
+
+// sliceToValue 将 []interface{} 转换为 *structpb.ListValue
+func (c *Converter) sliceToValue(items []interface{}) (*structpb.ListValue, error) {
 	values := make([]*structpb.Value, 0, len(items))
 	for _, item := range items {
-		value, err := convertAnyToValue(item)
+		value, err := c.anyToValue(item)
 		if err != nil {
 			return nil, err
 		}
@@ -109,18 +215,10 @@ func convertSliceToValue(items []interface{}) (*structpb.ListValue, error) {
 	return &structpb.ListValue{Values: values}, nil
 }
 
-func convertMapToStructPBAdvanced(m map[string]interface{}) (*structpb.Struct, error) {
-	if m == nil {
-		return nil, nil
+// StructToMap 将 *structpb.Struct 转换为 map[string]interface{}
+func (c *Converter) StructToMap(s *structpb.Struct) map[string]interface{} {
+	if s == nil {
+		return nil
 	}
-
-	fields := make(map[string]*structpb.Value)
-	for k, v := range m {
-		value, err := convertAnyToValue(v)
-		if err != nil {
-			return nil, fmt.Errorf("failed to convert field %s: %w", k, err)
-		}
-		fields[k] = value
-	}
-	return &structpb.Struct{Fields: fields}, nil
+	return s.AsMap()
 }
