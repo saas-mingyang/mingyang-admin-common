@@ -19,3 +19,12 @@ func Int32ToUint8Ptr(i int32) *uint8 {
 	u := uint8(i)
 	return &u
 }
+
+// Uint8PtrToUint32  Uint8PtrToUint32 辅助函数：指针转uint32，为nil返回0
+func Uint8PtrToUint32(val *uint8) *uint32 {
+	if val == nil {
+		return nil
+	}
+	u := uint32(*val)
+	return &u
+}
