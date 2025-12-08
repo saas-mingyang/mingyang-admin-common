@@ -12,7 +12,7 @@ func TimePtrFromUnix(unix int64) *time.Time {
 }
 
 // Int32ToUint8Ptr Int32ToUint8PtrPool Int32ToUint8Ptr 辅助函数：int32转指针，超出范围返回nil
-func Int32ToUint8Ptr(i int32) *uint8 {
+func Int32ToUint8Ptr(i uint32) *uint8 {
 	if i < 0 || i > 255 {
 		return nil
 	}
