@@ -1,6 +1,9 @@
 package convert
 
-import "time"
+import (
+	"google.golang.org/protobuf/types/known/structpb"
+	"time"
+)
 
 // TimePtrFromUnix 辅助函数：时间戳转指针，为0返回nil
 func TimePtrFromUnix(unix int64) *time.Time {
@@ -27,4 +30,13 @@ func Uint8PtrToUint32(val *uint8) *uint32 {
 	}
 	u := uint32(*val)
 	return &u
+}
+
+// ConvertMapToStructPB  将 map[string]interface{} 转换为 *structpb.Struct
+func ConvertMapToStructPB(m map[string]interface{}) (*structpb.Struct, error) {
+	if m == nil {
+		return nil, nil
+	}
+	// 使用 structpb 的标准转换方法
+	return structpb.NewStruct(m)
 }
