@@ -4,8 +4,8 @@ package types
 // The basic response with data | 基础带数据信息
 // swagger:model BaseDataInfo
 type BaseDataInfo struct {
-	// Error code | 错误代码
-	Code int `json:"code"`
+	// Error code.proto | 错误代码
+	Code int `json:"code.proto"`
 	// Message | 提示信息
 	Msg string `json:"msg"`
 	// Data | 数据
@@ -24,8 +24,8 @@ type BaseListInfo struct {
 // The basic response without data | 基础不带数据信息
 // swagger:model BaseMsgResp
 type BaseMsgResp struct {
-	// Error code | 错误代码
-	Code int `json:"code"`
+	// Error code.proto | 错误代码
+	Code int `json:"code.proto"`
 	// Message | 提示信息
 	Msg string `json:"msg"`
 }
@@ -119,7 +119,7 @@ type BaseUUIDInfo struct {
 type StatusCodeReq struct {
 	// ID
 	Id uint64 `json:"id,string"`
-	// Status code | 状态码
+	// Status code.proto | 状态码
 	Status uint64 `json:"status" validate:"number"`
 }
 

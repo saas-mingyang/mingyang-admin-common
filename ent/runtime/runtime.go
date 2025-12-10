@@ -17,7 +17,7 @@ import (
 	"entgo.io/ent/privacy"
 )
 
-// The init function reads all schema descriptors with runtime code
+// The init function reads all schema descriptors with runtime code.proto
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {

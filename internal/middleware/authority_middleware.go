@@ -54,10 +54,10 @@ func (m *AuthorityMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 
-		// check jwt blacklist
+		// check jwt_manager blacklist
 		jwtResult, err := m.Rds.Get(context.Background(), config.RedisTokenPrefix+jwt.StripBearerPrefixFromToken(r.Header.Get("Authorization"))).Result()
 		if err != nil && !errors.Is(err, redis.Nil) {
-			logx.Errorw("redis error in jwt", logx.Field("detail", err.Error()))
+			logx.Errorw("redis error in jwt_manager", logx.Field("detail", err.Error()))
 			httpx.Error(w, errorx.NewApiError(http.StatusInternalServerError, err.Error()))
 			return
 		}
