@@ -19,7 +19,7 @@ import (
 )
 
 // The Query interface represents an operation that queries a graph.
-// By using this interface, users can write generic code.proto that manipulates
+// By using this interface, users can write generic code that manipulates
 // query builders of different types.
 type Query interface {
 	// Type returns the string representation of the query type.

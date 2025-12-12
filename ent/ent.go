@@ -20,7 +20,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
-// ent aliases to avoid import conflicts in user's code.proto.
+// ent aliases to avoid import conflicts in user's code.
 type (
 	Op            = ent.Op
 	Hook          = ent.Hook
