@@ -6,14 +6,16 @@ import (
 	"context"
 	"fmt"
 
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/apk"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
+
 	"entgo.io/ent/dialect/sql"
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -70,6 +72,33 @@ func (f TraverseFunc) Traverse(ctx context.Context, q ent.Query) error {
 		return err
 	}
 	return f(ctx, query)
+}
+
+// The ApkFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ApkFunc func(context.Context, *ent.ApkQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ApkFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ApkQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ApkQuery", q)
+}
+
+// The TraverseApk type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseApk func(context.Context, *ent.ApkQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseApk) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseApk) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ApkQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ApkQuery", q)
 }
 
 // The CloudFileFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -210,6 +239,8 @@ func (f TraverseStorageProvider) Traverse(ctx context.Context, q ent.Query) erro
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q ent.Query) (Query, error) {
 	switch q := q.(type) {
+	case *ent.ApkQuery:
+		return &query[*ent.ApkQuery, predicate.Apk, apk.OrderOption]{typ: ent.TypeApk, tq: q}, nil
 	case *ent.CloudFileQuery:
 		return &query[*ent.CloudFileQuery, predicate.CloudFile, cloudfile.OrderOption]{typ: ent.TypeCloudFile, tq: q}, nil
 	case *ent.CloudFileTagQuery:

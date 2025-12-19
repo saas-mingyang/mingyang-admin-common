@@ -1,9 +1,9 @@
 package base
 
 import (
-	"github.com/suyuan32/simple-admin-common/enum/common"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-	"github.com/suyuan32/simple-admin-core/rpc/types/core"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
+	"mingyang-admin-simple-admin-core/rpc/types/core"
 )
 
 func (l *InitDatabaseLogic) insertApiData() error {
@@ -81,6 +81,14 @@ func (l *InitDatabaseLogic) insertApiData() error {
 		return err
 	}
 
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/file/delete_by_url"),
+		Description: pointy.GetPointer("apiDesc.deleteFile"),
+		ApiGroup:    pointy.GetPointer("file"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
 	// FileTag
 
 	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
@@ -136,7 +144,7 @@ func (l *InitDatabaseLogic) insertApiData() error {
 		Path:        pointy.GetPointer("/file_tag"),
 		Description: pointy.GetPointer("apiDesc.getFileTagById"),
 		ApiGroup:    pointy.GetPointer("file_tag"),
-		Method:      pointy.GetPointer("Post"),
+		Method:      pointy.GetPointer("POST"),
 	})
 
 	if err != nil {
@@ -277,6 +285,14 @@ func (l *InitDatabaseLogic) insertApiData() error {
 		return err
 	}
 
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/cloud_file/delete_by_url"),
+		Description: pointy.GetPointer("apiDesc.deleteFile"),
+		ApiGroup:    pointy.GetPointer("file"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
 	// Cloud file tag
 
 	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
@@ -332,6 +348,78 @@ func (l *InitDatabaseLogic) insertApiData() error {
 		Path:        pointy.GetPointer("/cloud_file_tag"),
 		Description: pointy.GetPointer("apiDesc.getCloudFileTagById"),
 		ApiGroup:    pointy.GetPointer("cloud_file_tag"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/create"),
+		Description: pointy.GetPointer("apiDesc.createApkFile"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/delete"),
+		Description: pointy.GetPointer("apiDesc.deleteApkFileById"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/download_url"),
+		Description: pointy.GetPointer("apiDesc.downloadApkFile"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/get"),
+		Description: pointy.GetPointer("apiDesc.getApkFile"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/apk/list"),
+		Description: pointy.GetPointer("apiDesc.getApkFileList"),
+		ApiGroup:    pointy.GetPointer("apk"),
+		Method:      pointy.GetPointer("POST"),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateApi(l.ctx, &core.ApiInfo{
+		ServiceName: pointy.GetPointer("Fms"),
+		Path:        pointy.GetPointer("/cloud_file/download_url"),
+		Description: pointy.GetPointer("apiDesc.downloadFile"),
+		ApiGroup:    pointy.GetPointer("cloud_file"),
 		Method:      pointy.GetPointer("POST"),
 	})
 
@@ -505,5 +593,31 @@ func (l *InitDatabaseLogic) insertMenuData() error {
 		return err
 	}
 
+	_, err = l.svcCtx.CoreRpc.CreateMenu(l.ctx, &core.MenuInfo{
+		Level:       pointy.GetPointer(uint32(2)),
+		ParentId:    pointy.GetPointer(menuData.Id),
+		Path:        pointy.GetPointer("/fms/apk"),
+		Name:        pointy.GetPointer("ApkFileTagManagement"),
+		Component:   pointy.GetPointer("/fms/apk/index"),
+		Sort:        pointy.GetPointer(uint32(5)),
+		Disabled:    pointy.GetPointer(false),
+		ServiceName: pointy.GetPointer("Fms"),
+		Meta: &core.Meta{
+			Title:              pointy.GetPointer("route.apkFileTagManagement"),
+			Icon:               pointy.GetPointer("ant-design:book-outlined"),
+			HideMenu:           pointy.GetPointer(false),
+			HideBreadcrumb:     pointy.GetPointer(false),
+			IgnoreKeepAlive:    pointy.GetPointer(false),
+			HideTab:            pointy.GetPointer(false),
+			CarryParam:         pointy.GetPointer(false),
+			HideChildrenInMenu: pointy.GetPointer(false),
+			Affix:              pointy.GetPointer(false),
+		},
+		MenuType: pointy.GetPointer(uint32(1)),
+	})
+
+	if err != nil {
+		return err
+	}
 	return err
 }

@@ -2,21 +2,22 @@ package cloudfile
 
 import (
 	"context"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/internal/utils/cloud"
-	"github.com/zeromicro/go-zero/core/errorx"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 	"strings"
 
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/zeromicro/go-zero/core/errorx"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/internal/utils/cloud"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -34,7 +35,7 @@ func NewDeleteCloudFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *D
 	}
 }
 
-func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.UUIDsReq) (*types.BaseMsgResp, error) {
+func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.IdsReq) (*types.BaseMsgResp, error) {
 	if l.svcCtx.Config.UploadConf.DeleteFileWithCloud {
 		tenantId := tenantctx.GetTenantIDFromCtx(l.ctx)
 		if _, ok := l.svcCtx.CloudStorage.Service[tenantId]; !ok {
@@ -47,7 +48,7 @@ func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.UUIDsReq) (*types.Base
 			}
 		}
 
-		data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).
+		data, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).
 			WithStorageProviders().All(l.ctx)
 		if err != nil {
 			return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)
@@ -84,7 +85,7 @@ func (l *DeleteCloudFileLogic) DeleteCloudFile(req *types.UUIDsReq) (*types.Base
 		}
 	}
 
-	_, err := l.svcCtx.DB.CloudFile.Delete().Where(cloudfile.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).Exec(l.ctx)
+	_, err := l.svcCtx.DB.CloudFile.Delete().Where(cloudfile.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).Exec(l.ctx)
 
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)

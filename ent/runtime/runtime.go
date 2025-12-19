@@ -4,15 +4,14 @@ package runtime
 
 import (
 	"context"
+	"mingyang-admin-simple-admin-file/ent/apk"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/schema"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"time"
-
-	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/schema"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -22,6 +21,45 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	apkMixin := schema.Apk{}.Mixin()
+	apkMixinFields0 := apkMixin[0].Fields()
+	_ = apkMixinFields0
+	apkMixinFields1 := apkMixin[1].Fields()
+	_ = apkMixinFields1
+	apkMixinFields2 := apkMixin[2].Fields()
+	_ = apkMixinFields2
+	apkFields := schema.Apk{}.Fields()
+	_ = apkFields
+	// apkDescCreatedAt is the schema descriptor for created_at field.
+	apkDescCreatedAt := apkMixinFields0[1].Descriptor()
+	// apk.DefaultCreatedAt holds the default value on creation for the created_at field.
+	apk.DefaultCreatedAt = apkDescCreatedAt.Default.(func() time.Time)
+	// apkDescUpdatedAt is the schema descriptor for updated_at field.
+	apkDescUpdatedAt := apkMixinFields0[2].Descriptor()
+	// apk.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	apk.DefaultUpdatedAt = apkDescUpdatedAt.Default.(func() time.Time)
+	// apk.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	apk.UpdateDefaultUpdatedAt = apkDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// apkDescStatus is the schema descriptor for status field.
+	apkDescStatus := apkMixinFields1[0].Descriptor()
+	// apk.DefaultStatus holds the default value on creation for the status field.
+	apk.DefaultStatus = apkDescStatus.Default.(uint8)
+	// apkDescTenantID is the schema descriptor for tenant_id field.
+	apkDescTenantID := apkMixinFields2[0].Descriptor()
+	// apk.DefaultTenantID holds the default value on creation for the tenant_id field.
+	apk.DefaultTenantID = apkDescTenantID.Default.(uint64)
+	// apkDescFileSize is the schema descriptor for file_size field.
+	apkDescFileSize := apkFields[3].Descriptor()
+	// apk.DefaultFileSize holds the default value on creation for the file_size field.
+	apk.DefaultFileSize = apkDescFileSize.Default.(uint64)
+	// apkDescIsForceUpdate is the schema descriptor for is_force_update field.
+	apkDescIsForceUpdate := apkFields[11].Descriptor()
+	// apk.DefaultIsForceUpdate holds the default value on creation for the is_force_update field.
+	apk.DefaultIsForceUpdate = apkDescIsForceUpdate.Default.(bool)
+	// apkDescDownloadCount is the schema descriptor for download_count field.
+	apkDescDownloadCount := apkFields[12].Descriptor()
+	// apk.DefaultDownloadCount holds the default value on creation for the download_count field.
+	apk.DefaultDownloadCount = apkDescDownloadCount.Default.(int64)
 	cloudfileMixin := schema.CloudFile{}.Mixin()
 	cloudfile.Policy = privacy.NewPolicies(schema.CloudFile{})
 	cloudfile.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -61,10 +99,6 @@ func init() {
 	cloudfileDescTenantID := cloudfileMixinFields2[0].Descriptor()
 	// cloudfile.DefaultTenantID holds the default value on creation for the tenant_id field.
 	cloudfile.DefaultTenantID = cloudfileDescTenantID.Default.(uint64)
-	// cloudfileDescID is the schema descriptor for id field.
-	cloudfileDescID := cloudfileMixinFields0[0].Descriptor()
-	// cloudfile.DefaultID holds the default value on creation for the id field.
-	cloudfile.DefaultID = cloudfileDescID.Default.(func() uuid.UUID)
 	cloudfiletagMixin := schema.CloudFileTag{}.Mixin()
 	cloudfiletag.Policy = privacy.NewPolicies(schema.CloudFileTag{})
 	cloudfiletag.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -143,10 +177,6 @@ func init() {
 	fileDescTenantID := fileMixinFields2[0].Descriptor()
 	// file.DefaultTenantID holds the default value on creation for the tenant_id field.
 	file.DefaultTenantID = fileDescTenantID.Default.(uint64)
-	// fileDescID is the schema descriptor for id field.
-	fileDescID := fileMixinFields0[0].Descriptor()
-	// file.DefaultID holds the default value on creation for the id field.
-	file.DefaultID = fileDescID.Default.(func() uuid.UUID)
 	filetagMixin := schema.FileTag{}.Mixin()
 	filetag.Policy = privacy.NewPolicies(schema.FileTag{})
 	filetag.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -236,6 +266,6 @@ func init() {
 }
 
 const (
-	Version = "v0.13.1"                                         // Version of ent codegen.
-	Sum     = "h1:uD8QwN1h6SNphdCCzmkMN3feSUzNnVvV/WIkHKMbzOE=" // Sum of ent codegen.
+	Version = "v0.14.5"                                         // Version of ent codegen.
+	Sum     = "h1:Rj2WOYJtCkWyFo6a+5wB3EfBRP0rnx1fMk6gGA0UUe4=" // Sum of ent codegen.
 )

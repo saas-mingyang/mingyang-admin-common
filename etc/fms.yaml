@@ -7,47 +7,29 @@ Middlewares:
   Tenant: true
 
 Auth:
-  AccessSecret:  # JWT key
+  AccessSecret: jS6VKDtsJf3z1n2VKDtsJf3z1n2  # JWT key
   AccessExpire: 259200  # Seconds
 
 CROSConf:
   Address: '*'
 
 Log:
-  ServiceName: fileManagerLogger
+  ServiceName: fileTenantManagerLogger
   Mode: file
-  Path: /home/data/logs/file/api
+  Path: /home/data/logs
   Level: info
   Compress: false
   KeepDays: 7
   StackCoolDownMillis: 100
 
 RedisConf:
-  Host: 10.5.0.3:6379
+  Host: 192.168.201.58:6379
   Db: 0
 
 I18nConf:
   Dir:
 
-# DatabaseConf sets the database of file manager service.
 DatabaseConf:
-  Type: postgres
-  Host: 192.168.201.188
-  Port: 5432
-  DBName: simple_admin_dev
-  Username: postgres
-  Password: AM38xymTdFree4Fh
-  MaxOpenConn: 100
-  MaxIdleConn: 20
-  ConnMaxIdleTime: 300s     # ★ 核心：5分钟无请求主动断
-  ConnMaxLifetime: 1800s    # ★ 核心：30分钟强制轮换
-  SSLMode: disable
-  CacheTime: 5
-  Debug: true   # 添加以下配置启用 SQL 日志
-  LogSlowThreshold: 600ms
-
-# CasbinDatabaseConf sets the core database if you use the Casbin of Core.
-CasbinDatabaseConf:
   Type: postgres
   Host: 192.168.201.188
   Port: 5432
@@ -60,6 +42,18 @@ CasbinDatabaseConf:
   # 添加以下配置启用 SQL 日志
   Debug: true
   LogSlowThreshold: 600ms
+
+# CasbinDatabaseConf sets the core database if you use the Casbin of Core.
+CasbinDatabaseConf:
+  Type: postgres
+  Host: 192.168.201.188
+  Port: 5432
+  DBName: simple_admin_uat
+  Username: postgres
+  Password: AM38xymTdFree4Fh
+  MaxOpenConn: 100
+  SSLMode: disable
+  CacheTime: 5
 
 UploadConf:
   MaxImageSize: 33554432  # 32 mb
@@ -76,10 +70,9 @@ CoreRpc:
   #Target: 127.0.0.1:9101
   Etcd:
     Hosts:
-      - 192.168.201.58:2379  # 共享etcd地址
+      - 192.168.201.58:2379   # 共享etcd地址
     Key: core.rpc
   Enabled: true
-
 
 CasbinConf:
   ModelText: |

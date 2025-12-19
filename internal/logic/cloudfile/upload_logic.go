@@ -4,27 +4,28 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/duke-git/lancet/v2/datetime"
-	"github.com/suyuan32/simple-admin-common/i18n"
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
-	"github.com/suyuan32/simple-admin-file/internal/utils/cloud"
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-file/internal/utils/filex"
-	"github.com/zeromicro/go-zero/core/errorx"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"mime/multipart"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/duke-git/lancet/v2/datetime"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
+	"github.com/zeromicro/go-zero/core/errorx"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/cloud"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/internal/utils/filex"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -82,8 +83,8 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}
 
 	fileName, fileSuffix := handler.Filename[:dotIndex], handler.Filename[dotIndex+1:]
-	fileUUID := uuidx.NewUUID()
-	storeFileName := fileUUID.String() + "." + fileSuffix
+	fileUUID := sonyflake.NextID()
+	storeFileName := fmt.Sprint(fileUUID) + "." + fileSuffix
 	userId := l.ctx.Value("userId").(string)
 
 	// judge if the file size is over max size
@@ -101,7 +102,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}
 
 	var provider string
-	if l.r.MultipartForm.Value["provider"] != nil && l.r.MultipartForm.Value["provider"][0] != "" {
+	if l.r.MultipartForm.Value["provider"] != nil && l.svcCtx.CloudStorage.Service[tenantId].CloudStorage[l.r.MultipartForm.Value["provider"][0]] != nil {
 		provider = l.r.MultipartForm.Value["provider"][0]
 	} else {
 		provider = l.svcCtx.CloudStorage.Service[tenantId].DefaultProvider
@@ -118,8 +119,8 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}
 
 	relativeSrc := fmt.Sprintf("%s/%s/%s/%s",
-		l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Folder,
 		datetime.FormatTimeToStr(time.Now(), "yyyy-mm-dd"),
+		fmt.Sprint(tenantId),
 		fileType,
 		storeFileName)
 
@@ -127,16 +128,16 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	if err != nil {
 		return nil, err
 	}
-
-	if l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].UseCdn {
-		url = fmt.Sprintf("%s%s", l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].CdnUrl, relativeSrc)
-	}
+	service := l.svcCtx.CloudStorage.Service[tenantId]
+	storageProvider := service.ProviderData[provider]
+	fmt.Printf("map类型和值: %#v\n", storageProvider)
 
 	// store to database
 	query := l.svcCtx.DB.CloudFile.Create().
+		SetID(fileUUID).
 		SetName(fileName).
 		SetFileType(filex.ConvertFileTypeToUint8(fileType)).
-		SetStorageProvidersID(l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Id).
+		SetStorageProvidersID(storageProvider.Id).
 		SetURL(url).
 		SetSize(uint64(handler.Size)).
 		SetUserID(userId)
@@ -158,8 +159,8 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 			Data: "",
 		},
 		Data: types.CloudFileInfo{
-			BaseUUIDInfo: types.BaseUUIDInfo{
-				Id:        pointy.GetPointer(data.ID.String()),
+			BaseIDInfo: types.BaseIDInfo{
+				Id:        &data.ID,
 				CreatedAt: pointy.GetPointer(data.CreatedAt.UnixMilli()),
 			},
 			State:       pointy.GetPointer(data.State),
@@ -174,6 +175,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 }
 
 func (l *UploadLogic) UploadToProvider(file multipart.File, fileName, provider string, tenantId uint64) (url string, err error) {
+	valueFileName := &fileName
 	if client, ok := l.svcCtx.CloudStorage.Service[tenantId].CloudStorage[provider]; ok {
 		_, err := client.PutObjectWithContext(l.ctx, &s3.PutObjectInput{
 			Bucket: aws.String(l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Bucket),
@@ -189,11 +191,8 @@ func (l *UploadLogic) UploadToProvider(file multipart.File, fileName, provider s
 				return url, errorx.NewCodeInternalError("failed to upload object")
 			}
 		}
-
-		return fmt.Sprintf("https://%s.%s%s",
-			l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Bucket,
-			l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Endpoint, fileName), nil
+		fmt.Printf("fileName: %s\n", *valueFileName)
+		return *valueFileName, nil
 	}
-
 	return url, nil
 }

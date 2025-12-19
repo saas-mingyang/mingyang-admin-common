@@ -7,11 +7,11 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
-	ent2 "github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/hook"
-	"github.com/suyuan32/simple-admin-file/ent/privacy"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/mixins"
+	ent2 "mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/hook"
+	"mingyang-admin-simple-admin-file/ent/privacy"
 )
 
 // StorageProvider holds the schema definition for the StorageProvider entity.
@@ -24,36 +24,26 @@ func (StorageProvider) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Unique().
-			Comment("The cloud storage service name | 服务名称").
-			Annotations(entsql.WithComments(true)),
+			Comment("The cloud storage service name | 服务名称"),
 		field.String("bucket").
-			Comment("The cloud storage bucket name | 云存储服务的存储桶").
-			Annotations(entsql.WithComments(true)),
+			Comment("The cloud storage bucket name | 云存储服务的存储桶"),
 		field.String("secret_id").
-			Comment("The secret ID | 密钥 ID").
-			Annotations(entsql.WithComments(true)),
+			Comment("The secret ID | 密钥 ID"),
 		field.String("secret_key").
-			Comment("The secret key | 密钥 Key").
-			Annotations(entsql.WithComments(true)),
+			Comment("The secret key | 密钥 Key"),
 		field.String("endpoint").
-			Comment("The service URL | 服务器地址").
-			Annotations(entsql.WithComments(true)),
+			Comment("The service URL | 服务器地址"),
 		field.String("folder").
 			Optional().
-			Comment("The folder in cloud | 云服务目标文件夹").
-			Annotations(entsql.WithComments(true)),
+			Comment("The folder in cloud | 云服务目标文件夹"),
 		field.String("region").
-			Comment("The service region | 服务器所在地区").
-			Annotations(entsql.WithComments(true)),
+			Comment("The service region | 服务器所在地区"),
 		field.Bool("is_default").Default(false).
-			Comment("Is it the default provider | 是否为默认提供商").
-			Annotations(entsql.WithComments(true)),
+			Comment("Is it the default provider | 是否为默认提供商"),
 		field.Bool("use_cdn").Default(false).
-			Comment("Does it use CDN | 是否使用 CDN").
-			Annotations(entsql.WithComments(true)),
+			Comment("Does it use CDN | 是否使用 CDN"),
 		field.String("cdn_url").Optional().
-			Comment("CDN URL | CDN 地址").
-			Annotations(entsql.WithComments(true)),
+			Comment("CDN URL | CDN 地址"),
 	}
 }
 
@@ -95,6 +85,8 @@ func (StorageProvider) Policy() ent.Policy {
 
 func (StorageProvider) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entsql.WithComments(true),
+		schema.Comment("Cloud File's Provider Configuration Table | 云文件服务商配置表"),
 		entsql.Annotation{Table: "fms_storage_providers"},
 	}
 }

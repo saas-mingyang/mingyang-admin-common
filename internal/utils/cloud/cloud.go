@@ -6,11 +6,11 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/suyuan32/simple-admin-common/orm/ent/entenum"
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
 	"github.com/zeromicro/go-zero/core/logx"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 )
 
 type CloudServiceGroup struct {
@@ -37,7 +37,7 @@ func NewCloudServiceGroup(db *ent.Client) *CloudServiceGroup {
 	cloudServices := &CloudServiceGroup{}
 	cloudServices.Service = make(map[uint64]*CloudService)
 
-	_ = AddTenantCloudServiceGroup(db, cloudServices, entenum.TENANT_DEFAULT_ID)
+	_ = AddTenantCloudServiceGroup(db, cloudServices, entenum.TenantDefaultId)
 
 	return cloudServices
 }

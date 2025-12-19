@@ -5,11 +5,11 @@ package privacy
 import (
 	"context"
 
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
-	"github.com/suyuan32/simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
 )
 
 var (
@@ -110,6 +110,30 @@ func DenyMutationOperationRule(op ent.Op) MutationRule {
 		return Denyf("ent/privacy: operation %s is not allowed", m.Op())
 	})
 	return OnMutationOperation(rule, op)
+}
+
+// The ApkQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ApkQueryRuleFunc func(context.Context, *ent.ApkQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ApkQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ApkQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.ApkQuery", q)
+}
+
+// The ApkMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ApkMutationRuleFunc func(context.Context, *ent.ApkMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ApkMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.ApkMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.ApkMutation", m)
 }
 
 // The CloudFileQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -267,6 +291,8 @@ var _ QueryMutationRule = FilterFunc(nil)
 
 func queryFilter(q ent.Query) (Filter, error) {
 	switch q := q.(type) {
+	case *ent.ApkQuery:
+		return q.Filter(), nil
 	case *ent.CloudFileQuery:
 		return q.Filter(), nil
 	case *ent.CloudFileTagQuery:
@@ -284,6 +310,8 @@ func queryFilter(q ent.Query) (Filter, error) {
 
 func mutationFilter(m ent.Mutation) (Filter, error) {
 	switch m := m.(type) {
+	case *ent.ApkMutation:
+		return m.Filter(), nil
 	case *ent.CloudFileMutation:
 		return m.Filter(), nil
 	case *ent.CloudFileTagMutation:

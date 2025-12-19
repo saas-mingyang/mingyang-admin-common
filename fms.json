@@ -16,11 +16,179 @@
     "contact": {
       "email": "yuansu.china.work@gmail.com"
     },
-    "version": "1.4.6"
+    "version": "1.7.0"
   },
   "host": "localhost:9102",
   "basePath": "/",
   "paths": {
+    "/apk/create": {
+      "post": {
+        "description": "Create apk file information | 创建apk文件",
+        "tags": [
+          "apk"
+        ],
+        "summary": "Create apk file information | 创建apk文件",
+        "operationId": "CreateApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ApkInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/apk/delete": {
+      "post": {
+        "description": "Delete apk file information | 删除apk文件",
+        "tags": [
+          "apk"
+        ],
+        "summary": "Delete apk file information | 删除apk文件",
+        "operationId": "DeleteApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/IdsReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/apk/download_url": {
+      "post": {
+        "description": "Download apk file information | 下载apk文件",
+        "tags": [
+          "apk"
+        ],
+        "summary": "Download apk file information | 下载apk文件",
+        "operationId": "DownloadApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/IDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CloudFileInfoResp",
+            "schema": {
+              "$ref": "#/definitions/CloudFileInfoResp"
+            }
+          }
+        }
+      }
+    },
+    "/apk/get": {
+      "post": {
+        "description": "Get apk file information | 获取apk文件",
+        "tags": [
+          "apk"
+        ],
+        "summary": "Get apk file information | 获取apk文件",
+        "operationId": "GetApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/IdsReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/apk/list": {
+      "post": {
+        "description": "List apk file information | 获取apk文件列表",
+        "tags": [
+          "apk"
+        ],
+        "summary": "List apk file information | 获取apk文件列表",
+        "operationId": "ListApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ApkFileListReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApkFileListResp",
+            "schema": {
+              "$ref": "#/definitions/ApkFileListResp"
+            }
+          }
+        }
+      }
+    },
+    "/apk/update": {
+      "post": {
+        "description": "update apk file information | 创建apk文件",
+        "tags": [
+          "apk"
+        ],
+        "summary": "update apk file information | 创建apk文件",
+        "operationId": "UpdateApkFile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ApkInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
     "/cloud_file": {
       "post": {
         "description": "Get cloud file by ID | 通过ID获取云文件",
@@ -91,7 +259,7 @@
             "in": "body",
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/UUIDsReq"
+              "$ref": "#/definitions/IdsReq"
             }
           }
         ],
@@ -100,6 +268,62 @@
             "description": "BaseMsgResp",
             "schema": {
               "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/cloud_file/delete_by_url": {
+      "post": {
+        "description": "Delete cloud file information by url | 通过地址删除云文件信息",
+        "tags": [
+          "cloudfile"
+        ],
+        "summary": "Delete cloud file information by url | 通过地址删除云文件信息",
+        "operationId": "DeleteCloudFileByUrl",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/CloudFileDeleteReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/cloud_file/download_url": {
+      "post": {
+        "description": "Get cloud file download url | 获取云文件下载地址",
+        "tags": [
+          "cloudfile"
+        ],
+        "summary": "Get cloud file download url | 获取云文件下载地址",
+        "operationId": "GetCloudFileDownloadUrl",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/UUIDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CloudFileInfoResp",
+            "schema": {
+              "$ref": "#/definitions/CloudFileInfoResp"
             }
           }
         }
@@ -333,7 +557,35 @@
             "in": "body",
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/UUIDsReq"
+              "$ref": "#/definitions/IdsReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/file/delete_by_url": {
+      "post": {
+        "description": "Delete file information | 删除文件信息",
+        "tags": [
+          "file"
+        ],
+        "summary": "Delete file information | 删除文件信息",
+        "operationId": "DeleteFileByUrl",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/FileDeleteReq"
             }
           }
         ],
@@ -773,6 +1025,238 @@
     }
   },
   "definitions": {
+    "ApkFileInfoResp": {
+      "description": "CloudFile information response | 云文件信息返回体",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/ApkInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "ApkFileListInfo": {
+      "description": "ApkFile list data | ApkFile",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "ApkFile list data | ApkFil",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApkInfo"
+          },
+          "x-go-name": "Data"
+        },
+        "total": {
+          "description": "The total number of data | 数据总数",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Total"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "ApkFileListReq": {
+      "description": "Get cloud file list request params | 云文件列表请求参数",
+      "type": "object",
+      "required": [
+        "page",
+        "pageSize"
+      ],
+      "properties": {
+        "name": {
+          "description": "Name | APK名称",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "page": {
+          "description": "Page number | 第几页",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "x-go-name": "Page"
+        },
+        "pageSize": {
+          "description": "Page size | 单页数据行数",
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 100000,
+          "x-go-name": "PageSize"
+        },
+        "version": {
+          "description": "Version| 版本号",
+          "type": "string",
+          "x-go-name": "Version"
+        },
+        "versionCode": {
+          "description": "version_code| 版本代码(内部版本号)",
+          "type": "string",
+          "x-go-name": "VersionCode"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "ApkFileListResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/ApkFileListInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "ApkInfo": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "description": "category | 分类 android ｜ ios",
+          "type": "string",
+          "x-go-name": "Category"
+        },
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "description": {
+          "description": "Description | 版本描述",
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "downloadCount": {
+          "description": "DownloadCount | 下载次数",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DownloadCount"
+        },
+        "fileSize": {
+          "description": "FileSize | 文件大小",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "FileSize"
+        },
+        "fileUrl": {
+          "description": "FileId | 文件ID 或者 下载链接,具体看category",
+          "type": "string",
+          "x-go-name": "FileUrl"
+        },
+        "id": {
+          "description": "ID",
+          "type": "string",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "isForceUpdate": {
+          "description": "IsForceUpdate | 是否强制更新",
+          "type": "boolean",
+          "x-go-name": "IsForceUpdate"
+        },
+        "name": {
+          "description": "Name | APK名称",
+          "type": "string",
+          "maxLength": 500,
+          "minLength": 1,
+          "x-go-name": "Name"
+        },
+        "packageName": {
+          "description": "UploadTime | 上传时间\nUploadTime int64 `json:\"upload_time,optional\"`\nMd5 | 文件MD5值\nMd5 string `json:\"md5,optional\"` // 文件MD5值\nSha1 | 文件SHA1值\nSha1 string `json:\"sha1,optional\"` // 文件SHA1值\nSha256 | 文件SHA256值\nSha256 string `json:\"sha256,optional\"` // 文件SHA256值\nPackageName | 应用包名",
+          "type": "string",
+          "x-go-name": "PackageName"
+        },
+        "updateLog": {
+          "description": "UpdateLog | 更新日志",
+          "type": "string",
+          "x-go-name": "UpdateLog"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        },
+        "version": {
+          "description": "Version | APK版本",
+          "type": "string",
+          "maxLength": 200,
+          "minLength": 1,
+          "x-go-name": "Version"
+        },
+        "version_code": {
+          "description": "VersionCode | 版本代码(内部版本号)",
+          "type": "string",
+          "x-go-name": "VersionCode"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "ApkUpdateReq": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "description": {
+          "description": "Description | 版本描述",
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "id": {
+          "description": "ID",
+          "type": "string",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "packageName": {
+          "description": "PackageName | 应用包名",
+          "type": "string",
+          "x-go-name": "PackageName"
+        },
+        "updateLog": {
+          "description": "UpdateLog | 更新日志",
+          "type": "string",
+          "x-go-name": "UpdateLog"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
     "BaseDataInfo": {
       "description": "The basic response with data | 基础带数据信息",
       "type": "object",
@@ -794,7 +1278,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "BaseIDInfo": {
       "description": "The base ID response data | 基础ID信息",
@@ -808,7 +1292,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -819,7 +1303,7 @@
           "x-go-name": "UpdatedAt"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "BaseListInfo": {
       "description": "The basic response with data | 基础带数据信息",
@@ -837,7 +1321,7 @@
           "x-go-name": "Total"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "BaseMsgResp": {
       "description": "The basic response without data | 基础不带数据信息",
@@ -855,7 +1339,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "BaseUUIDInfo": {
       "description": "The base UUID response data | 基础UUID信息",
@@ -879,7 +1363,19 @@
           "x-go-name": "UpdatedAt"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "CloudFileDeleteReq": {
+      "description": "Delete cloud file by url request | 通过网址删除云文件请求",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "Url | 文件网址",
+          "type": "string",
+          "x-go-name": "Url"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileInfo": {
       "description": "The response data of cloud file information | 云文件信息",
@@ -900,6 +1396,7 @@
         "id": {
           "description": "ID",
           "type": "string",
+          "format": "uint64",
           "x-go-name": "Id"
         },
         "name": {
@@ -955,7 +1452,7 @@
           "x-go-name": "UserId"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileInfoResp": {
       "description": "CloudFile information response | 云文件信息返回体",
@@ -979,7 +1476,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileListInfo": {
       "description": "CloudFile list data | 云文件列表数据",
@@ -1000,7 +1497,7 @@
           "x-go-name": "Total"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileListReq": {
       "description": "Get cloud file list request params | 云文件列表请求参数",
@@ -1037,21 +1534,25 @@
         },
         "providerId": {
           "description": "Provider ID | 提供商 ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "ProviderId"
+        },
+        "providerName": {
+          "description": "Provider name | 提供商名称",
+          "type": "string",
+          "x-go-name": "ProviderName"
         },
         "tagIds": {
           "description": "Tag ID | 标签 ID",
           "type": "array",
           "items": {
-            "type": "integer",
-            "format": "uint64"
+            "type": "string"
           },
           "x-go-name": "TagIds"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileListResp": {
       "description": "The response data of cloud file list | 云文件列表数据",
@@ -1075,7 +1576,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileTagInfo": {
       "description": "The response data of cloud file tag information | 云文件标签信息",
@@ -1089,7 +1590,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1116,7 +1617,7 @@
           "x-go-name": "UpdatedAt"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileTagInfoResp": {
       "description": "Cloud file tag information response | 云文件标签信息返回体",
@@ -1140,7 +1641,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileTagListInfo": {
       "description": "CloudFileTag list data | 云文件标签列表数据",
@@ -1161,7 +1662,7 @@
           "x-go-name": "Total"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileTagListReq": {
       "description": "Get cloud file tag list request params | 云文件标签列表请求参数",
@@ -1196,7 +1697,7 @@
           "x-go-name": "Remark"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "CloudFileTagListResp": {
       "description": "The response data of cloud file tag list | 云文件标签列表数据",
@@ -1220,7 +1721,19 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "FileDeleteReq": {
+      "description": "Delete  file by url request | 通过网址删除文件请求",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "Url | 文件网址",
+          "type": "string",
+          "x-go-name": "Url"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileInfo": {
       "description": "The response data of file information | 文件信息数据",
@@ -1241,6 +1754,7 @@
         "id": {
           "description": "ID",
           "type": "string",
+          "format": "uint64",
           "x-go-name": "Id"
         },
         "name": {
@@ -1291,7 +1805,7 @@
           "x-go-name": "UserUUID"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileListInfo": {
       "type": "object",
@@ -1311,7 +1825,7 @@
           "x-go-name": "Total"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileListReq": {
       "description": "Get file list params | 获取文件列表参数",
@@ -1372,7 +1886,7 @@
           "x-go-name": "FileTagIds"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileListResp": {
       "description": "The response data of file information list | 文件信息列表数据",
@@ -1396,7 +1910,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileTagInfo": {
       "description": "The response data of file tag information | 文件标签信息",
@@ -1410,7 +1924,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1437,7 +1951,7 @@
           "x-go-name": "UpdatedAt"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileTagInfoResp": {
       "description": "FileTag information response | 文件标签信息返回体",
@@ -1461,7 +1975,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileTagListInfo": {
       "description": "FileTag list data | 文件标签列表数据",
@@ -1482,7 +1996,7 @@
           "x-go-name": "Total"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileTagListReq": {
       "description": "Get file tag list request params | 文件标签列表请求参数",
@@ -1517,7 +2031,7 @@
           "x-go-name": "Remark"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "FileTagListResp": {
       "description": "The response data of file tag list | 文件标签列表数据",
@@ -1541,7 +2055,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "IDPathReq": {
       "description": "Basic ID request | 基础ID地址参数请求",
@@ -1556,7 +2070,7 @@
           "format": "uint64"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "IDReq": {
       "description": "Basic ID request | 基础ID参数请求",
@@ -1567,12 +2081,12 @@
       "properties": {
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "IDsReq": {
       "description": "Basic IDs request | 基础ID数组参数请求",
@@ -1585,13 +2099,30 @@
           "description": "IDs",
           "type": "array",
           "items": {
-            "type": "integer",
-            "format": "uint64"
+            "type": "string"
           },
           "x-go-name": "Ids"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "IdsReq": {
+      "description": "Basic UUID array request | 基础UUID数组参数请求",
+      "type": "object",
+      "required": [
+        "ids"
+      ],
+      "properties": {
+        "ids": {
+          "description": "Ids",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Ids"
+        }
+      },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "PageInfo": {
       "description": "The page request parameters | 列表请求参数",
@@ -1616,7 +2147,7 @@
           "x-go-name": "PageSize"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "StatusCodeReq": {
       "description": "The request params of setting boolean status | 设置状态参数",
@@ -1625,6 +2156,7 @@
         "id": {
           "description": "ID",
           "type": "string",
+          "format": "uint64",
           "x-go-name": "Id"
         },
         "status": {
@@ -1634,7 +2166,7 @@
           "x-go-name": "Status"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "StorageProviderInfo": {
       "description": "The response data of storage provider information | 服务提供商信息",
@@ -1668,7 +2200,7 @@
         },
         "id": {
           "description": "ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "Id"
         },
@@ -1714,7 +2246,7 @@
           "x-go-name": "UseCdn"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "StorageProviderInfoResp": {
       "description": "StorageProvider information response | 服务提供商信息返回体",
@@ -1738,7 +2270,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "StorageProviderListInfo": {
       "description": "StorageProvider list data | 服务提供商列表数据",
@@ -1759,7 +2291,7 @@
           "x-go-name": "Total"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "StorageProviderListReq": {
       "description": "Get storage provider list request params | 服务提供商列表请求参数",
@@ -1789,7 +2321,7 @@
           "x-go-name": "PageSize"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "StorageProviderListResp": {
       "description": "The response data of storage provider list | 服务提供商列表数据",
@@ -1813,7 +2345,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "UUIDPathReq": {
       "description": "Basic path UUID request | 基础UUID地址参数请求",
@@ -1827,7 +2359,7 @@
           "type": "string"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "UUIDReq": {
       "description": "Basic UUID request | 基础UUID参数请求",
@@ -1843,25 +2375,7 @@
           "x-go-name": "Id"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
-    },
-    "UUIDsReq": {
-      "description": "Basic UUID array request | 基础UUID数组参数请求",
-      "type": "object",
-      "required": [
-        "ids"
-      ],
-      "properties": {
-        "ids": {
-          "description": "Ids",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "Ids"
-        }
-      },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "UpdateFileReq": {
       "description": "Update file information params | 更新文件信息参数",
@@ -1874,6 +2388,7 @@
         "id": {
           "description": "ID",
           "type": "string",
+          "format": "uint64",
           "x-go-name": "ID"
         },
         "name": {
@@ -1891,12 +2406,18 @@
           "x-go-name": "FileTagIds"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "UploadInfo": {
       "description": "The data when upload finished | 上传完成数据",
       "type": "object",
       "properties": {
+        "id": {
+          "description": "File id | 文件 id",
+          "type": "string",
+          "format": "uint64",
+          "x-go-name": "ID"
+        },
         "name": {
           "description": "File name | 文件名称",
           "type": "string",
@@ -1908,7 +2429,7 @@
           "x-go-name": "Url"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "UploadResp": {
       "description": "The response data when upload finished | 上传完成返回的数据",
@@ -1932,7 +2453,7 @@
           "x-go-name": "Msg"
         }
       },
-      "x-go-package": "github.com/suyuan32/simple-admin-file/internal/types"
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     }
   },
   "securityDefinitions": {

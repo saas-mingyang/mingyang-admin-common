@@ -6,18 +6,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/apk"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"sync"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 )
 
 const (
@@ -29,6 +29,7 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
+	TypeApk             = "Apk"
 	TypeCloudFile       = "CloudFile"
 	TypeCloudFileTag    = "CloudFileTag"
 	TypeFile            = "File"
@@ -36,12 +37,1554 @@ const (
 	TypeStorageProvider = "StorageProvider"
 )
 
+// ApkMutation represents an operation that mutates the Apk nodes in the graph.
+type ApkMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *uint64
+	created_at        *time.Time
+	updated_at        *time.Time
+	status            *uint8
+	addstatus         *int8
+	tenant_id         *uint64
+	addtenant_id      *int64
+	name              *string
+	version           *string
+	version_code      *string
+	file_size         *uint64
+	addfile_size      *int64
+	file_url          *string
+	md5               *string
+	sha1              *string
+	sha256            *string
+	package_name      *string
+	description       *string
+	update_log        *string
+	is_force_update   *bool
+	download_count    *int64
+	adddownload_count *int64
+	category          *string
+	clearedFields     map[string]struct{}
+	done              bool
+	oldValue          func(context.Context) (*Apk, error)
+	predicates        []predicate.Apk
+}
+
+var _ ent.Mutation = (*ApkMutation)(nil)
+
+// apkOption allows management of the mutation configuration using functional options.
+type apkOption func(*ApkMutation)
+
+// newApkMutation creates new mutation for the Apk entity.
+func newApkMutation(c config, op Op, opts ...apkOption) *ApkMutation {
+	m := &ApkMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeApk,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withApkID sets the ID field of the mutation.
+func withApkID(id uint64) apkOption {
+	return func(m *ApkMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Apk
+		)
+		m.oldValue = func(ctx context.Context) (*Apk, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Apk.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withApk sets the old Apk of the mutation.
+func withApk(node *Apk) apkOption {
+	return func(m *ApkMutation) {
+		m.oldValue = func(context.Context) (*Apk, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ApkMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ApkMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Apk entities.
+func (m *ApkMutation) SetID(id uint64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ApkMutation) ID() (id uint64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ApkMutation) IDs(ctx context.Context) ([]uint64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uint64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Apk.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ApkMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ApkMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ApkMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ApkMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ApkMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ApkMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *ApkMutation) SetStatus(u uint8) {
+	m.status = &u
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ApkMutation) Status() (r uint8, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldStatus(ctx context.Context) (v uint8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds u to the "status" field.
+func (m *ApkMutation) AddStatus(u int8) {
+	if m.addstatus != nil {
+		*m.addstatus += u
+	} else {
+		m.addstatus = &u
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ApkMutation) AddedStatus() (r int8, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *ApkMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[apk.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *ApkMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[apk.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ApkMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, apk.FieldStatus)
+}
+
+// SetTenantID sets the "tenant_id" field.
+func (m *ApkMutation) SetTenantID(u uint64) {
+	m.tenant_id = &u
+	m.addtenant_id = nil
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *ApkMutation) TenantID() (r uint64, exists bool) {
+	v := m.tenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldTenantID(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// AddTenantID adds u to the "tenant_id" field.
+func (m *ApkMutation) AddTenantID(u int64) {
+	if m.addtenant_id != nil {
+		*m.addtenant_id += u
+	} else {
+		m.addtenant_id = &u
+	}
+}
+
+// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
+func (m *ApkMutation) AddedTenantID() (r int64, exists bool) {
+	v := m.addtenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *ApkMutation) ResetTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
+}
+
+// SetName sets the "name" field.
+func (m *ApkMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ApkMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ApkMutation) ResetName() {
+	m.name = nil
+}
+
+// SetVersion sets the "version" field.
+func (m *ApkMutation) SetVersion(s string) {
+	m.version = &s
+}
+
+// Version returns the value of the "version" field in the mutation.
+func (m *ApkMutation) Version() (r string, exists bool) {
+	v := m.version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersion returns the old "version" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
+	}
+	return oldValue.Version, nil
+}
+
+// ResetVersion resets all changes to the "version" field.
+func (m *ApkMutation) ResetVersion() {
+	m.version = nil
+}
+
+// SetVersionCode sets the "version_code" field.
+func (m *ApkMutation) SetVersionCode(s string) {
+	m.version_code = &s
+}
+
+// VersionCode returns the value of the "version_code" field in the mutation.
+func (m *ApkMutation) VersionCode() (r string, exists bool) {
+	v := m.version_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersionCode returns the old "version_code" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldVersionCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersionCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersionCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersionCode: %w", err)
+	}
+	return oldValue.VersionCode, nil
+}
+
+// ResetVersionCode resets all changes to the "version_code" field.
+func (m *ApkMutation) ResetVersionCode() {
+	m.version_code = nil
+}
+
+// SetFileSize sets the "file_size" field.
+func (m *ApkMutation) SetFileSize(u uint64) {
+	m.file_size = &u
+	m.addfile_size = nil
+}
+
+// FileSize returns the value of the "file_size" field in the mutation.
+func (m *ApkMutation) FileSize() (r uint64, exists bool) {
+	v := m.file_size
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileSize returns the old "file_size" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldFileSize(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileSize is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileSize requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileSize: %w", err)
+	}
+	return oldValue.FileSize, nil
+}
+
+// AddFileSize adds u to the "file_size" field.
+func (m *ApkMutation) AddFileSize(u int64) {
+	if m.addfile_size != nil {
+		*m.addfile_size += u
+	} else {
+		m.addfile_size = &u
+	}
+}
+
+// AddedFileSize returns the value that was added to the "file_size" field in this mutation.
+func (m *ApkMutation) AddedFileSize() (r int64, exists bool) {
+	v := m.addfile_size
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearFileSize clears the value of the "file_size" field.
+func (m *ApkMutation) ClearFileSize() {
+	m.file_size = nil
+	m.addfile_size = nil
+	m.clearedFields[apk.FieldFileSize] = struct{}{}
+}
+
+// FileSizeCleared returns if the "file_size" field was cleared in this mutation.
+func (m *ApkMutation) FileSizeCleared() bool {
+	_, ok := m.clearedFields[apk.FieldFileSize]
+	return ok
+}
+
+// ResetFileSize resets all changes to the "file_size" field.
+func (m *ApkMutation) ResetFileSize() {
+	m.file_size = nil
+	m.addfile_size = nil
+	delete(m.clearedFields, apk.FieldFileSize)
+}
+
+// SetFileURL sets the "file_url" field.
+func (m *ApkMutation) SetFileURL(s string) {
+	m.file_url = &s
+}
+
+// FileURL returns the value of the "file_url" field in the mutation.
+func (m *ApkMutation) FileURL() (r string, exists bool) {
+	v := m.file_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileURL returns the old "file_url" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldFileURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileURL: %w", err)
+	}
+	return oldValue.FileURL, nil
+}
+
+// ResetFileURL resets all changes to the "file_url" field.
+func (m *ApkMutation) ResetFileURL() {
+	m.file_url = nil
+}
+
+// SetMd5 sets the "md5" field.
+func (m *ApkMutation) SetMd5(s string) {
+	m.md5 = &s
+}
+
+// Md5 returns the value of the "md5" field in the mutation.
+func (m *ApkMutation) Md5() (r string, exists bool) {
+	v := m.md5
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMd5 returns the old "md5" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldMd5(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMd5 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMd5 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMd5: %w", err)
+	}
+	return oldValue.Md5, nil
+}
+
+// ClearMd5 clears the value of the "md5" field.
+func (m *ApkMutation) ClearMd5() {
+	m.md5 = nil
+	m.clearedFields[apk.FieldMd5] = struct{}{}
+}
+
+// Md5Cleared returns if the "md5" field was cleared in this mutation.
+func (m *ApkMutation) Md5Cleared() bool {
+	_, ok := m.clearedFields[apk.FieldMd5]
+	return ok
+}
+
+// ResetMd5 resets all changes to the "md5" field.
+func (m *ApkMutation) ResetMd5() {
+	m.md5 = nil
+	delete(m.clearedFields, apk.FieldMd5)
+}
+
+// SetSha1 sets the "sha1" field.
+func (m *ApkMutation) SetSha1(s string) {
+	m.sha1 = &s
+}
+
+// Sha1 returns the value of the "sha1" field in the mutation.
+func (m *ApkMutation) Sha1() (r string, exists bool) {
+	v := m.sha1
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSha1 returns the old "sha1" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldSha1(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSha1 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSha1 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSha1: %w", err)
+	}
+	return oldValue.Sha1, nil
+}
+
+// ClearSha1 clears the value of the "sha1" field.
+func (m *ApkMutation) ClearSha1() {
+	m.sha1 = nil
+	m.clearedFields[apk.FieldSha1] = struct{}{}
+}
+
+// Sha1Cleared returns if the "sha1" field was cleared in this mutation.
+func (m *ApkMutation) Sha1Cleared() bool {
+	_, ok := m.clearedFields[apk.FieldSha1]
+	return ok
+}
+
+// ResetSha1 resets all changes to the "sha1" field.
+func (m *ApkMutation) ResetSha1() {
+	m.sha1 = nil
+	delete(m.clearedFields, apk.FieldSha1)
+}
+
+// SetSha256 sets the "sha256" field.
+func (m *ApkMutation) SetSha256(s string) {
+	m.sha256 = &s
+}
+
+// Sha256 returns the value of the "sha256" field in the mutation.
+func (m *ApkMutation) Sha256() (r string, exists bool) {
+	v := m.sha256
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSha256 returns the old "sha256" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldSha256(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSha256 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSha256 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSha256: %w", err)
+	}
+	return oldValue.Sha256, nil
+}
+
+// ClearSha256 clears the value of the "sha256" field.
+func (m *ApkMutation) ClearSha256() {
+	m.sha256 = nil
+	m.clearedFields[apk.FieldSha256] = struct{}{}
+}
+
+// Sha256Cleared returns if the "sha256" field was cleared in this mutation.
+func (m *ApkMutation) Sha256Cleared() bool {
+	_, ok := m.clearedFields[apk.FieldSha256]
+	return ok
+}
+
+// ResetSha256 resets all changes to the "sha256" field.
+func (m *ApkMutation) ResetSha256() {
+	m.sha256 = nil
+	delete(m.clearedFields, apk.FieldSha256)
+}
+
+// SetPackageName sets the "package_name" field.
+func (m *ApkMutation) SetPackageName(s string) {
+	m.package_name = &s
+}
+
+// PackageName returns the value of the "package_name" field in the mutation.
+func (m *ApkMutation) PackageName() (r string, exists bool) {
+	v := m.package_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageName returns the old "package_name" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldPackageName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageName: %w", err)
+	}
+	return oldValue.PackageName, nil
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (m *ApkMutation) ClearPackageName() {
+	m.package_name = nil
+	m.clearedFields[apk.FieldPackageName] = struct{}{}
+}
+
+// PackageNameCleared returns if the "package_name" field was cleared in this mutation.
+func (m *ApkMutation) PackageNameCleared() bool {
+	_, ok := m.clearedFields[apk.FieldPackageName]
+	return ok
+}
+
+// ResetPackageName resets all changes to the "package_name" field.
+func (m *ApkMutation) ResetPackageName() {
+	m.package_name = nil
+	delete(m.clearedFields, apk.FieldPackageName)
+}
+
+// SetDescription sets the "description" field.
+func (m *ApkMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ApkMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ApkMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[apk.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ApkMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[apk.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ApkMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, apk.FieldDescription)
+}
+
+// SetUpdateLog sets the "update_log" field.
+func (m *ApkMutation) SetUpdateLog(s string) {
+	m.update_log = &s
+}
+
+// UpdateLog returns the value of the "update_log" field in the mutation.
+func (m *ApkMutation) UpdateLog() (r string, exists bool) {
+	v := m.update_log
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateLog returns the old "update_log" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldUpdateLog(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateLog is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateLog requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateLog: %w", err)
+	}
+	return oldValue.UpdateLog, nil
+}
+
+// ClearUpdateLog clears the value of the "update_log" field.
+func (m *ApkMutation) ClearUpdateLog() {
+	m.update_log = nil
+	m.clearedFields[apk.FieldUpdateLog] = struct{}{}
+}
+
+// UpdateLogCleared returns if the "update_log" field was cleared in this mutation.
+func (m *ApkMutation) UpdateLogCleared() bool {
+	_, ok := m.clearedFields[apk.FieldUpdateLog]
+	return ok
+}
+
+// ResetUpdateLog resets all changes to the "update_log" field.
+func (m *ApkMutation) ResetUpdateLog() {
+	m.update_log = nil
+	delete(m.clearedFields, apk.FieldUpdateLog)
+}
+
+// SetIsForceUpdate sets the "is_force_update" field.
+func (m *ApkMutation) SetIsForceUpdate(b bool) {
+	m.is_force_update = &b
+}
+
+// IsForceUpdate returns the value of the "is_force_update" field in the mutation.
+func (m *ApkMutation) IsForceUpdate() (r bool, exists bool) {
+	v := m.is_force_update
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsForceUpdate returns the old "is_force_update" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldIsForceUpdate(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsForceUpdate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsForceUpdate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsForceUpdate: %w", err)
+	}
+	return oldValue.IsForceUpdate, nil
+}
+
+// ResetIsForceUpdate resets all changes to the "is_force_update" field.
+func (m *ApkMutation) ResetIsForceUpdate() {
+	m.is_force_update = nil
+}
+
+// SetDownloadCount sets the "download_count" field.
+func (m *ApkMutation) SetDownloadCount(i int64) {
+	m.download_count = &i
+	m.adddownload_count = nil
+}
+
+// DownloadCount returns the value of the "download_count" field in the mutation.
+func (m *ApkMutation) DownloadCount() (r int64, exists bool) {
+	v := m.download_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDownloadCount returns the old "download_count" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldDownloadCount(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDownloadCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDownloadCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDownloadCount: %w", err)
+	}
+	return oldValue.DownloadCount, nil
+}
+
+// AddDownloadCount adds i to the "download_count" field.
+func (m *ApkMutation) AddDownloadCount(i int64) {
+	if m.adddownload_count != nil {
+		*m.adddownload_count += i
+	} else {
+		m.adddownload_count = &i
+	}
+}
+
+// AddedDownloadCount returns the value that was added to the "download_count" field in this mutation.
+func (m *ApkMutation) AddedDownloadCount() (r int64, exists bool) {
+	v := m.adddownload_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDownloadCount resets all changes to the "download_count" field.
+func (m *ApkMutation) ResetDownloadCount() {
+	m.download_count = nil
+	m.adddownload_count = nil
+}
+
+// SetCategory sets the "category" field.
+func (m *ApkMutation) SetCategory(s string) {
+	m.category = &s
+}
+
+// Category returns the value of the "category" field in the mutation.
+func (m *ApkMutation) Category() (r string, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategory returns the old "category" field's value of the Apk entity.
+// If the Apk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApkMutation) OldCategory(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+	}
+	return oldValue.Category, nil
+}
+
+// ResetCategory resets all changes to the "category" field.
+func (m *ApkMutation) ResetCategory() {
+	m.category = nil
+}
+
+// Where appends a list predicates to the ApkMutation builder.
+func (m *ApkMutation) Where(ps ...predicate.Apk) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ApkMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ApkMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Apk, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ApkMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ApkMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Apk).
+func (m *ApkMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ApkMutation) Fields() []string {
+	fields := make([]string, 0, 18)
+	if m.created_at != nil {
+		fields = append(fields, apk.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, apk.FieldUpdatedAt)
+	}
+	if m.status != nil {
+		fields = append(fields, apk.FieldStatus)
+	}
+	if m.tenant_id != nil {
+		fields = append(fields, apk.FieldTenantID)
+	}
+	if m.name != nil {
+		fields = append(fields, apk.FieldName)
+	}
+	if m.version != nil {
+		fields = append(fields, apk.FieldVersion)
+	}
+	if m.version_code != nil {
+		fields = append(fields, apk.FieldVersionCode)
+	}
+	if m.file_size != nil {
+		fields = append(fields, apk.FieldFileSize)
+	}
+	if m.file_url != nil {
+		fields = append(fields, apk.FieldFileURL)
+	}
+	if m.md5 != nil {
+		fields = append(fields, apk.FieldMd5)
+	}
+	if m.sha1 != nil {
+		fields = append(fields, apk.FieldSha1)
+	}
+	if m.sha256 != nil {
+		fields = append(fields, apk.FieldSha256)
+	}
+	if m.package_name != nil {
+		fields = append(fields, apk.FieldPackageName)
+	}
+	if m.description != nil {
+		fields = append(fields, apk.FieldDescription)
+	}
+	if m.update_log != nil {
+		fields = append(fields, apk.FieldUpdateLog)
+	}
+	if m.is_force_update != nil {
+		fields = append(fields, apk.FieldIsForceUpdate)
+	}
+	if m.download_count != nil {
+		fields = append(fields, apk.FieldDownloadCount)
+	}
+	if m.category != nil {
+		fields = append(fields, apk.FieldCategory)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ApkMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case apk.FieldCreatedAt:
+		return m.CreatedAt()
+	case apk.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case apk.FieldStatus:
+		return m.Status()
+	case apk.FieldTenantID:
+		return m.TenantID()
+	case apk.FieldName:
+		return m.Name()
+	case apk.FieldVersion:
+		return m.Version()
+	case apk.FieldVersionCode:
+		return m.VersionCode()
+	case apk.FieldFileSize:
+		return m.FileSize()
+	case apk.FieldFileURL:
+		return m.FileURL()
+	case apk.FieldMd5:
+		return m.Md5()
+	case apk.FieldSha1:
+		return m.Sha1()
+	case apk.FieldSha256:
+		return m.Sha256()
+	case apk.FieldPackageName:
+		return m.PackageName()
+	case apk.FieldDescription:
+		return m.Description()
+	case apk.FieldUpdateLog:
+		return m.UpdateLog()
+	case apk.FieldIsForceUpdate:
+		return m.IsForceUpdate()
+	case apk.FieldDownloadCount:
+		return m.DownloadCount()
+	case apk.FieldCategory:
+		return m.Category()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ApkMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case apk.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case apk.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case apk.FieldStatus:
+		return m.OldStatus(ctx)
+	case apk.FieldTenantID:
+		return m.OldTenantID(ctx)
+	case apk.FieldName:
+		return m.OldName(ctx)
+	case apk.FieldVersion:
+		return m.OldVersion(ctx)
+	case apk.FieldVersionCode:
+		return m.OldVersionCode(ctx)
+	case apk.FieldFileSize:
+		return m.OldFileSize(ctx)
+	case apk.FieldFileURL:
+		return m.OldFileURL(ctx)
+	case apk.FieldMd5:
+		return m.OldMd5(ctx)
+	case apk.FieldSha1:
+		return m.OldSha1(ctx)
+	case apk.FieldSha256:
+		return m.OldSha256(ctx)
+	case apk.FieldPackageName:
+		return m.OldPackageName(ctx)
+	case apk.FieldDescription:
+		return m.OldDescription(ctx)
+	case apk.FieldUpdateLog:
+		return m.OldUpdateLog(ctx)
+	case apk.FieldIsForceUpdate:
+		return m.OldIsForceUpdate(ctx)
+	case apk.FieldDownloadCount:
+		return m.OldDownloadCount(ctx)
+	case apk.FieldCategory:
+		return m.OldCategory(ctx)
+	}
+	return nil, fmt.Errorf("unknown Apk field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApkMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case apk.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case apk.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case apk.FieldStatus:
+		v, ok := value.(uint8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case apk.FieldTenantID:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
+		return nil
+	case apk.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case apk.FieldVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersion(v)
+		return nil
+	case apk.FieldVersionCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersionCode(v)
+		return nil
+	case apk.FieldFileSize:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileSize(v)
+		return nil
+	case apk.FieldFileURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileURL(v)
+		return nil
+	case apk.FieldMd5:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMd5(v)
+		return nil
+	case apk.FieldSha1:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSha1(v)
+		return nil
+	case apk.FieldSha256:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSha256(v)
+		return nil
+	case apk.FieldPackageName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageName(v)
+		return nil
+	case apk.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case apk.FieldUpdateLog:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateLog(v)
+		return nil
+	case apk.FieldIsForceUpdate:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsForceUpdate(v)
+		return nil
+	case apk.FieldDownloadCount:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDownloadCount(v)
+		return nil
+	case apk.FieldCategory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategory(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Apk field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ApkMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, apk.FieldStatus)
+	}
+	if m.addtenant_id != nil {
+		fields = append(fields, apk.FieldTenantID)
+	}
+	if m.addfile_size != nil {
+		fields = append(fields, apk.FieldFileSize)
+	}
+	if m.adddownload_count != nil {
+		fields = append(fields, apk.FieldDownloadCount)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ApkMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case apk.FieldStatus:
+		return m.AddedStatus()
+	case apk.FieldTenantID:
+		return m.AddedTenantID()
+	case apk.FieldFileSize:
+		return m.AddedFileSize()
+	case apk.FieldDownloadCount:
+		return m.AddedDownloadCount()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApkMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case apk.FieldStatus:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	case apk.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTenantID(v)
+		return nil
+	case apk.FieldFileSize:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFileSize(v)
+		return nil
+	case apk.FieldDownloadCount:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDownloadCount(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Apk numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ApkMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(apk.FieldStatus) {
+		fields = append(fields, apk.FieldStatus)
+	}
+	if m.FieldCleared(apk.FieldFileSize) {
+		fields = append(fields, apk.FieldFileSize)
+	}
+	if m.FieldCleared(apk.FieldMd5) {
+		fields = append(fields, apk.FieldMd5)
+	}
+	if m.FieldCleared(apk.FieldSha1) {
+		fields = append(fields, apk.FieldSha1)
+	}
+	if m.FieldCleared(apk.FieldSha256) {
+		fields = append(fields, apk.FieldSha256)
+	}
+	if m.FieldCleared(apk.FieldPackageName) {
+		fields = append(fields, apk.FieldPackageName)
+	}
+	if m.FieldCleared(apk.FieldDescription) {
+		fields = append(fields, apk.FieldDescription)
+	}
+	if m.FieldCleared(apk.FieldUpdateLog) {
+		fields = append(fields, apk.FieldUpdateLog)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ApkMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ApkMutation) ClearField(name string) error {
+	switch name {
+	case apk.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case apk.FieldFileSize:
+		m.ClearFileSize()
+		return nil
+	case apk.FieldMd5:
+		m.ClearMd5()
+		return nil
+	case apk.FieldSha1:
+		m.ClearSha1()
+		return nil
+	case apk.FieldSha256:
+		m.ClearSha256()
+		return nil
+	case apk.FieldPackageName:
+		m.ClearPackageName()
+		return nil
+	case apk.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case apk.FieldUpdateLog:
+		m.ClearUpdateLog()
+		return nil
+	}
+	return fmt.Errorf("unknown Apk nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ApkMutation) ResetField(name string) error {
+	switch name {
+	case apk.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case apk.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case apk.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case apk.FieldTenantID:
+		m.ResetTenantID()
+		return nil
+	case apk.FieldName:
+		m.ResetName()
+		return nil
+	case apk.FieldVersion:
+		m.ResetVersion()
+		return nil
+	case apk.FieldVersionCode:
+		m.ResetVersionCode()
+		return nil
+	case apk.FieldFileSize:
+		m.ResetFileSize()
+		return nil
+	case apk.FieldFileURL:
+		m.ResetFileURL()
+		return nil
+	case apk.FieldMd5:
+		m.ResetMd5()
+		return nil
+	case apk.FieldSha1:
+		m.ResetSha1()
+		return nil
+	case apk.FieldSha256:
+		m.ResetSha256()
+		return nil
+	case apk.FieldPackageName:
+		m.ResetPackageName()
+		return nil
+	case apk.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case apk.FieldUpdateLog:
+		m.ResetUpdateLog()
+		return nil
+	case apk.FieldIsForceUpdate:
+		m.ResetIsForceUpdate()
+		return nil
+	case apk.FieldDownloadCount:
+		m.ResetDownloadCount()
+		return nil
+	case apk.FieldCategory:
+		m.ResetCategory()
+		return nil
+	}
+	return fmt.Errorf("unknown Apk field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ApkMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ApkMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ApkMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ApkMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ApkMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ApkMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ApkMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Apk unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ApkMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Apk edge %s", name)
+}
+
 // CloudFileMutation represents an operation that mutates the CloudFile nodes in the graph.
 type CloudFileMutation struct {
 	config
 	op                       Op
 	typ                      string
-	id                       *uuid.UUID
+	id                       *uint64
 	created_at               *time.Time
 	updated_at               *time.Time
 	state                    *bool
@@ -85,7 +1628,7 @@ func newCloudFileMutation(c config, op Op, opts ...cloudfileOption) *CloudFileMu
 }
 
 // withCloudFileID sets the ID field of the mutation.
-func withCloudFileID(id uuid.UUID) cloudfileOption {
+func withCloudFileID(id uint64) cloudfileOption {
 	return func(m *CloudFileMutation) {
 		var (
 			err   error
@@ -137,13 +1680,13 @@ func (m CloudFileMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of CloudFile entities.
-func (m *CloudFileMutation) SetID(id uuid.UUID) {
+func (m *CloudFileMutation) SetID(id uint64) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CloudFileMutation) ID() (id uuid.UUID, exists bool) {
+func (m *CloudFileMutation) ID() (id uint64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -154,12 +1697,12 @@ func (m *CloudFileMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *CloudFileMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *CloudFileMutation) IDs(ctx context.Context) ([]uint64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []uint64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -1091,8 +2634,8 @@ type CloudFileTagMutation struct {
 	name               *string
 	remark             *string
 	clearedFields      map[string]struct{}
-	cloud_files        map[uuid.UUID]struct{}
-	removedcloud_files map[uuid.UUID]struct{}
+	cloud_files        map[uint64]struct{}
+	removedcloud_files map[uint64]struct{}
 	clearedcloud_files bool
 	done               bool
 	oldValue           func(context.Context) (*CloudFileTag, error)
@@ -1487,9 +3030,9 @@ func (m *CloudFileTagMutation) ResetRemark() {
 }
 
 // AddCloudFileIDs adds the "cloud_files" edge to the CloudFile entity by ids.
-func (m *CloudFileTagMutation) AddCloudFileIDs(ids ...uuid.UUID) {
+func (m *CloudFileTagMutation) AddCloudFileIDs(ids ...uint64) {
 	if m.cloud_files == nil {
-		m.cloud_files = make(map[uuid.UUID]struct{})
+		m.cloud_files = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		m.cloud_files[ids[i]] = struct{}{}
@@ -1507,9 +3050,9 @@ func (m *CloudFileTagMutation) CloudFilesCleared() bool {
 }
 
 // RemoveCloudFileIDs removes the "cloud_files" edge to the CloudFile entity by IDs.
-func (m *CloudFileTagMutation) RemoveCloudFileIDs(ids ...uuid.UUID) {
+func (m *CloudFileTagMutation) RemoveCloudFileIDs(ids ...uint64) {
 	if m.removedcloud_files == nil {
-		m.removedcloud_files = make(map[uuid.UUID]struct{})
+		m.removedcloud_files = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		delete(m.cloud_files, ids[i])
@@ -1518,7 +3061,7 @@ func (m *CloudFileTagMutation) RemoveCloudFileIDs(ids ...uuid.UUID) {
 }
 
 // RemovedCloudFiles returns the removed IDs of the "cloud_files" edge to the CloudFile entity.
-func (m *CloudFileTagMutation) RemovedCloudFilesIDs() (ids []uuid.UUID) {
+func (m *CloudFileTagMutation) RemovedCloudFilesIDs() (ids []uint64) {
 	for id := range m.removedcloud_files {
 		ids = append(ids, id)
 	}
@@ -1526,7 +3069,7 @@ func (m *CloudFileTagMutation) RemovedCloudFilesIDs() (ids []uuid.UUID) {
 }
 
 // CloudFilesIDs returns the "cloud_files" edge IDs in the mutation.
-func (m *CloudFileTagMutation) CloudFilesIDs() (ids []uuid.UUID) {
+func (m *CloudFileTagMutation) CloudFilesIDs() (ids []uint64) {
 	for id := range m.cloud_files {
 		ids = append(ids, id)
 	}
@@ -1887,7 +3430,7 @@ type FileMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *uuid.UUID
+	id            *uint64
 	created_at    *time.Time
 	updated_at    *time.Time
 	status        *uint8
@@ -1931,7 +3474,7 @@ func newFileMutation(c config, op Op, opts ...fileOption) *FileMutation {
 }
 
 // withFileID sets the ID field of the mutation.
-func withFileID(id uuid.UUID) fileOption {
+func withFileID(id uint64) fileOption {
 	return func(m *FileMutation) {
 		var (
 			err   error
@@ -1983,13 +3526,13 @@ func (m FileMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of File entities.
-func (m *FileMutation) SetID(id uuid.UUID) {
+func (m *FileMutation) SetID(id uint64) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *FileMutation) ID() (id uuid.UUID, exists bool) {
+func (m *FileMutation) ID() (id uint64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2000,12 +3543,12 @@ func (m *FileMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *FileMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *FileMutation) IDs(ctx context.Context) ([]uint64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []uint64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2966,8 +4509,8 @@ type FileTagMutation struct {
 	name          *string
 	remark        *string
 	clearedFields map[string]struct{}
-	files         map[uuid.UUID]struct{}
-	removedfiles  map[uuid.UUID]struct{}
+	files         map[uint64]struct{}
+	removedfiles  map[uint64]struct{}
 	clearedfiles  bool
 	done          bool
 	oldValue      func(context.Context) (*FileTag, error)
@@ -3362,9 +4905,9 @@ func (m *FileTagMutation) ResetRemark() {
 }
 
 // AddFileIDs adds the "files" edge to the File entity by ids.
-func (m *FileTagMutation) AddFileIDs(ids ...uuid.UUID) {
+func (m *FileTagMutation) AddFileIDs(ids ...uint64) {
 	if m.files == nil {
-		m.files = make(map[uuid.UUID]struct{})
+		m.files = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		m.files[ids[i]] = struct{}{}
@@ -3382,9 +4925,9 @@ func (m *FileTagMutation) FilesCleared() bool {
 }
 
 // RemoveFileIDs removes the "files" edge to the File entity by IDs.
-func (m *FileTagMutation) RemoveFileIDs(ids ...uuid.UUID) {
+func (m *FileTagMutation) RemoveFileIDs(ids ...uint64) {
 	if m.removedfiles == nil {
-		m.removedfiles = make(map[uuid.UUID]struct{})
+		m.removedfiles = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		delete(m.files, ids[i])
@@ -3393,7 +4936,7 @@ func (m *FileTagMutation) RemoveFileIDs(ids ...uuid.UUID) {
 }
 
 // RemovedFiles returns the removed IDs of the "files" edge to the File entity.
-func (m *FileTagMutation) RemovedFilesIDs() (ids []uuid.UUID) {
+func (m *FileTagMutation) RemovedFilesIDs() (ids []uint64) {
 	for id := range m.removedfiles {
 		ids = append(ids, id)
 	}
@@ -3401,7 +4944,7 @@ func (m *FileTagMutation) RemovedFilesIDs() (ids []uuid.UUID) {
 }
 
 // FilesIDs returns the "files" edge IDs in the mutation.
-func (m *FileTagMutation) FilesIDs() (ids []uuid.UUID) {
+func (m *FileTagMutation) FilesIDs() (ids []uint64) {
 	for id := range m.files {
 		ids = append(ids, id)
 	}
@@ -3779,8 +5322,8 @@ type StorageProviderMutation struct {
 	use_cdn           *bool
 	cdn_url           *string
 	clearedFields     map[string]struct{}
-	cloudfiles        map[uuid.UUID]struct{}
-	removedcloudfiles map[uuid.UUID]struct{}
+	cloudfiles        map[uint64]struct{}
+	removedcloudfiles map[uint64]struct{}
 	clearedcloudfiles bool
 	done              bool
 	oldValue          func(context.Context) (*StorageProvider, error)
@@ -4455,9 +5998,9 @@ func (m *StorageProviderMutation) ResetCdnURL() {
 }
 
 // AddCloudfileIDs adds the "cloudfiles" edge to the CloudFile entity by ids.
-func (m *StorageProviderMutation) AddCloudfileIDs(ids ...uuid.UUID) {
+func (m *StorageProviderMutation) AddCloudfileIDs(ids ...uint64) {
 	if m.cloudfiles == nil {
-		m.cloudfiles = make(map[uuid.UUID]struct{})
+		m.cloudfiles = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		m.cloudfiles[ids[i]] = struct{}{}
@@ -4475,9 +6018,9 @@ func (m *StorageProviderMutation) CloudfilesCleared() bool {
 }
 
 // RemoveCloudfileIDs removes the "cloudfiles" edge to the CloudFile entity by IDs.
-func (m *StorageProviderMutation) RemoveCloudfileIDs(ids ...uuid.UUID) {
+func (m *StorageProviderMutation) RemoveCloudfileIDs(ids ...uint64) {
 	if m.removedcloudfiles == nil {
-		m.removedcloudfiles = make(map[uuid.UUID]struct{})
+		m.removedcloudfiles = make(map[uint64]struct{})
 	}
 	for i := range ids {
 		delete(m.cloudfiles, ids[i])
@@ -4486,7 +6029,7 @@ func (m *StorageProviderMutation) RemoveCloudfileIDs(ids ...uuid.UUID) {
 }
 
 // RemovedCloudfiles returns the removed IDs of the "cloudfiles" edge to the CloudFile entity.
-func (m *StorageProviderMutation) RemovedCloudfilesIDs() (ids []uuid.UUID) {
+func (m *StorageProviderMutation) RemovedCloudfilesIDs() (ids []uint64) {
 	for id := range m.removedcloudfiles {
 		ids = append(ids, id)
 	}
@@ -4494,7 +6037,7 @@ func (m *StorageProviderMutation) RemovedCloudfilesIDs() (ids []uuid.UUID) {
 }
 
 // CloudfilesIDs returns the "cloudfiles" edge IDs in the mutation.
-func (m *StorageProviderMutation) CloudfilesIDs() (ids []uuid.UUID) {
+func (m *StorageProviderMutation) CloudfilesIDs() (ids []uint64) {
 	for id := range m.cloudfiles {
 		ids = append(ids, id)
 	}

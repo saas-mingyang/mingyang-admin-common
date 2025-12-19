@@ -2,19 +2,21 @@ package cloudfile
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
+
+	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -41,10 +43,13 @@ func (l *GetCloudFileListLogic) GetCloudFileList(req *types.CloudFileListReq) (*
 		predicates = append(predicates, cloudfile.HasStorageProvidersWith(storageprovider.IDEQ(*req.ProviderId)))
 	}
 	if req.TagIds != nil {
-		predicates = append(predicates, cloudfile.HasTagsWith(cloudfiletag.IDIn(req.TagIds...)))
+		predicates = append(predicates, cloudfile.HasTagsWith(cloudfiletag.IDIn(convert.StringSliceToUint64Slice(req.TagIds)...)))
 	}
 	if req.FileType != nil && *req.FileType != 0 {
 		predicates = append(predicates, cloudfile.FileTypeEQ(*req.FileType))
+	}
+	if req.ProviderName != nil {
+		predicates = append(predicates, cloudfile.HasStorageProvidersWith(storageprovider.NameEQ(*req.ProviderName)))
 	}
 	data, err := l.svcCtx.DB.CloudFile.Query().Where(predicates...).WithStorageProviders().WithTags().
 		Page(l.ctx, req.Page, req.PageSize)
@@ -60,8 +65,8 @@ func (l *GetCloudFileListLogic) GetCloudFileList(req *types.CloudFileListReq) (*
 	for _, v := range data.List {
 		resp.Data.Data = append(resp.Data.Data,
 			types.CloudFileInfo{
-				BaseUUIDInfo: types.BaseUUIDInfo{
-					Id:        pointy.GetPointer(v.ID.String()),
+				BaseIDInfo: types.BaseIDInfo{
+					Id:        &v.ID,
 					CreatedAt: pointy.GetPointer(v.CreatedAt.UnixMilli()),
 					UpdatedAt: pointy.GetPointer(v.UpdatedAt.UnixMilli()),
 				},

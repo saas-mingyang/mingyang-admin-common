@@ -6,14 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 )
 
 // CloudFileCreate is the builder for creating a CloudFile entity.
@@ -24,155 +23,147 @@ type CloudFileCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cfc *CloudFileCreate) SetCreatedAt(t time.Time) *CloudFileCreate {
-	cfc.mutation.SetCreatedAt(t)
-	return cfc
+func (_c *CloudFileCreate) SetCreatedAt(v time.Time) *CloudFileCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cfc *CloudFileCreate) SetNillableCreatedAt(t *time.Time) *CloudFileCreate {
-	if t != nil {
-		cfc.SetCreatedAt(*t)
+func (_c *CloudFileCreate) SetNillableCreatedAt(v *time.Time) *CloudFileCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cfc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cfc *CloudFileCreate) SetUpdatedAt(t time.Time) *CloudFileCreate {
-	cfc.mutation.SetUpdatedAt(t)
-	return cfc
+func (_c *CloudFileCreate) SetUpdatedAt(v time.Time) *CloudFileCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cfc *CloudFileCreate) SetNillableUpdatedAt(t *time.Time) *CloudFileCreate {
-	if t != nil {
-		cfc.SetUpdatedAt(*t)
+func (_c *CloudFileCreate) SetNillableUpdatedAt(v *time.Time) *CloudFileCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cfc
+	return _c
 }
 
 // SetState sets the "state" field.
-func (cfc *CloudFileCreate) SetState(b bool) *CloudFileCreate {
-	cfc.mutation.SetState(b)
-	return cfc
+func (_c *CloudFileCreate) SetState(v bool) *CloudFileCreate {
+	_c.mutation.SetState(v)
+	return _c
 }
 
 // SetNillableState sets the "state" field if the given value is not nil.
-func (cfc *CloudFileCreate) SetNillableState(b *bool) *CloudFileCreate {
-	if b != nil {
-		cfc.SetState(*b)
+func (_c *CloudFileCreate) SetNillableState(v *bool) *CloudFileCreate {
+	if v != nil {
+		_c.SetState(*v)
 	}
-	return cfc
+	return _c
 }
 
 // SetTenantID sets the "tenant_id" field.
-func (cfc *CloudFileCreate) SetTenantID(u uint64) *CloudFileCreate {
-	cfc.mutation.SetTenantID(u)
-	return cfc
+func (_c *CloudFileCreate) SetTenantID(v uint64) *CloudFileCreate {
+	_c.mutation.SetTenantID(v)
+	return _c
 }
 
 // SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (cfc *CloudFileCreate) SetNillableTenantID(u *uint64) *CloudFileCreate {
-	if u != nil {
-		cfc.SetTenantID(*u)
+func (_c *CloudFileCreate) SetNillableTenantID(v *uint64) *CloudFileCreate {
+	if v != nil {
+		_c.SetTenantID(*v)
 	}
-	return cfc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (cfc *CloudFileCreate) SetName(s string) *CloudFileCreate {
-	cfc.mutation.SetName(s)
-	return cfc
+func (_c *CloudFileCreate) SetName(v string) *CloudFileCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetURL sets the "url" field.
-func (cfc *CloudFileCreate) SetURL(s string) *CloudFileCreate {
-	cfc.mutation.SetURL(s)
-	return cfc
+func (_c *CloudFileCreate) SetURL(v string) *CloudFileCreate {
+	_c.mutation.SetURL(v)
+	return _c
 }
 
 // SetSize sets the "size" field.
-func (cfc *CloudFileCreate) SetSize(u uint64) *CloudFileCreate {
-	cfc.mutation.SetSize(u)
-	return cfc
+func (_c *CloudFileCreate) SetSize(v uint64) *CloudFileCreate {
+	_c.mutation.SetSize(v)
+	return _c
 }
 
 // SetFileType sets the "file_type" field.
-func (cfc *CloudFileCreate) SetFileType(u uint8) *CloudFileCreate {
-	cfc.mutation.SetFileType(u)
-	return cfc
+func (_c *CloudFileCreate) SetFileType(v uint8) *CloudFileCreate {
+	_c.mutation.SetFileType(v)
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (cfc *CloudFileCreate) SetUserID(s string) *CloudFileCreate {
-	cfc.mutation.SetUserID(s)
-	return cfc
+func (_c *CloudFileCreate) SetUserID(v string) *CloudFileCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cfc *CloudFileCreate) SetID(u uuid.UUID) *CloudFileCreate {
-	cfc.mutation.SetID(u)
-	return cfc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (cfc *CloudFileCreate) SetNillableID(u *uuid.UUID) *CloudFileCreate {
-	if u != nil {
-		cfc.SetID(*u)
-	}
-	return cfc
+func (_c *CloudFileCreate) SetID(v uint64) *CloudFileCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetStorageProvidersID sets the "storage_providers" edge to the StorageProvider entity by ID.
-func (cfc *CloudFileCreate) SetStorageProvidersID(id uint64) *CloudFileCreate {
-	cfc.mutation.SetStorageProvidersID(id)
-	return cfc
+func (_c *CloudFileCreate) SetStorageProvidersID(id uint64) *CloudFileCreate {
+	_c.mutation.SetStorageProvidersID(id)
+	return _c
 }
 
 // SetNillableStorageProvidersID sets the "storage_providers" edge to the StorageProvider entity by ID if the given value is not nil.
-func (cfc *CloudFileCreate) SetNillableStorageProvidersID(id *uint64) *CloudFileCreate {
+func (_c *CloudFileCreate) SetNillableStorageProvidersID(id *uint64) *CloudFileCreate {
 	if id != nil {
-		cfc = cfc.SetStorageProvidersID(*id)
+		_c = _c.SetStorageProvidersID(*id)
 	}
-	return cfc
+	return _c
 }
 
 // SetStorageProviders sets the "storage_providers" edge to the StorageProvider entity.
-func (cfc *CloudFileCreate) SetStorageProviders(s *StorageProvider) *CloudFileCreate {
-	return cfc.SetStorageProvidersID(s.ID)
+func (_c *CloudFileCreate) SetStorageProviders(v *StorageProvider) *CloudFileCreate {
+	return _c.SetStorageProvidersID(v.ID)
 }
 
 // AddTagIDs adds the "tags" edge to the CloudFileTag entity by IDs.
-func (cfc *CloudFileCreate) AddTagIDs(ids ...uint64) *CloudFileCreate {
-	cfc.mutation.AddTagIDs(ids...)
-	return cfc
+func (_c *CloudFileCreate) AddTagIDs(ids ...uint64) *CloudFileCreate {
+	_c.mutation.AddTagIDs(ids...)
+	return _c
 }
 
 // AddTags adds the "tags" edges to the CloudFileTag entity.
-func (cfc *CloudFileCreate) AddTags(c ...*CloudFileTag) *CloudFileCreate {
-	ids := make([]uint64, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *CloudFileCreate) AddTags(v ...*CloudFileTag) *CloudFileCreate {
+	ids := make([]uint64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cfc.AddTagIDs(ids...)
+	return _c.AddTagIDs(ids...)
 }
 
 // Mutation returns the CloudFileMutation object of the builder.
-func (cfc *CloudFileCreate) Mutation() *CloudFileMutation {
-	return cfc.mutation
+func (_c *CloudFileCreate) Mutation() *CloudFileMutation {
+	return _c.mutation
 }
 
 // Save creates the CloudFile in the database.
-func (cfc *CloudFileCreate) Save(ctx context.Context) (*CloudFile, error) {
-	if err := cfc.defaults(); err != nil {
+func (_c *CloudFileCreate) Save(ctx context.Context) (*CloudFile, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cfc.sqlSave, cfc.mutation, cfc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cfc *CloudFileCreate) SaveX(ctx context.Context) *CloudFile {
-	v, err := cfc.Save(ctx)
+func (_c *CloudFileCreate) SaveX(ctx context.Context) *CloudFile {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -180,150 +171,140 @@ func (cfc *CloudFileCreate) SaveX(ctx context.Context) *CloudFile {
 }
 
 // Exec executes the query.
-func (cfc *CloudFileCreate) Exec(ctx context.Context) error {
-	_, err := cfc.Save(ctx)
+func (_c *CloudFileCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cfc *CloudFileCreate) ExecX(ctx context.Context) {
-	if err := cfc.Exec(ctx); err != nil {
+func (_c *CloudFileCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cfc *CloudFileCreate) defaults() error {
-	if _, ok := cfc.mutation.CreatedAt(); !ok {
+func (_c *CloudFileCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if cloudfile.DefaultCreatedAt == nil {
 			return fmt.Errorf("ent: uninitialized cloudfile.DefaultCreatedAt (forgotten import ent/runtime?)")
 		}
 		v := cloudfile.DefaultCreatedAt()
-		cfc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cfc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if cloudfile.DefaultUpdatedAt == nil {
 			return fmt.Errorf("ent: uninitialized cloudfile.DefaultUpdatedAt (forgotten import ent/runtime?)")
 		}
 		v := cloudfile.DefaultUpdatedAt()
-		cfc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cfc.mutation.State(); !ok {
+	if _, ok := _c.mutation.State(); !ok {
 		v := cloudfile.DefaultState
-		cfc.mutation.SetState(v)
+		_c.mutation.SetState(v)
 	}
-	if _, ok := cfc.mutation.TenantID(); !ok {
+	if _, ok := _c.mutation.TenantID(); !ok {
 		v := cloudfile.DefaultTenantID
-		cfc.mutation.SetTenantID(v)
-	}
-	if _, ok := cfc.mutation.ID(); !ok {
-		if cloudfile.DefaultID == nil {
-			return fmt.Errorf("ent: uninitialized cloudfile.DefaultID (forgotten import ent/runtime?)")
-		}
-		v := cloudfile.DefaultID()
-		cfc.mutation.SetID(v)
+		_c.mutation.SetTenantID(v)
 	}
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (cfc *CloudFileCreate) check() error {
-	if _, ok := cfc.mutation.CreatedAt(); !ok {
+// check runs all checks and app-defined validators on the builder.
+func (_c *CloudFileCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "CloudFile.created_at"`)}
 	}
-	if _, ok := cfc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "CloudFile.updated_at"`)}
 	}
-	if _, ok := cfc.mutation.TenantID(); !ok {
+	if _, ok := _c.mutation.TenantID(); !ok {
 		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "CloudFile.tenant_id"`)}
 	}
-	if _, ok := cfc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "CloudFile.name"`)}
 	}
-	if _, ok := cfc.mutation.URL(); !ok {
+	if _, ok := _c.mutation.URL(); !ok {
 		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "CloudFile.url"`)}
 	}
-	if _, ok := cfc.mutation.Size(); !ok {
+	if _, ok := _c.mutation.Size(); !ok {
 		return &ValidationError{Name: "size", err: errors.New(`ent: missing required field "CloudFile.size"`)}
 	}
-	if _, ok := cfc.mutation.FileType(); !ok {
+	if _, ok := _c.mutation.FileType(); !ok {
 		return &ValidationError{Name: "file_type", err: errors.New(`ent: missing required field "CloudFile.file_type"`)}
 	}
-	if _, ok := cfc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "CloudFile.user_id"`)}
 	}
 	return nil
 }
 
-func (cfc *CloudFileCreate) sqlSave(ctx context.Context) (*CloudFile, error) {
-	if err := cfc.check(); err != nil {
+func (_c *CloudFileCreate) sqlSave(ctx context.Context) (*CloudFile, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cfc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cfc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
-		}
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint64(id)
 	}
-	cfc.mutation.id = &_node.ID
-	cfc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cfc *CloudFileCreate) createSpec() (*CloudFile, *sqlgraph.CreateSpec) {
+func (_c *CloudFileCreate) createSpec() (*CloudFile, *sqlgraph.CreateSpec) {
 	var (
-		_node = &CloudFile{config: cfc.config}
-		_spec = sqlgraph.NewCreateSpec(cloudfile.Table, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUUID))
+		_node = &CloudFile{config: _c.config}
+		_spec = sqlgraph.NewCreateSpec(cloudfile.Table, sqlgraph.NewFieldSpec(cloudfile.FieldID, field.TypeUint64))
 	)
-	if id, ok := cfc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
-	if value, ok := cfc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(cloudfile.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cfc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(cloudfile.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cfc.mutation.State(); ok {
+	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(cloudfile.FieldState, field.TypeBool, value)
 		_node.State = value
 	}
-	if value, ok := cfc.mutation.TenantID(); ok {
+	if value, ok := _c.mutation.TenantID(); ok {
 		_spec.SetField(cloudfile.FieldTenantID, field.TypeUint64, value)
 		_node.TenantID = value
 	}
-	if value, ok := cfc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(cloudfile.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := cfc.mutation.URL(); ok {
+	if value, ok := _c.mutation.URL(); ok {
 		_spec.SetField(cloudfile.FieldURL, field.TypeString, value)
 		_node.URL = value
 	}
-	if value, ok := cfc.mutation.Size(); ok {
+	if value, ok := _c.mutation.Size(); ok {
 		_spec.SetField(cloudfile.FieldSize, field.TypeUint64, value)
 		_node.Size = value
 	}
-	if value, ok := cfc.mutation.FileType(); ok {
+	if value, ok := _c.mutation.FileType(); ok {
 		_spec.SetField(cloudfile.FieldFileType, field.TypeUint8, value)
 		_node.FileType = value
 	}
-	if value, ok := cfc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(cloudfile.FieldUserID, field.TypeString, value)
 		_node.UserID = value
 	}
-	if nodes := cfc.mutation.StorageProvidersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.StorageProvidersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -340,7 +321,7 @@ func (cfc *CloudFileCreate) createSpec() (*CloudFile, *sqlgraph.CreateSpec) {
 		_node.cloud_file_storage_providers = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cfc.mutation.TagsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -367,16 +348,16 @@ type CloudFileCreateBulk struct {
 }
 
 // Save creates the CloudFile entities in the database.
-func (cfcb *CloudFileCreateBulk) Save(ctx context.Context) ([]*CloudFile, error) {
-	if cfcb.err != nil {
-		return nil, cfcb.err
+func (_c *CloudFileCreateBulk) Save(ctx context.Context) ([]*CloudFile, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(cfcb.builders))
-	nodes := make([]*CloudFile, len(cfcb.builders))
-	mutators := make([]Mutator, len(cfcb.builders))
-	for i := range cfcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*CloudFile, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cfcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CloudFileMutation)
@@ -390,11 +371,11 @@ func (cfcb *CloudFileCreateBulk) Save(ctx context.Context) ([]*CloudFile, error)
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cfcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cfcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -404,6 +385,10 @@ func (cfcb *CloudFileCreateBulk) Save(ctx context.Context) ([]*CloudFile, error)
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = uint64(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})
@@ -414,7 +399,7 @@ func (cfcb *CloudFileCreateBulk) Save(ctx context.Context) ([]*CloudFile, error)
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cfcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -422,8 +407,8 @@ func (cfcb *CloudFileCreateBulk) Save(ctx context.Context) ([]*CloudFile, error)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cfcb *CloudFileCreateBulk) SaveX(ctx context.Context) []*CloudFile {
-	v, err := cfcb.Save(ctx)
+func (_c *CloudFileCreateBulk) SaveX(ctx context.Context) []*CloudFile {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -431,14 +416,14 @@ func (cfcb *CloudFileCreateBulk) SaveX(ctx context.Context) []*CloudFile {
 }
 
 // Exec executes the query.
-func (cfcb *CloudFileCreateBulk) Exec(ctx context.Context) error {
-	_, err := cfcb.Save(ctx)
+func (_c *CloudFileCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cfcb *CloudFileCreateBulk) ExecX(ctx context.Context) {
-	if err := cfcb.Exec(ctx); err != nil {
+func (_c *CloudFileCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

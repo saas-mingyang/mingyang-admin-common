@@ -21,7 +21,8 @@
 	"file": {
 		"overSizeError": "文件大小超过限定值",
 		"wrongTypeError": "错误的文件类型",
-		"parseFormFailed": "无法处理提交数据"
+		"parseFormFailed": "无法处理提交数据",
+		"fileCategoryIsAndroid": "当前文件不可下载,文件类别必须是android"
 	},
 	"init": {
 		"initializeIsRunning": "正在初始化...",
@@ -32,4 +33,5 @@
 		"StorageProviderNotExist": "云存储服务商不存在",
 		"failedLoadProviderConfig": "加载云服务提供商失败，请联系管理员"
 	}
+
 }

@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	uuid "github.com/gofrs/uuid/v5"
 )
 
 const (
@@ -99,7 +98,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/suyuan32/simple-admin-file/ent/runtime"
+//	import _ "mingyang-admin-simple-admin-file/ent/runtime"
 var (
 	Hooks  [2]ent.Hook
 	Policy ent.Policy
@@ -113,8 +112,6 @@ var (
 	DefaultState bool
 	// DefaultTenantID holds the default value on creation for the "tenant_id" field.
 	DefaultTenantID uint64
-	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the CloudFile queries.

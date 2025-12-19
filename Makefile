@@ -35,7 +35,8 @@ AUTO_API_INIT_DATA=true
 GOARCH=amd64
 
 # The repository of docker | Docker 仓库地址
-DOCKER_REPO=registry.cn-hangzhou.aliyuncs.com/simple_admin
+DOCKER_REPO=registry.cn-hangzhou.aliyuncs.com/simple_admin_vip
+
 
 # ---- You may not need to modify the codes below | 下面的代码大概率不需要更改 ----
 
@@ -74,7 +75,7 @@ publish-docker: # Publish docker image | 发布 docker 镜像
 
 .PHONY: gen-swagger
 gen-swagger: # Generate swagger file | 生成 swagger 文件
-	swagger generate spec --output=./$(SERVICE_STYLE).$(SWAGGER_TYPE) --scan-models
+	swagger generate spec --output=./$(SERVICE_STYLE).$(SWAGGER_TYPE) --scan-models --exclude-deps
 	@echo "Generate swagger successfully"
 
 .PHONY: serve-swagger
@@ -86,7 +87,7 @@ serve-swagger: # Run the swagger server | 运行 swagger 服务
 .PHONY: gen-api
 gen-api: # Generate API files | 生成 API 的代码
 	goctls api go --api ./desc/all.api --dir ./ --trans_err=true --style=$(PROJECT_STYLE)
-	swagger generate spec --output=./$(SERVICE_STYLE).$(SWAGGER_TYPE) --scan-models
+	swagger generate spec --output=./$(SERVICE_STYLE).$(SWAGGER_TYPE) --scan-models  --exclude-deps
 	@echo "Generate API codes successfully"
 
 .PHONY: gen-ent
@@ -117,3 +118,43 @@ build-linux: # Build project for Linux | 构建Linux下的可执行文件
 .PHONY: help
 help: # Show help | 显示帮助
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
+
+
+
+.PHONY: format-api
+format-api: # Format API files | 格式化 API 文件
+	@echo "Formatting API files..."
+	@if [ -f "./desc/all.api" ]; then \
+		goctl api format --dir ./desc ; \
+		echo "API files formatted successfully"; \
+	else \
+		echo "API files not found in ./desc directory"; \
+	fi
+	@if [ -f "./*.api" ]; then \
+		goctl api format --dir . --force; \
+		echo "Root directory API files formatted successfully"; \
+	fi
+
+.PHONY: format-rpc
+format-rpc: # Format RPC files | 格式化 RPC 文件
+	@echo "Formatting RPC files..."
+	@if [ -d "./desc" ]; then \
+		find ./desc -name "*.proto" -exec goctl rpc protoc {} --go_out=./ --go-grpc_out=./ --zrpc_out=. \; 2>/dev/null || echo "RPC formatting completed"; \
+		echo "RPC files formatted successfully"; \
+	else \
+		echo "RPC files directory ./desc not found"; \
+	fi
+
+.PHONY: format-all
+format-all: format-api format-rpc # Format both API and RPC files | 格式化所有 API 和 RPC 文件
+	@echo "All files formatted successfully"
+
+
+
+
+
+
+
+
+
+

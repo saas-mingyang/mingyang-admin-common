@@ -6,13 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
 )
 
 // FileTagCreate is the builder for creating a FileTag entity.
@@ -23,118 +22,118 @@ type FileTagCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ftc *FileTagCreate) SetCreatedAt(t time.Time) *FileTagCreate {
-	ftc.mutation.SetCreatedAt(t)
-	return ftc
+func (_c *FileTagCreate) SetCreatedAt(v time.Time) *FileTagCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ftc *FileTagCreate) SetNillableCreatedAt(t *time.Time) *FileTagCreate {
-	if t != nil {
-		ftc.SetCreatedAt(*t)
+func (_c *FileTagCreate) SetNillableCreatedAt(v *time.Time) *FileTagCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ftc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ftc *FileTagCreate) SetUpdatedAt(t time.Time) *FileTagCreate {
-	ftc.mutation.SetUpdatedAt(t)
-	return ftc
+func (_c *FileTagCreate) SetUpdatedAt(v time.Time) *FileTagCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ftc *FileTagCreate) SetNillableUpdatedAt(t *time.Time) *FileTagCreate {
-	if t != nil {
-		ftc.SetUpdatedAt(*t)
+func (_c *FileTagCreate) SetNillableUpdatedAt(v *time.Time) *FileTagCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ftc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (ftc *FileTagCreate) SetStatus(u uint8) *FileTagCreate {
-	ftc.mutation.SetStatus(u)
-	return ftc
+func (_c *FileTagCreate) SetStatus(v uint8) *FileTagCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ftc *FileTagCreate) SetNillableStatus(u *uint8) *FileTagCreate {
-	if u != nil {
-		ftc.SetStatus(*u)
+func (_c *FileTagCreate) SetNillableStatus(v *uint8) *FileTagCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return ftc
+	return _c
 }
 
 // SetTenantID sets the "tenant_id" field.
-func (ftc *FileTagCreate) SetTenantID(u uint64) *FileTagCreate {
-	ftc.mutation.SetTenantID(u)
-	return ftc
+func (_c *FileTagCreate) SetTenantID(v uint64) *FileTagCreate {
+	_c.mutation.SetTenantID(v)
+	return _c
 }
 
 // SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (ftc *FileTagCreate) SetNillableTenantID(u *uint64) *FileTagCreate {
-	if u != nil {
-		ftc.SetTenantID(*u)
+func (_c *FileTagCreate) SetNillableTenantID(v *uint64) *FileTagCreate {
+	if v != nil {
+		_c.SetTenantID(*v)
 	}
-	return ftc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ftc *FileTagCreate) SetName(s string) *FileTagCreate {
-	ftc.mutation.SetName(s)
-	return ftc
+func (_c *FileTagCreate) SetName(v string) *FileTagCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetRemark sets the "remark" field.
-func (ftc *FileTagCreate) SetRemark(s string) *FileTagCreate {
-	ftc.mutation.SetRemark(s)
-	return ftc
+func (_c *FileTagCreate) SetRemark(v string) *FileTagCreate {
+	_c.mutation.SetRemark(v)
+	return _c
 }
 
 // SetNillableRemark sets the "remark" field if the given value is not nil.
-func (ftc *FileTagCreate) SetNillableRemark(s *string) *FileTagCreate {
-	if s != nil {
-		ftc.SetRemark(*s)
+func (_c *FileTagCreate) SetNillableRemark(v *string) *FileTagCreate {
+	if v != nil {
+		_c.SetRemark(*v)
 	}
-	return ftc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ftc *FileTagCreate) SetID(u uint64) *FileTagCreate {
-	ftc.mutation.SetID(u)
-	return ftc
+func (_c *FileTagCreate) SetID(v uint64) *FileTagCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (ftc *FileTagCreate) AddFileIDs(ids ...uuid.UUID) *FileTagCreate {
-	ftc.mutation.AddFileIDs(ids...)
-	return ftc
+func (_c *FileTagCreate) AddFileIDs(ids ...uint64) *FileTagCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (ftc *FileTagCreate) AddFiles(f ...*File) *FileTagCreate {
-	ids := make([]uuid.UUID, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *FileTagCreate) AddFiles(v ...*File) *FileTagCreate {
+	ids := make([]uint64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ftc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // Mutation returns the FileTagMutation object of the builder.
-func (ftc *FileTagCreate) Mutation() *FileTagMutation {
-	return ftc.mutation
+func (_c *FileTagCreate) Mutation() *FileTagMutation {
+	return _c.mutation
 }
 
 // Save creates the FileTag in the database.
-func (ftc *FileTagCreate) Save(ctx context.Context) (*FileTag, error) {
-	if err := ftc.defaults(); err != nil {
+func (_c *FileTagCreate) Save(ctx context.Context) (*FileTag, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ftc.sqlSave, ftc.mutation, ftc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ftc *FileTagCreate) SaveX(ctx context.Context) *FileTag {
-	v, err := ftc.Save(ctx)
+func (_c *FileTagCreate) SaveX(ctx context.Context) *FileTag {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -142,68 +141,68 @@ func (ftc *FileTagCreate) SaveX(ctx context.Context) *FileTag {
 }
 
 // Exec executes the query.
-func (ftc *FileTagCreate) Exec(ctx context.Context) error {
-	_, err := ftc.Save(ctx)
+func (_c *FileTagCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ftc *FileTagCreate) ExecX(ctx context.Context) {
-	if err := ftc.Exec(ctx); err != nil {
+func (_c *FileTagCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ftc *FileTagCreate) defaults() error {
-	if _, ok := ftc.mutation.CreatedAt(); !ok {
+func (_c *FileTagCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if filetag.DefaultCreatedAt == nil {
 			return fmt.Errorf("ent: uninitialized filetag.DefaultCreatedAt (forgotten import ent/runtime?)")
 		}
 		v := filetag.DefaultCreatedAt()
-		ftc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ftc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if filetag.DefaultUpdatedAt == nil {
 			return fmt.Errorf("ent: uninitialized filetag.DefaultUpdatedAt (forgotten import ent/runtime?)")
 		}
 		v := filetag.DefaultUpdatedAt()
-		ftc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ftc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := filetag.DefaultStatus
-		ftc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := ftc.mutation.TenantID(); !ok {
+	if _, ok := _c.mutation.TenantID(); !ok {
 		v := filetag.DefaultTenantID
-		ftc.mutation.SetTenantID(v)
+		_c.mutation.SetTenantID(v)
 	}
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (ftc *FileTagCreate) check() error {
-	if _, ok := ftc.mutation.CreatedAt(); !ok {
+// check runs all checks and app-defined validators on the builder.
+func (_c *FileTagCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "FileTag.created_at"`)}
 	}
-	if _, ok := ftc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "FileTag.updated_at"`)}
 	}
-	if _, ok := ftc.mutation.TenantID(); !ok {
+	if _, ok := _c.mutation.TenantID(); !ok {
 		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "FileTag.tenant_id"`)}
 	}
-	if _, ok := ftc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "FileTag.name"`)}
 	}
 	return nil
 }
 
-func (ftc *FileTagCreate) sqlSave(ctx context.Context) (*FileTag, error) {
-	if err := ftc.check(); err != nil {
+func (_c *FileTagCreate) sqlSave(ctx context.Context) (*FileTag, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ftc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ftc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -213,45 +212,45 @@ func (ftc *FileTagCreate) sqlSave(ctx context.Context) (*FileTag, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint64(id)
 	}
-	ftc.mutation.id = &_node.ID
-	ftc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ftc *FileTagCreate) createSpec() (*FileTag, *sqlgraph.CreateSpec) {
+func (_c *FileTagCreate) createSpec() (*FileTag, *sqlgraph.CreateSpec) {
 	var (
-		_node = &FileTag{config: ftc.config}
+		_node = &FileTag{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(filetag.Table, sqlgraph.NewFieldSpec(filetag.FieldID, field.TypeUint64))
 	)
-	if id, ok := ftc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ftc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(filetag.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ftc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(filetag.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ftc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(filetag.FieldStatus, field.TypeUint8, value)
 		_node.Status = value
 	}
-	if value, ok := ftc.mutation.TenantID(); ok {
+	if value, ok := _c.mutation.TenantID(); ok {
 		_spec.SetField(filetag.FieldTenantID, field.TypeUint64, value)
 		_node.TenantID = value
 	}
-	if value, ok := ftc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(filetag.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ftc.mutation.Remark(); ok {
+	if value, ok := _c.mutation.Remark(); ok {
 		_spec.SetField(filetag.FieldRemark, field.TypeString, value)
 		_node.Remark = value
 	}
-	if nodes := ftc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -259,7 +258,7 @@ func (ftc *FileTagCreate) createSpec() (*FileTag, *sqlgraph.CreateSpec) {
 			Columns: filetag.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -278,16 +277,16 @@ type FileTagCreateBulk struct {
 }
 
 // Save creates the FileTag entities in the database.
-func (ftcb *FileTagCreateBulk) Save(ctx context.Context) ([]*FileTag, error) {
-	if ftcb.err != nil {
-		return nil, ftcb.err
+func (_c *FileTagCreateBulk) Save(ctx context.Context) ([]*FileTag, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ftcb.builders))
-	nodes := make([]*FileTag, len(ftcb.builders))
-	mutators := make([]Mutator, len(ftcb.builders))
-	for i := range ftcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*FileTag, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ftcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FileTagMutation)
@@ -301,11 +300,11 @@ func (ftcb *FileTagCreateBulk) Save(ctx context.Context) ([]*FileTag, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ftcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ftcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -329,7 +328,7 @@ func (ftcb *FileTagCreateBulk) Save(ctx context.Context) ([]*FileTag, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ftcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -337,8 +336,8 @@ func (ftcb *FileTagCreateBulk) Save(ctx context.Context) ([]*FileTag, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ftcb *FileTagCreateBulk) SaveX(ctx context.Context) []*FileTag {
-	v, err := ftcb.Save(ctx)
+func (_c *FileTagCreateBulk) SaveX(ctx context.Context) []*FileTag {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -346,14 +345,14 @@ func (ftcb *FileTagCreateBulk) SaveX(ctx context.Context) []*FileTag {
 }
 
 // Exec executes the query.
-func (ftcb *FileTagCreateBulk) Exec(ctx context.Context) error {
-	_, err := ftcb.Save(ctx)
+func (_c *FileTagCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ftcb *FileTagCreateBulk) ExecX(ctx context.Context) {
-	if err := ftcb.Exec(ctx); err != nil {
+func (_c *FileTagCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

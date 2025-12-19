@@ -48,7 +48,7 @@ type PageInfo struct {
 type IDReq struct {
 	// ID
 	// Required: true
-	Id uint64 `json:"id" validate:"number"`
+	Id uint64 `json:"id,string" validate:"number"`
 }
 
 // Basic IDs request | 基础ID数组参数请求
@@ -56,7 +56,7 @@ type IDReq struct {
 type IDsReq struct {
 	// IDs
 	// Required: true
-	Ids []uint64 `json:"ids"`
+	Ids []string `json:"ids"`
 }
 
 // Basic ID request | 基础ID地址参数请求
@@ -85,8 +85,8 @@ type UUIDReq struct {
 }
 
 // Basic UUID array request | 基础UUID数组参数请求
-// swagger:model UUIDsReq
-type UUIDsReq struct {
+// swagger:model IdsReq
+type IdsReq struct {
 	// Ids
 	// Required: true
 	Ids []string `json:"ids"`
@@ -96,7 +96,7 @@ type UUIDsReq struct {
 // swagger:model BaseIDInfo
 type BaseIDInfo struct {
 	// ID
-	Id *uint64 `json:"id,optional"`
+	Id *uint64 `json:"id,optional,string"`
 	// Create date | 创建日期
 	CreatedAt *int64 `json:"createdAt,optional"`
 	// Update date | 更新日期
@@ -118,7 +118,7 @@ type BaseUUIDInfo struct {
 // swagger:model StatusCodeReq
 type StatusCodeReq struct {
 	// ID
-	Id string `json:"id"`
+	Id uint64 `json:"id,string"`
 	// Status code | 状态码
 	Status uint64 `json:"status" validate:"number"`
 }
@@ -130,6 +130,8 @@ type UploadInfo struct {
 	Name string `json:"name"`
 	// File path | 文件路径
 	Url string `json:"url"`
+	// File id | 文件 id
+	ID uint64 `json:"id,string,omitempty"`
 }
 
 // The response data when upload finished | 上传完成返回的数据
@@ -145,7 +147,7 @@ type UploadResp struct {
 type UpdateFileReq struct {
 	// ID
 	// Required : true
-	ID string `json:"id"`
+	ID uint64 `json:"id,string"`
 	// File name | 文件名
 	// Required : true
 	Name *string `json:"name,optional" validate:"max=50"`
@@ -174,7 +176,7 @@ type FileListReq struct {
 // The response data of file information | 文件信息数据
 // swagger:model FileInfo
 type FileInfo struct {
-	BaseUUIDInfo
+	BaseIDInfo
 	// User's UUID | 用户的UUID
 	UserUUID *string `json:"userUUID"`
 	// File name | 文件名
@@ -207,6 +209,13 @@ type FileListInfo struct {
 	BaseListInfo
 	// The file list data | 文件信息列表数据
 	Data []FileInfo `json:"data"`
+}
+
+// Delete  file by url request | 通过网址删除文件请求
+// swagger:model FileDeleteReq
+type FileDeleteReq struct {
+	// Url | 文件网址
+	Url string `json:"url"`
 }
 
 // The response data of file tag information | 文件标签信息
@@ -258,7 +267,7 @@ type FileTagInfoResp struct {
 // The response data of cloud file information | 云文件信息
 // swagger:model CloudFileInfo
 type CloudFileInfo struct {
-	BaseUUIDInfo
+	BaseIDInfo
 	// State | 状态
 	State *bool `json:"state,optional"`
 	// Name | 名称
@@ -302,11 +311,13 @@ type CloudFileListReq struct {
 	// Name | 文件名
 	Name *string `json:"name,optional"`
 	// Provider ID | 提供商 ID
-	ProviderId *uint64 `json:"providerId,optional"`
+	ProviderId *uint64 `json:"providerId,optional,string"`
 	// Tag ID | 标签 ID
-	TagIds []uint64 `json:"tagIds,optional"`
+	TagIds []string `json:"tagIds,optional"`
 	// File type | 文件类型
 	FileType *uint8 `json:"fileType,optional"`
+	// Provider name | 提供商名称
+	ProviderName *string `json:"providerName,optional"`
 }
 
 // CloudFile information response | 云文件信息返回体
@@ -315,6 +326,13 @@ type CloudFileInfoResp struct {
 	BaseDataInfo
 	// CloudFile information | 云文件数据
 	Data CloudFileInfo `json:"data"`
+}
+
+// Delete cloud file by url request | 通过网址删除云文件请求
+// swagger:model CloudFileDeleteReq
+type CloudFileDeleteReq struct {
+	// Url | 文件网址
+	Url string `json:"url"`
 }
 
 // The response data of storage provider information | 服务提供商信息
@@ -421,4 +439,89 @@ type CloudFileTagInfoResp struct {
 	BaseDataInfo
 	// Cloud file tag information | 云文件标签数据
 	Data CloudFileTagInfo `json:"data"`
+}
+
+// swagger:model ApkInfo
+type ApkInfo struct {
+	BaseIDInfo
+	// Name | APK名称
+	// max length : 500
+	// min length : 1
+	Name string `json:"name" validate:"max=500,min=1"`
+	// Version | APK版本
+	// max length : 200
+	// min length : 1
+	Version string `json:"version" validate:"max=200,min=1"`
+	// VersionCode | 版本代码(内部版本号)
+	VersionCode string `json:"version_code,optional"`
+	// FileSize | 文件大小
+	FileSize *uint64 `json:"fileSize,optional"`
+	// FileId | 文件ID 或者 下载链接,具体看category
+	FileUrl string `json:"fileUrl,string"`
+	// UploadTime | 上传时间
+	//UploadTime int64 `json:"upload_time,optional"`
+	// Md5 | 文件MD5值
+	//Md5 string `json:"md5,optional"` // 文件MD5值
+	// Sha1 | 文件SHA1值
+	//Sha1 string `json:"sha1,optional"` // 文件SHA1值
+	// Sha256 | 文件SHA256值
+	//Sha256 string `json:"sha256,optional"` // 文件SHA256值
+	// PackageName | 应用包名
+	PackageName string `json:"packageName"` // 应用包名
+	// Description | 版本描述
+	Description *string `json:"description,optional"` // 版本描述
+	// UpdateLog | 更新日志
+	UpdateLog *string `json:"updateLog,optional"` // 更新日志
+	// IsForceUpdate | 是否强制更新
+	IsForceUpdate *bool `json:"isForceUpdate"` // 是否强制更新
+	// DownloadCount | 下载次数
+	DownloadCount int64 `json:"downloadCount"` // 下载次数
+	// category | 分类 android ｜ ios
+	Category string `json:"category"` // 分类 android ｜ ios
+}
+
+// Get cloud file list request params | 云文件列表请求参数
+// swagger:model ApkFileListReq
+type ApkFileListReq struct {
+	PageInfo
+	// Name | APK名称
+	Name *string `json:"name,optional"`
+	// Version| 版本号
+	Version *string `json:"version,optional"`
+	// version_code| 版本代码(内部版本号)
+	VersionCode *string `json:"versionCode,optional"`
+}
+
+// swagger:model ApkFileListResp
+type ApkFileListResp struct {
+	BaseDataInfo
+	// ApkFile list data | ApkFile
+	Data ApkFileListInfo `json:"data"`
+}
+
+// ApkFile list data | ApkFile
+// swagger:model ApkFileListInfo
+type ApkFileListInfo struct {
+	BaseListInfo
+	// ApkFile list data | ApkFil
+	Data []ApkInfo `json:"data"`
+}
+
+// CloudFile information response | 云文件信息返回体
+// swagger:model ApkFileInfoResp
+type ApkFileInfoResp struct {
+	BaseDataInfo
+	// CloudFile information | 云文件数据
+	Data ApkInfo `json:"data"`
+}
+
+// swagger:model ApkUpdateReq
+type ApkUpdateReq struct {
+	BaseIDInfo
+	// PackageName | 应用包名
+	PackageName string `json:"packageName,optional"` // 应用包名
+	// Description | 版本描述
+	Description string `json:"description,optional"` // 版本描述
+	// UpdateLog | 更新日志
+	UpdateLog string `json:"updateLog,optional"` // 更新日志
 }

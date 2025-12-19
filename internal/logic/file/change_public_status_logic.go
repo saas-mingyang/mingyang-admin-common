@@ -2,18 +2,17 @@ package file
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
 	"os"
 	"path"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-file/internal/utils/entx"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/internal/utils/entx"
 
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -34,7 +33,7 @@ func NewChangePublicStatusLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 
 func (l *ChangePublicStatusLogic) ChangePublicStatus(req *types.StatusCodeReq) (resp *types.BaseMsgResp, err error) {
 	err = entx.WithTx(l.ctx, l.svcCtx.DB, func(tx *ent.Tx) error {
-		file, err := tx.File.UpdateOneID(uuidx.ParseUUIDString(req.Id)).SetStatus(uint8(req.Status)).Save(l.ctx)
+		file, err := tx.File.UpdateOneID(req.Id).SetStatus(uint8(req.Status)).Save(l.ctx)
 
 		if err != nil {
 			return err

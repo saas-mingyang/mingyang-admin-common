@@ -2,18 +2,19 @@ package file
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
-	file2 "github.com/suyuan32/simple-admin-file/ent/file"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 	"os"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
+	file2 "mingyang-admin-simple-admin-file/ent/file"
 
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-file/internal/utils/entx"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/internal/utils/entx"
+
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -33,15 +34,15 @@ func NewDeleteFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 	}
 }
 
-func (l *DeleteFileLogic) DeleteFile(req *types.UUIDsReq) (resp *types.BaseMsgResp, err error) {
+func (l *DeleteFileLogic) DeleteFile(req *types.IdsReq) (resp *types.BaseMsgResp, err error) {
 	err = entx.WithTx(l.ctx, l.svcCtx.DB, func(tx *ent.Tx) error {
-		files, err := tx.File.Query().Where(file2.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).All(l.ctx)
+		files, err := tx.File.Query().Where(file2.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).All(l.ctx)
 
 		if err != nil {
 			return err
 		}
 
-		_, err = tx.File.Delete().Where(file2.IDIn(uuidx.ParseUUIDSlice(req.Ids)...)).Exec(l.ctx)
+		_, err = tx.File.Delete().Where(file2.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).Exec(l.ctx)
 
 		if err != nil {
 			return err

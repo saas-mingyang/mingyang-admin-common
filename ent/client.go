@@ -9,18 +9,19 @@ import (
 	"log"
 	"reflect"
 
-	uuid "github.com/gofrs/uuid/v5"
-	"github.com/suyuan32/simple-admin-file/ent/migrate"
+	"mingyang-admin-simple-admin-file/ent/migrate"
+
+	"mingyang-admin-simple-admin-file/ent/apk"
+	"mingyang-admin-simple-admin-file/ent/cloudfile"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+	"mingyang-admin-simple-admin-file/ent/storageprovider"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfile"
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
-	"github.com/suyuan32/simple-admin-file/ent/storageprovider"
 
 	stdsql "database/sql"
 )
@@ -30,6 +31,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Apk is the client for interacting with the Apk builders.
+	Apk *ApkClient
 	// CloudFile is the client for interacting with the CloudFile builders.
 	CloudFile *CloudFileClient
 	// CloudFileTag is the client for interacting with the CloudFileTag builders.
@@ -51,6 +54,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.Apk = NewApkClient(c.config)
 	c.CloudFile = NewCloudFileClient(c.config)
 	c.CloudFileTag = NewCloudFileTagClient(c.config)
 	c.File = NewFileClient(c.config)
@@ -148,6 +152,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:             ctx,
 		config:          cfg,
+		Apk:             NewApkClient(cfg),
 		CloudFile:       NewCloudFileClient(cfg),
 		CloudFileTag:    NewCloudFileTagClient(cfg),
 		File:            NewFileClient(cfg),
@@ -172,6 +177,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:             ctx,
 		config:          cfg,
+		Apk:             NewApkClient(cfg),
 		CloudFile:       NewCloudFileClient(cfg),
 		CloudFileTag:    NewCloudFileTagClient(cfg),
 		File:            NewFileClient(cfg),
@@ -183,7 +189,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		CloudFile.
+//		Apk.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -205,26 +211,28 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.CloudFile.Use(hooks...)
-	c.CloudFileTag.Use(hooks...)
-	c.File.Use(hooks...)
-	c.FileTag.Use(hooks...)
-	c.StorageProvider.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.Apk, c.CloudFile, c.CloudFileTag, c.File, c.FileTag, c.StorageProvider,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.CloudFile.Intercept(interceptors...)
-	c.CloudFileTag.Intercept(interceptors...)
-	c.File.Intercept(interceptors...)
-	c.FileTag.Intercept(interceptors...)
-	c.StorageProvider.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.Apk, c.CloudFile, c.CloudFileTag, c.File, c.FileTag, c.StorageProvider,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *ApkMutation:
+		return c.Apk.mutate(ctx, m)
 	case *CloudFileMutation:
 		return c.CloudFile.mutate(ctx, m)
 	case *CloudFileTagMutation:
@@ -237,6 +245,139 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.StorageProvider.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// ApkClient is a client for the Apk schema.
+type ApkClient struct {
+	config
+}
+
+// NewApkClient returns a client for the Apk from the given config.
+func NewApkClient(c config) *ApkClient {
+	return &ApkClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `apk.Hooks(f(g(h())))`.
+func (c *ApkClient) Use(hooks ...Hook) {
+	c.hooks.Apk = append(c.hooks.Apk, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `apk.Intercept(f(g(h())))`.
+func (c *ApkClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Apk = append(c.inters.Apk, interceptors...)
+}
+
+// Create returns a builder for creating a Apk entity.
+func (c *ApkClient) Create() *ApkCreate {
+	mutation := newApkMutation(c.config, OpCreate)
+	return &ApkCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Apk entities.
+func (c *ApkClient) CreateBulk(builders ...*ApkCreate) *ApkCreateBulk {
+	return &ApkCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ApkClient) MapCreateBulk(slice any, setFunc func(*ApkCreate, int)) *ApkCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ApkCreateBulk{err: fmt.Errorf("calling to ApkClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ApkCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ApkCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Apk.
+func (c *ApkClient) Update() *ApkUpdate {
+	mutation := newApkMutation(c.config, OpUpdate)
+	return &ApkUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApkClient) UpdateOne(_m *Apk) *ApkUpdateOne {
+	mutation := newApkMutation(c.config, OpUpdateOne, withApk(_m))
+	return &ApkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApkClient) UpdateOneID(id uint64) *ApkUpdateOne {
+	mutation := newApkMutation(c.config, OpUpdateOne, withApkID(id))
+	return &ApkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Apk.
+func (c *ApkClient) Delete() *ApkDelete {
+	mutation := newApkMutation(c.config, OpDelete)
+	return &ApkDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ApkClient) DeleteOne(_m *Apk) *ApkDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ApkClient) DeleteOneID(id uint64) *ApkDeleteOne {
+	builder := c.Delete().Where(apk.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApkDeleteOne{builder}
+}
+
+// Query returns a query builder for Apk.
+func (c *ApkClient) Query() *ApkQuery {
+	return &ApkQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeApk},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Apk entity by its id.
+func (c *ApkClient) Get(ctx context.Context, id uint64) (*Apk, error) {
+	return c.Query().Where(apk.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApkClient) GetX(ctx context.Context, id uint64) *Apk {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApkClient) Hooks() []Hook {
+	return c.hooks.Apk
+}
+
+// Interceptors returns the client interceptors.
+func (c *ApkClient) Interceptors() []Interceptor {
+	return c.inters.Apk
+}
+
+func (c *ApkClient) mutate(ctx context.Context, m *ApkMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ApkCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ApkUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ApkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ApkDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Apk mutation op: %q", m.Op())
 	}
 }
 
@@ -295,13 +436,13 @@ func (c *CloudFileClient) Update() *CloudFileUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CloudFileClient) UpdateOne(cf *CloudFile) *CloudFileUpdateOne {
-	mutation := newCloudFileMutation(c.config, OpUpdateOne, withCloudFile(cf))
+func (c *CloudFileClient) UpdateOne(_m *CloudFile) *CloudFileUpdateOne {
+	mutation := newCloudFileMutation(c.config, OpUpdateOne, withCloudFile(_m))
 	return &CloudFileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CloudFileClient) UpdateOneID(id uuid.UUID) *CloudFileUpdateOne {
+func (c *CloudFileClient) UpdateOneID(id uint64) *CloudFileUpdateOne {
 	mutation := newCloudFileMutation(c.config, OpUpdateOne, withCloudFileID(id))
 	return &CloudFileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -313,12 +454,12 @@ func (c *CloudFileClient) Delete() *CloudFileDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CloudFileClient) DeleteOne(cf *CloudFile) *CloudFileDeleteOne {
-	return c.DeleteOneID(cf.ID)
+func (c *CloudFileClient) DeleteOne(_m *CloudFile) *CloudFileDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CloudFileClient) DeleteOneID(id uuid.UUID) *CloudFileDeleteOne {
+func (c *CloudFileClient) DeleteOneID(id uint64) *CloudFileDeleteOne {
 	builder := c.Delete().Where(cloudfile.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -335,12 +476,12 @@ func (c *CloudFileClient) Query() *CloudFileQuery {
 }
 
 // Get returns a CloudFile entity by its id.
-func (c *CloudFileClient) Get(ctx context.Context, id uuid.UUID) (*CloudFile, error) {
+func (c *CloudFileClient) Get(ctx context.Context, id uint64) (*CloudFile, error) {
 	return c.Query().Where(cloudfile.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CloudFileClient) GetX(ctx context.Context, id uuid.UUID) *CloudFile {
+func (c *CloudFileClient) GetX(ctx context.Context, id uint64) *CloudFile {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -349,32 +490,32 @@ func (c *CloudFileClient) GetX(ctx context.Context, id uuid.UUID) *CloudFile {
 }
 
 // QueryStorageProviders queries the storage_providers edge of a CloudFile.
-func (c *CloudFileClient) QueryStorageProviders(cf *CloudFile) *StorageProviderQuery {
+func (c *CloudFileClient) QueryStorageProviders(_m *CloudFile) *StorageProviderQuery {
 	query := (&StorageProviderClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := cf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(cloudfile.Table, cloudfile.FieldID, id),
 			sqlgraph.To(storageprovider.Table, storageprovider.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, cloudfile.StorageProvidersTable, cloudfile.StorageProvidersColumn),
 		)
-		fromV = sqlgraph.Neighbors(cf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTags queries the tags edge of a CloudFile.
-func (c *CloudFileClient) QueryTags(cf *CloudFile) *CloudFileTagQuery {
+func (c *CloudFileClient) QueryTags(_m *CloudFile) *CloudFileTagQuery {
 	query := (&CloudFileTagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := cf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(cloudfile.Table, cloudfile.FieldID, id),
 			sqlgraph.To(cloudfiletag.Table, cloudfiletag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, cloudfile.TagsTable, cloudfile.TagsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(cf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -461,8 +602,8 @@ func (c *CloudFileTagClient) Update() *CloudFileTagUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CloudFileTagClient) UpdateOne(cft *CloudFileTag) *CloudFileTagUpdateOne {
-	mutation := newCloudFileTagMutation(c.config, OpUpdateOne, withCloudFileTag(cft))
+func (c *CloudFileTagClient) UpdateOne(_m *CloudFileTag) *CloudFileTagUpdateOne {
+	mutation := newCloudFileTagMutation(c.config, OpUpdateOne, withCloudFileTag(_m))
 	return &CloudFileTagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -479,8 +620,8 @@ func (c *CloudFileTagClient) Delete() *CloudFileTagDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CloudFileTagClient) DeleteOne(cft *CloudFileTag) *CloudFileTagDeleteOne {
-	return c.DeleteOneID(cft.ID)
+func (c *CloudFileTagClient) DeleteOne(_m *CloudFileTag) *CloudFileTagDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -515,16 +656,16 @@ func (c *CloudFileTagClient) GetX(ctx context.Context, id uint64) *CloudFileTag 
 }
 
 // QueryCloudFiles queries the cloud_files edge of a CloudFileTag.
-func (c *CloudFileTagClient) QueryCloudFiles(cft *CloudFileTag) *CloudFileQuery {
+func (c *CloudFileTagClient) QueryCloudFiles(_m *CloudFileTag) *CloudFileQuery {
 	query := (&CloudFileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := cft.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(cloudfiletag.Table, cloudfiletag.FieldID, id),
 			sqlgraph.To(cloudfile.Table, cloudfile.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, cloudfiletag.CloudFilesTable, cloudfiletag.CloudFilesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(cft.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -611,13 +752,13 @@ func (c *FileClient) Update() *FileUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *FileClient) UpdateOne(f *File) *FileUpdateOne {
-	mutation := newFileMutation(c.config, OpUpdateOne, withFile(f))
+func (c *FileClient) UpdateOne(_m *File) *FileUpdateOne {
+	mutation := newFileMutation(c.config, OpUpdateOne, withFile(_m))
 	return &FileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *FileClient) UpdateOneID(id uuid.UUID) *FileUpdateOne {
+func (c *FileClient) UpdateOneID(id uint64) *FileUpdateOne {
 	mutation := newFileMutation(c.config, OpUpdateOne, withFileID(id))
 	return &FileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -629,12 +770,12 @@ func (c *FileClient) Delete() *FileDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *FileClient) DeleteOne(f *File) *FileDeleteOne {
-	return c.DeleteOneID(f.ID)
+func (c *FileClient) DeleteOne(_m *File) *FileDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *FileClient) DeleteOneID(id uuid.UUID) *FileDeleteOne {
+func (c *FileClient) DeleteOneID(id uint64) *FileDeleteOne {
 	builder := c.Delete().Where(file.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -651,12 +792,12 @@ func (c *FileClient) Query() *FileQuery {
 }
 
 // Get returns a File entity by its id.
-func (c *FileClient) Get(ctx context.Context, id uuid.UUID) (*File, error) {
+func (c *FileClient) Get(ctx context.Context, id uint64) (*File, error) {
 	return c.Query().Where(file.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *FileClient) GetX(ctx context.Context, id uuid.UUID) *File {
+func (c *FileClient) GetX(ctx context.Context, id uint64) *File {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -665,16 +806,16 @@ func (c *FileClient) GetX(ctx context.Context, id uuid.UUID) *File {
 }
 
 // QueryTags queries the tags edge of a File.
-func (c *FileClient) QueryTags(f *File) *FileTagQuery {
+func (c *FileClient) QueryTags(_m *File) *FileTagQuery {
 	query := (&FileTagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(filetag.Table, filetag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.TagsTable, file.TagsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -761,8 +902,8 @@ func (c *FileTagClient) Update() *FileTagUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *FileTagClient) UpdateOne(ft *FileTag) *FileTagUpdateOne {
-	mutation := newFileTagMutation(c.config, OpUpdateOne, withFileTag(ft))
+func (c *FileTagClient) UpdateOne(_m *FileTag) *FileTagUpdateOne {
+	mutation := newFileTagMutation(c.config, OpUpdateOne, withFileTag(_m))
 	return &FileTagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -779,8 +920,8 @@ func (c *FileTagClient) Delete() *FileTagDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *FileTagClient) DeleteOne(ft *FileTag) *FileTagDeleteOne {
-	return c.DeleteOneID(ft.ID)
+func (c *FileTagClient) DeleteOne(_m *FileTag) *FileTagDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -815,16 +956,16 @@ func (c *FileTagClient) GetX(ctx context.Context, id uint64) *FileTag {
 }
 
 // QueryFiles queries the files edge of a FileTag.
-func (c *FileTagClient) QueryFiles(ft *FileTag) *FileQuery {
+func (c *FileTagClient) QueryFiles(_m *FileTag) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ft.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(filetag.Table, filetag.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, filetag.FilesTable, filetag.FilesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(ft.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -911,8 +1052,8 @@ func (c *StorageProviderClient) Update() *StorageProviderUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *StorageProviderClient) UpdateOne(sp *StorageProvider) *StorageProviderUpdateOne {
-	mutation := newStorageProviderMutation(c.config, OpUpdateOne, withStorageProvider(sp))
+func (c *StorageProviderClient) UpdateOne(_m *StorageProvider) *StorageProviderUpdateOne {
+	mutation := newStorageProviderMutation(c.config, OpUpdateOne, withStorageProvider(_m))
 	return &StorageProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -929,8 +1070,8 @@ func (c *StorageProviderClient) Delete() *StorageProviderDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *StorageProviderClient) DeleteOne(sp *StorageProvider) *StorageProviderDeleteOne {
-	return c.DeleteOneID(sp.ID)
+func (c *StorageProviderClient) DeleteOne(_m *StorageProvider) *StorageProviderDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -965,16 +1106,16 @@ func (c *StorageProviderClient) GetX(ctx context.Context, id uint64) *StoragePro
 }
 
 // QueryCloudfiles queries the cloudfiles edge of a StorageProvider.
-func (c *StorageProviderClient) QueryCloudfiles(sp *StorageProvider) *CloudFileQuery {
+func (c *StorageProviderClient) QueryCloudfiles(_m *StorageProvider) *CloudFileQuery {
 	query := (&CloudFileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sp.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(storageprovider.Table, storageprovider.FieldID, id),
 			sqlgraph.To(cloudfile.Table, cloudfile.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, storageprovider.CloudfilesTable, storageprovider.CloudfilesColumn),
 		)
-		fromV = sqlgraph.Neighbors(sp.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1009,10 +1150,10 @@ func (c *StorageProviderClient) mutate(ctx context.Context, m *StorageProviderMu
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Hook
+		Apk, CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Hook
 	}
 	inters struct {
-		CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Interceptor
+		Apk, CloudFile, CloudFileTag, File, FileTag, StorageProvider []ent.Interceptor
 	}
 )
 

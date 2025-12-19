@@ -9,9 +9,45 @@ import (
 )
 
 var (
+	// ApkFileColumns holds the columns for the "apk_file" table.
+	ApkFileColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
+		{Name: "tenant_id", Type: field.TypeUint64, Comment: "Tenant ID | 租户 ID", Default: 1},
+		{Name: "name", Type: field.TypeString, Comment: "APK名称"},
+		{Name: "version", Type: field.TypeString, Comment: "版本号"},
+		{Name: "version_code", Type: field.TypeString, Unique: true, Comment: "版本代码(内部版本号)"},
+		{Name: "file_size", Type: field.TypeUint64, Nullable: true, Comment: "文件大小", Default: 0},
+		{Name: "file_url", Type: field.TypeString, Comment: "文件id ｜ 下载地址"},
+		{Name: "md5", Type: field.TypeString, Nullable: true, Comment: "文件MD5值"},
+		{Name: "sha1", Type: field.TypeString, Nullable: true, Comment: "文件SHA1值"},
+		{Name: "sha256", Type: field.TypeString, Nullable: true, Comment: "文件SHA256值"},
+		{Name: "package_name", Type: field.TypeString, Nullable: true, Comment: "应用包名"},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "版本描述"},
+		{Name: "update_log", Type: field.TypeString, Nullable: true, Comment: "更新日志"},
+		{Name: "is_force_update", Type: field.TypeBool, Comment: "是否强制更新", Default: false},
+		{Name: "download_count", Type: field.TypeInt64, Comment: "下载次数", Default: 0},
+		{Name: "category", Type: field.TypeString, Comment: "android ｜ ios"},
+	}
+	// ApkFileTable holds the schema information for the "apk_file" table.
+	ApkFileTable = &schema.Table{
+		Name:       "apk_file",
+		Comment:    "APK版本记录",
+		Columns:    ApkFileColumns,
+		PrimaryKey: []*schema.Column{ApkFileColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "apk_version_code",
+				Unique:  true,
+				Columns: []*schema.Column{ApkFileColumns[7]},
+			},
+		},
+	}
 	// FmsCloudFilesColumns holds the columns for the "fms_cloud_files" table.
 	FmsCloudFilesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeUint64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "state", Type: field.TypeBool, Nullable: true, Comment: "State true: normal false: ban | 状态 true 正常 false 禁用", Default: true},
@@ -20,12 +56,13 @@ var (
 		{Name: "url", Type: field.TypeString, Comment: "The file's url | 文件地址"},
 		{Name: "size", Type: field.TypeUint64, Comment: "The file's size | 文件大小"},
 		{Name: "file_type", Type: field.TypeUint8, Comment: "The file's type | 文件类型"},
-		{Name: "user_id", Type: field.TypeString, Comment: "The user who upload the file | 上传用户的 ID"},
+		{Name: "user_id", Type: field.TypeString, Comment: "The app who upload the file | 上传用户的 ID"},
 		{Name: "cloud_file_storage_providers", Type: field.TypeUint64, Nullable: true},
 	}
 	// FmsCloudFilesTable holds the schema information for the "fms_cloud_files" table.
 	FmsCloudFilesTable = &schema.Table{
 		Name:       "fms_cloud_files",
+		Comment:    "Cloud File Table | 云文件表",
 		Columns:    FmsCloudFilesColumns,
 		PrimaryKey: []*schema.Column{FmsCloudFilesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
@@ -47,6 +84,11 @@ var (
 				Unique:  false,
 				Columns: []*schema.Column{FmsCloudFilesColumns[8]},
 			},
+			{
+				Name:    "cloudfile_url",
+				Unique:  false,
+				Columns: []*schema.Column{FmsCloudFilesColumns[6]},
+			},
 		},
 	}
 	// FmsCloudFileTagsColumns holds the columns for the "fms_cloud_file_tags" table.
@@ -62,6 +104,7 @@ var (
 	// FmsCloudFileTagsTable holds the schema information for the "fms_cloud_file_tags" table.
 	FmsCloudFileTagsTable = &schema.Table{
 		Name:       "fms_cloud_file_tags",
+		Comment:    "Cloud File's Tags Table | 云文件标签表",
 		Columns:    FmsCloudFileTagsColumns,
 		PrimaryKey: []*schema.Column{FmsCloudFileTagsColumns[0]},
 		Indexes: []*schema.Index{
@@ -74,7 +117,7 @@ var (
 	}
 	// FmsFilesColumns holds the columns for the "fms_files" table.
 	FmsFilesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeUint64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
@@ -82,13 +125,14 @@ var (
 		{Name: "name", Type: field.TypeString, Comment: "File's name | 文件名称"},
 		{Name: "file_type", Type: field.TypeUint8, Comment: "File's type | 文件类型"},
 		{Name: "size", Type: field.TypeUint64, Comment: "File's size | 文件大小"},
-		{Name: "path", Type: field.TypeString},
+		{Name: "path", Type: field.TypeString, Comment: "File's path | 文件路径"},
 		{Name: "user_id", Type: field.TypeString, Comment: "User's UUID | 用户的 UUID"},
 		{Name: "md5", Type: field.TypeString, Comment: "The md5 of the file | 文件的 md5"},
 	}
 	// FmsFilesTable holds the schema information for the "fms_files" table.
 	FmsFilesTable = &schema.Table{
 		Name:       "fms_files",
+		Comment:    "File Table | 文件表",
 		Columns:    FmsFilesColumns,
 		PrimaryKey: []*schema.Column{FmsFilesColumns[0]},
 		Indexes: []*schema.Index{
@@ -101,6 +145,11 @@ var (
 				Name:    "file_file_type",
 				Unique:  false,
 				Columns: []*schema.Column{FmsFilesColumns[6]},
+			},
+			{
+				Name:    "file_path",
+				Unique:  false,
+				Columns: []*schema.Column{FmsFilesColumns[8]},
 			},
 		},
 	}
@@ -117,6 +166,7 @@ var (
 	// FmsFileTagsTable holds the schema information for the "fms_file_tags" table.
 	FmsFileTagsTable = &schema.Table{
 		Name:       "fms_file_tags",
+		Comment:    "File's Tags Table | 文件标签表",
 		Columns:    FmsFileTagsColumns,
 		PrimaryKey: []*schema.Column{FmsFileTagsColumns[0]},
 		Indexes: []*schema.Index{
@@ -148,13 +198,14 @@ var (
 	// FmsStorageProvidersTable holds the schema information for the "fms_storage_providers" table.
 	FmsStorageProvidersTable = &schema.Table{
 		Name:       "fms_storage_providers",
+		Comment:    "Cloud File's Provider Configuration Table | 云文件服务商配置表",
 		Columns:    FmsStorageProvidersColumns,
 		PrimaryKey: []*schema.Column{FmsStorageProvidersColumns[0]},
 	}
 	// CloudFileTagCloudFilesColumns holds the columns for the "cloud_file_tag_cloud_files" table.
 	CloudFileTagCloudFilesColumns = []*schema.Column{
 		{Name: "cloud_file_tag_id", Type: field.TypeUint64},
-		{Name: "cloud_file_id", Type: field.TypeUUID},
+		{Name: "cloud_file_id", Type: field.TypeUint64},
 	}
 	// CloudFileTagCloudFilesTable holds the schema information for the "cloud_file_tag_cloud_files" table.
 	CloudFileTagCloudFilesTable = &schema.Table{
@@ -179,7 +230,7 @@ var (
 	// FileTagFilesColumns holds the columns for the "file_tag_files" table.
 	FileTagFilesColumns = []*schema.Column{
 		{Name: "file_tag_id", Type: field.TypeUint64},
-		{Name: "file_id", Type: field.TypeUUID},
+		{Name: "file_id", Type: field.TypeUint64},
 	}
 	// FileTagFilesTable holds the schema information for the "file_tag_files" table.
 	FileTagFilesTable = &schema.Table{
@@ -203,6 +254,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		ApkFileTable,
 		FmsCloudFilesTable,
 		FmsCloudFileTagsTable,
 		FmsFilesTable,
@@ -214,6 +266,9 @@ var (
 )
 
 func init() {
+	ApkFileTable.Annotation = &entsql.Annotation{
+		Table: "apk_file",
+	}
 	FmsCloudFilesTable.ForeignKeys[0].RefTable = FmsStorageProvidersTable
 	FmsCloudFilesTable.Annotation = &entsql.Annotation{
 		Table: "fms_cloud_files",

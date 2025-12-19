@@ -2,16 +2,18 @@ package base
 
 import (
 	"context"
+
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/suyuan32/simple-admin-common/msg/logmsg"
+	"github.com/saas-mingyang/mingyang-admin-common/msg/logmsg"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/suyuan32/simple-admin-common/enum/errorcode"
-	"github.com/suyuan32/simple-admin-common/i18n"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/errorcode"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/zeromicro/go-zero/core/errorx"
+
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

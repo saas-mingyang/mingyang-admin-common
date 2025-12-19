@@ -1,0 +1,18 @@
+name: Build docker and publish
+run-name: The pipeline for docker build
+on: [ release ]
+
+jobs:
+  Build-Project:
+    runs-on: host
+    steps:
+      - run: git clone ${{ vars.CODE_REPO }}/simple-admin-file-tenant.git
+      - run: go env -w GOPROXY=https://goproxy.cn,direct
+      - run: go mod tidy
+        working-directory: simple-admin-file-tenant
+      - run: make build-linux
+        working-directory: simple-admin-file-tenant
+      - run: make docker
+        working-directory: simple-admin-file-tenant
+      - run: make publish-docker
+        working-directory: simple-admin-file-tenant

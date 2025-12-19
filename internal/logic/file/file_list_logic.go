@@ -2,21 +2,23 @@ package file
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-	"github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/filetag"
 	"time"
 
-	"github.com/suyuan32/simple-admin-common/enum/errorcode"
-	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
+
+	"mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/filetag"
+
+	"github.com/saas-mingyang/mingyang-admin-common/enum/errorcode"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/zeromicro/go-zero/core/errorx"
 
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
-	"github.com/suyuan32/simple-admin-file/ent/file"
-	"github.com/suyuan32/simple-admin-file/ent/predicate"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/ent/file"
+	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -79,8 +81,8 @@ func (l *FileListLogic) FileList(req *types.FileListReq) (resp *types.FileListRe
 
 	for _, v := range files.List {
 		resp.Data.Data = append(resp.Data.Data, types.FileInfo{
-			BaseUUIDInfo: types.BaseUUIDInfo{
-				Id:        pointy.GetPointer(v.ID.String()),
+			BaseIDInfo: types.BaseIDInfo{
+				Id:        &v.ID,
 				CreatedAt: pointy.GetPointer(v.CreatedAt.UnixMilli()),
 				UpdatedAt: pointy.GetPointer(v.UpdatedAt.UnixMilli()),
 			},

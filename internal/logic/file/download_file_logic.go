@@ -2,13 +2,12 @@ package file
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
 	"path"
 
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,8 +26,8 @@ func NewDownloadFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Down
 	}
 }
 
-func (l *DownloadFileLogic) DownloadFile(req *types.UUIDPathReq) (filePath string, err error) {
-	file, err := l.svcCtx.DB.File.Get(l.ctx, uuidx.ParseUUIDString(req.Id))
+func (l *DownloadFileLogic) DownloadFile(req *types.BaseIDInfo) (filePath string, err error) {
+	file, err := l.svcCtx.DB.File.Get(l.ctx, *req.Id)
 
 	if err != nil {
 		return "", dberrorhandler.DefaultEntError(l.Logger, err, req)

@@ -3,15 +3,9 @@ package file
 import (
 	"context"
 	"fmt"
-	"github.com/duke-git/lancet/v2/datetime"
-	"github.com/duke-git/lancet/v2/fileutil"
-	"github.com/suyuan32/simple-admin-common/enum/errorcode"
-	"github.com/suyuan32/simple-admin-common/i18n"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
-	"github.com/zeromicro/go-zero/core/errorx"
-	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"io"
+	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
 	"net/http"
 	"os"
 	"path"
@@ -19,10 +13,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-file/internal/utils/filex"
+	"github.com/duke-git/lancet/v2/datetime"
+	"github.com/duke-git/lancet/v2/fileutil"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/errorcode"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
+	"github.com/zeromicro/go-zero/core/errorx"
+	"github.com/zeromicro/go-zero/core/logx"
+
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/internal/utils/filex"
 )
 
 type UploadLogic struct {
@@ -66,8 +68,8 @@ func (l *UploadLogic) Upload() (resp *types.UploadResp, err error) {
 	}
 
 	fileName, fileSuffix := handler.Filename[:dotIndex], handler.Filename[dotIndex+1:]
-	fileUUID := uuidx.NewUUID()
-	storeFileName := fileUUID.String() + "." + fileSuffix
+	fileUUID := sonyflake.NextID()
+	storeFileName := fmt.Sprint(fileUUID) + "." + fileSuffix
 	timeString := datetime.FormatTimeToStr(time.Now(), "yyyy-mm-dd")
 	userId := l.ctx.Value("userId").(string)
 
@@ -166,10 +168,13 @@ func (l *UploadLogic) Upload() (resp *types.UploadResp, err error) {
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, "upload failed")
 	}
-
+	logic := cloudfile.NewGetCloudFileDownloadUrlLogic(l.ctx, l.svcCtx)
+	url, err := logic.GetCloudFileDownloadUrl(&types.BaseIDInfo{Id: pointy.GetPointer(fileUUID)})
+	if err != nil {
+		return nil, err
+	}
 	return &types.UploadResp{
 		BaseDataInfo: types.BaseDataInfo{Msg: l.svcCtx.Trans.Trans(l.ctx, i18n.Success)},
-		Data: types.UploadInfo{Name: handler.Filename, Url: l.svcCtx.Config.UploadConf.ServerURL +
-			relativePath},
+		Data:         types.UploadInfo{Name: handler.Filename, Url: *url.Data.Url, ID: fileUUID},
 	}, nil
 }

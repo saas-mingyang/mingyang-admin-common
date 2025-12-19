@@ -5,9 +5,9 @@ import (
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"github.com/suyuan32/simple-admin-file/internal/logic/cloudfile"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
 )
 
 // swagger:route post /cloud_file/delete cloudfile DeleteCloudFile
@@ -20,14 +20,14 @@ import (
 //  + name: body
 //    require: true
 //    in: body
-//    type: UUIDsReq
+//    type: IdsReq
 //
 // Responses:
 //  200: BaseMsgResp
 
 func DeleteCloudFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UUIDsReq
+		var req types.IdsReq
 		if err := httpx.Parse(r, &req, true); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return

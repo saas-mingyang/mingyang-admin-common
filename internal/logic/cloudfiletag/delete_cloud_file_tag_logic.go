@@ -2,13 +2,14 @@ package cloudfiletag
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 
-	"github.com/suyuan32/simple-admin-file/ent/cloudfiletag"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-	"github.com/suyuan32/simple-admin-file/internal/types"
-	"github.com/suyuan32/simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +28,7 @@ func NewDeleteCloudFileTagLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *DeleteCloudFileTagLogic) DeleteCloudFileTag(req *types.IDsReq) (*types.BaseMsgResp, error) {
-	_, err := l.svcCtx.DB.CloudFileTag.Delete().Where(cloudfiletag.IDIn(req.Ids...)).Exec(l.ctx)
+	_, err := l.svcCtx.DB.CloudFileTag.Delete().Where(cloudfiletag.IDIn(convert.StringSliceToUint64Slice(req.Ids)...)).Exec(l.ctx)
 
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, req)

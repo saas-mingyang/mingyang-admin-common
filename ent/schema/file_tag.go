@@ -8,11 +8,11 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
-	ent2 "github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/hook"
-	"github.com/suyuan32/simple-admin-file/ent/privacy"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/mixins"
+	ent2 "mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/hook"
+	"mingyang-admin-simple-admin-file/ent/privacy"
 )
 
 // FileTag holds the schema definition for the FileTag entity.
@@ -23,11 +23,9 @@ type FileTag struct {
 // Fields of the FileTag.
 func (FileTag) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").Comment("FileTag's name | 标签名称").
-			Annotations(entsql.WithComments(true)),
+		field.String("name").Comment("FileTag's name | 标签名称"),
 		field.String("remark").Comment("The remark of tag | 标签的备注").
-			Optional().
-			Annotations(entsql.WithComments(true)),
+			Optional(),
 	}
 }
 
@@ -75,6 +73,8 @@ func (FileTag) Policy() ent.Policy {
 
 func (FileTag) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entsql.WithComments(true),
+		schema.Comment("File's Tags Table | 文件标签表"),
 		entsql.Annotation{Table: "fms_file_tags"}, // fms means FileTag management service
 	}
 }

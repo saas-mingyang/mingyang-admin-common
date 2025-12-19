@@ -5,7 +5,7 @@
 //		Schemes: http, https
 //		Host: localhost:9102
 //		BasePath: /
-//		Version: 1.4.6
+//		Version: 1.7.0
 //		Contact: yuansu.china.work@gmail.com
 //		securityDefinitions:
 //		  Token:
@@ -25,14 +25,11 @@ package main
 
 import (
 	"flag"
-	"fmt"
-
-	"github.com/suyuan32/simple-admin-file/internal/config"
-	"github.com/suyuan32/simple-admin-file/internal/handler"
-	"github.com/suyuan32/simple-admin-file/internal/svc"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"mingyang-admin-simple-admin-file/internal/config"
+	"mingyang-admin-simple-admin-file/internal/handler"
+	"mingyang-admin-simple-admin-file/internal/svc"
 )
 
 var configFile = flag.String("f", "etc/fms.yaml", "the config file")
@@ -49,6 +46,5 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 
-	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

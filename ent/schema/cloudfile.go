@@ -8,11 +8,11 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
-	"github.com/suyuan32/simple-admin-common/orm/ent/tenantctx"
-	ent2 "github.com/suyuan32/simple-admin-file/ent"
-	"github.com/suyuan32/simple-admin-file/ent/hook"
-	"github.com/suyuan32/simple-admin-file/ent/privacy"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/mixins"
+	ent2 "mingyang-admin-simple-admin-file/ent"
+	"mingyang-admin-simple-admin-file/ent/hook"
+	"mingyang-admin-simple-admin-file/ent/privacy"
 )
 
 // CloudFile holds the schema definition for the CloudFile entity.
@@ -24,20 +24,15 @@ type CloudFile struct {
 func (CloudFile) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
-			Comment("The file's name | 文件名").
-			Annotations(entsql.WithComments(true)),
+			Comment("The file's name | 文件名"),
 		field.String("url").
-			Comment("The file's url | 文件地址").
-			Annotations(entsql.WithComments(true)),
+			Comment("The file's url | 文件地址"),
 		field.Uint64("size").
-			Comment("The file's size | 文件大小").
-			Annotations(entsql.WithComments(true)),
+			Comment("The file's size | 文件大小"),
 		field.Uint8("file_type").
-			Comment("The file's type | 文件类型").
-			Annotations(entsql.WithComments(true)),
+			Comment("The file's type | 文件类型"),
 		field.String("user_id").
-			Comment("The user who upload the file | 上传用户的 ID").
-			Annotations(entsql.WithComments(true)),
+			Comment("The app who upload the file | 上传用户的 ID"),
 	}
 }
 
@@ -52,7 +47,7 @@ func (CloudFile) Edges() []ent.Edge {
 // Mixin of the CloudFile.
 func (CloudFile) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixins.UUIDMixin{},
+		mixins.IDMixin{},
 		mixins.StateMixin{},
 		mixins.TenantMixin{},
 	}
@@ -63,6 +58,7 @@ func (CloudFile) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name"),
 		index.Fields("file_type"),
+		index.Fields("url"),
 	}
 }
 
@@ -90,6 +86,8 @@ func (CloudFile) Policy() ent.Policy {
 // Annotations of the CloudFile
 func (CloudFile) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entsql.WithComments(true),
+		schema.Comment("Cloud File Table | 云文件表"),
 		entsql.Annotation{Table: "fms_cloud_files"},
 	}
 }
