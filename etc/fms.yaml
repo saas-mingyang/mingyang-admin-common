@@ -31,27 +31,35 @@ I18nConf:
 
 # DatabaseConf sets the database of file manager service.
 DatabaseConf:
-  Type: mysql
-  Host: 127.0.0.1
-  Port: 3306
-  DBName: simple_admin
-  Username: # set your username
-  Password: # set your password
+  Type: postgres
+  Host: 192.168.201.188
+  Port: 5432
+  DBName: simple_admin_dev
+  Username: postgres
+  Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
+  MaxIdleConn: 20
+  ConnMaxIdleTime: 300s     # ★ 核心：5分钟无请求主动断
+  ConnMaxLifetime: 1800s    # ★ 核心：30分钟强制轮换
   SSLMode: disable
   CacheTime: 5
+  Debug: true   # 添加以下配置启用 SQL 日志
+  LogSlowThreshold: 600ms
 
 # CasbinDatabaseConf sets the core database if you use the Casbin of Core.
 CasbinDatabaseConf:
-  Type: mysql
-  Host: 127.0.0.1
-  Port: 3306
-  DBName: simple_admin
-  Username: # set your username
-  Password: # set your password
+  Type: postgres
+  Host: 192.168.201.188
+  Port: 5432
+  DBName: simple_admin_dev
+  Username: postgres
+  Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5
+  # 添加以下配置启用 SQL 日志
+  Debug: true
+  LogSlowThreshold: 600ms
 
 UploadConf:
   MaxImageSize: 33554432  # 32 mb
@@ -65,8 +73,13 @@ UploadConf:
 
 # You can disable the core rpc if you have already initialized file manager's database.
 CoreRpc:
-  Target: k8s://default/core-rpc-svc:9101
+  #Target: 127.0.0.1:9101
+  Etcd:
+    Hosts:
+      - 192.168.201.58:2379  # 共享etcd地址
+    Key: core.rpc
   Enabled: true
+
 
 CasbinConf:
   ModelText: |
