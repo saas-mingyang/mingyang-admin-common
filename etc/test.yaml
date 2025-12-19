@@ -6,6 +6,11 @@ Timeout: 300000 # bigger max bytes need longer timeout | 超时时间
 Middlewares:
   Tenant: true
 
+Etcd:
+  Hosts:
+    - 192.168.201.228:32487
+  Key: fms.api
+
 Auth:
   AccessSecret: jS6VKDtsJf3z1n2VKDtsJf3z1n2  # JWT key
   AccessExpire: 259200  # Seconds
@@ -71,7 +76,7 @@ CoreRpc:
   #Target: 127.0.0.1:9101
   Etcd:
     Hosts:
-      - 10.233.110.60:2379  # 共享etcd地址
+      - 192.168.201.228:32487  # 共享etcd地址
     Key: core.rpc
   Enabled: true
 
