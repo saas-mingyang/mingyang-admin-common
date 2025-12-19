@@ -23,9 +23,8 @@ Log:
   StackCoolDownMillis: 100
 
 RedisConf:
-  Host: 192.168.201.228:31314
-  Db: 4
-  Pass: 'redis.123456'
+  Host: 192.168.201.58:6379
+  Db: 0
 
 I18nConf:
   Dir:
@@ -34,7 +33,7 @@ DatabaseConf:
   Type: postgres
   Host: 192.168.201.188
   Port: 5432
-  DBName: simple_admin_uat
+  DBName: simple_admin_dev
   Username: postgres
   Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
@@ -71,7 +70,7 @@ CoreRpc:
   #Target: 127.0.0.1:9101
   Etcd:
     Hosts:
-      - 192.168.201.228:32487  # 共享etcd地址
+      - 192.168.201.58:2379   # 共享etcd地址
     Key: core.rpc
   Enabled: true
 
