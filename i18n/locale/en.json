@@ -18,5 +18,11 @@
 		"validationError": "Operation failed: Validate failed",
 		"notSingularError": "Operation failed: Data is not unique",
 		"serviceUnavailable": "Service is unavailable, please check if the service is enabled"
+	},
+	"cms": {
+		"passwordStrengthVerification": "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.",
+		"verificationCodeExpired": "Verification code has expired",
+		"incorrectAccountPassword": "Incorrect account or password",
+		"usernameAlreadyExists": "Username already exists"
 	}
 }

@@ -1,7 +1,6 @@
 package test
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -32,31 +31,5 @@ import (
 */
 
 func Test_fun(t *testing.T) {
-	//append函数
-	var a = []int{1, 2, 3}
-	a = append(a, 4)
-	//fmt.Println(a)
-	//close函数
-	/*	c := make(chan int)
-		close(c)*/
-	//申明map
-	m := make(map[string]string)
-	m["a"] = "张三"
-	delete(m, "a")
-	//获取map
-	//fmt.Printf("获取value %v\n", m["a"])
-	//panic函数
-	//panic("panic") //panic: panic
-	// recover 函数
-	/*	defer func() {
-			if r := recover(); r != nil {
-				fmt.Println("Recovered from panic:", r)
-			}
-		}()
-		panic("this is a test panic")*/
-	//new 函数
-	s := new(string)
-	*s = "hello world"
-	fmt.Println(*s) //输出空字符串
 
 }

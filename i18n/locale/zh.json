@@ -15,8 +15,16 @@
 		"redisError": "Redis 错误",
 		"permissionDeny": "用户无权限访问此接口",
 		"constraintError": "操作失败: 数据冲突",
-		"validationError": "操作失败: 校验失败",
+		"validationError": "操作失败: 参数校验失败",
 		"notSingularError": "操作失败: 数据不唯一",
 		"serviceUnavailable": "服务不可用，请检查服务是否已启用"
+	},
+
+	"cms": {
+		"passwordStrengthVerification": "密码必须至少包含 8 个字符，包括一个大写字母、一个小写字母、一个数字和一个特殊字符。",
+		"verificationCodeExpired": "验证码已过期",
+		"incorrectAccountPassword": "账号或密码错误",
+		"usernameAlreadyExists": "用户名已存在"
 	}
+
 }
