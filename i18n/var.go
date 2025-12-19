@@ -38,10 +38,9 @@ const (
 
 	ApiRequestFailed = "sys.api.apiRequestFailed"
 
-	// cms
-	passwordStrengthVerification = "cms.passwordStrengthVerification"
-	verificationCodeExpired      = "cms.verificationCodeExpired"
-	verificationCodeError        = "cms.verificationCodeError"
-	incorrectAccountPassword     = "cms.incorrectAccountPassword"
-	usernameAlreadyExists        = "cms.usernameAlreadyExists"
+	PasswordStrengthVerification = "cms.passwordStrengthVerification"
+	VerificationCodeExpired      = "cms.verificationCodeExpired"
+	VerificationCodeError        = "cms.verificationCodeError"
+	IncorrectAccountPassword     = "cms.incorrectAccountPassword"
+	UsernameAlreadyExists        = "cms.usernameAlreadyExists"
 )
