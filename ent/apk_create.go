@@ -303,7 +303,7 @@ func (_c *ApkCreate) defaults() {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
+// check runs all checks and app-defined validators on the builder.
 func (_c *ApkCreate) check() error {
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Apk.created_at"`)}

@@ -34,7 +34,7 @@ type CloudFile struct {
 	Size uint64 `json:"size,omitempty"`
 	// The file's type | 文件类型
 	FileType uint8 `json:"file_type,omitempty"`
-	// The user who upload the file | 上传用户的 ID
+	// The app who upload the file | 上传用户的 ID
 	UserID string `json:"user_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CloudFileQuery when eager-loading is set.

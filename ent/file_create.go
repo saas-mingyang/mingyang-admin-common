@@ -196,7 +196,7 @@ func (_c *FileCreate) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
+// check runs all checks and app-defined validators on the builder.
 func (_c *FileCreate) check() error {
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "File.created_at"`)}

@@ -32,7 +32,7 @@ func (CloudFile) Fields() []ent.Field {
 		field.Uint8("file_type").
 			Comment("The file's type | 文件类型"),
 		field.String("user_id").
-			Comment("The user who upload the file | 上传用户的 ID"),
+			Comment("The app who upload the file | 上传用户的 ID"),
 	}
 }
 

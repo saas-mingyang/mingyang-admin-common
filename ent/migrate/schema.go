@@ -56,7 +56,7 @@ var (
 		{Name: "url", Type: field.TypeString, Comment: "The file's url | 文件地址"},
 		{Name: "size", Type: field.TypeUint64, Comment: "The file's size | 文件大小"},
 		{Name: "file_type", Type: field.TypeUint8, Comment: "The file's type | 文件类型"},
-		{Name: "user_id", Type: field.TypeString, Comment: "The user who upload the file | 上传用户的 ID"},
+		{Name: "user_id", Type: field.TypeString, Comment: "The app who upload the file | 上传用户的 ID"},
 		{Name: "cloud_file_storage_providers", Type: field.TypeUint64, Nullable: true},
 	}
 	// FmsCloudFilesTable holds the schema information for the "fms_cloud_files" table.

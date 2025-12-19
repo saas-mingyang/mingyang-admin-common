@@ -260,7 +260,7 @@ func (_c *StorageProviderCreate) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
+// check runs all checks and app-defined validators on the builder.
 func (_c *StorageProviderCreate) check() error {
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "StorageProvider.created_at"`)}
