@@ -23,6 +23,7 @@
 		"passwordStrengthVerification": "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.",
 		"verificationCodeExpired": "Verification code has expired",
 		"incorrectAccountPassword": "Incorrect account or password",
-		"usernameAlreadyExists": "Username already exists"
+		"usernameAlreadyExists": "Username already exists",
+		"verificationCodeError": "Verification code error"
 	}
 }

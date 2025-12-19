@@ -37,4 +37,11 @@ const (
 	CacheError         = "common.cacheError"
 
 	ApiRequestFailed = "sys.api.apiRequestFailed"
+
+	// cms
+	passwordStrengthVerification = "cms.passwordStrengthVerification"
+	verificationCodeExpired      = "cms.verificationCodeExpired"
+	verificationCodeError        = "cms.verificationCodeError"
+	incorrectAccountPassword     = "cms.incorrectAccountPassword"
+	usernameAlreadyExists        = "cms.usernameAlreadyExists"
 )
