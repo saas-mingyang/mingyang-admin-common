@@ -8,7 +8,7 @@ Middlewares:
 
 Etcd:
   Hosts:
-    - 10.233.110.60:2379
+    - mingyang-etcd-test.mingyang-admin.svc.cluster.local:2379
   Key: fms.api
 
 Auth:
@@ -76,7 +76,7 @@ CoreRpc:
   #Target: 127.0.0.1:9101
   Etcd:
     Hosts:
-      - 10.233.110.60:2379  # 共享etcd地址
+      - mingyang-etcd-test.mingyang-admin.svc.cluster.local:2379  # 共享etcd地址
     Key: core.rpc
   Enabled: true
 
