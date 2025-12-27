@@ -173,11 +173,11 @@ func (tx *Tx) init() {
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
 // applies a query, for example: Apk.QueryXXX(), the query will be executed
-// through the driver which created this transaction.
+// through the device which created this transaction.
 //
 // Note that txDriver is not goroutine safe.
 type txDriver struct {
-	// the driver we started the transaction from.
+	// the device we started the transaction from.
 	drv dialect.Driver
 	// tx is the underlying transaction.
 	tx dialect.Tx
@@ -187,7 +187,7 @@ type txDriver struct {
 	onRollback []RollbackHook
 }
 
-// newTx creates a new transactional driver.
+// newTx creates a new transactional device.
 func newTx(ctx context.Context, drv dialect.Driver) (*txDriver, error) {
 	tx, err := drv.Tx(ctx)
 	if err != nil {
@@ -200,7 +200,7 @@ func newTx(ctx context.Context, drv dialect.Driver) (*txDriver, error) {
 // from the internal builders. Should be called only by the internal builders.
 func (tx *txDriver) Tx(context.Context) (dialect.Tx, error) { return tx, nil }
 
-// Dialect returns the dialect of the driver we started the transaction from.
+// Dialect returns the dialect of the device we started the transaction from.
 func (tx *txDriver) Dialect() string { return tx.drv.Dialect() }
 
 // Close is a nop close.
