@@ -23,7 +23,7 @@ import (
 	"time"
 
 	entsql "entgo.io/ent/dialect/sql"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-device/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -47,7 +47,7 @@ type DatabaseConf struct {
 	Debug        bool   `json:",optional,env=DATABASE_DEBUG"`
 }
 
-// NewNoCacheDriver returns an Ent driver without cache.
+// NewNoCacheDriver returns an Ent device without cache.
 func (c DatabaseConf) NewNoCacheDriver() *entsql.Driver {
 	db, err := sql.Open(c.Type, c.GetDSN())
 	logx.Must(err)
