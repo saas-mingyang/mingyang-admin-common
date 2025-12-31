@@ -23,7 +23,6 @@ import (
 	"time"
 
 	entsql "entgo.io/ent/dialect/sql"
-	_ "github.com/go-sql-device/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/zeromicro/go-zero/core/logx"
