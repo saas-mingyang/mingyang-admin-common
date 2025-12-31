@@ -226,6 +226,7 @@ func (c *Converter) StructToMap(s *structpb.Struct) map[string]interface{} {
 
 // StringSliceToUint64Slice 将字符串切片转换为 uint64 切片
 func StringSliceToUint64Slice(strSlice []string) []uint64 {
+	fmt.Printf("StringSliceToUint64Slice: %v\n", strSlice)
 	result := make([]uint64, 0, len(strSlice))
 
 	for _, str := range strSlice {
@@ -241,6 +242,7 @@ func StringSliceToUint64Slice(strSlice []string) []uint64 {
 
 // Uint64SliceToStringSlice 将 uint64 切片转换为字符串切片
 func Uint64SliceToStringSlice(uintSlice []uint64) []string {
+	fmt.Printf("Uint64SliceToStringSlice: %v\n", uintSlice)
 	result := make([]string, len(uintSlice))
 
 	for i, val := range uintSlice {
