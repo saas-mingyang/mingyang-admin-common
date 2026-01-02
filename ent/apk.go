@@ -219,7 +219,7 @@ func (_m *Apk) Update() *ApkUpdateOne {
 }
 
 // Unwrap unwraps the Apk entity that was returned from a transaction after it was closed,
-// so that all future queries will be executed through the driver which created the transaction.
+// so that all future queries will be executed through the device which created the transaction.
 func (_m *Apk) Unwrap() *Apk {
 	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {

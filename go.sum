@@ -250,6 +250,9 @@ github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0t
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/saas-mingyang/mingyang-admin-common v0.2.6 h1:Gw1AZdpd5QDGegIsZTnp+odKdalCpGnyScjo4VH7VR8=
 github.com/saas-mingyang/mingyang-admin-common v0.2.6/go.mod h1:mAweT+3C08LGdr14AQNz9Sx5COPEpTtL6dr5fQAKqWc=
+github.com/saas-mingyang/mingyang-admin-common v0.4.1/go.mod h1:yMd57SVikZcHgMvJGIuwe8hd/IFnMDFi7eh836Xpgb8=
+github.com/saas-mingyang/mingyang-admin-common v0.4.2/go.mod h1:yMd57SVikZcHgMvJGIuwe8hd/IFnMDFi7eh836Xpgb8=
+github.com/saas-mingyang/mingyang-admin-common v0.4.3/go.mod h1:yMd57SVikZcHgMvJGIuwe8hd/IFnMDFi7eh836Xpgb8=
 github.com/saas-mingyang/mingyang-admin-core v0.0.0-20251107040124-c97a0a448793 h1:wSJjRdeAIX++S1lDSInYlIPg6OyPKCakHBJTNG683RI=
 github.com/saas-mingyang/mingyang-admin-core v0.0.0-20251107040124-c97a0a448793/go.mod h1:wMcbdgNDZ+ZNB4inJb68MD2vAJ2iintwm3EYQn4F7Sc=
 github.com/spaolacci/murmur3 v1.1.0 h1:7c1g84S4BPRrfL5Xrdp6fOJ206sU9y293DDHaoy0bLI=

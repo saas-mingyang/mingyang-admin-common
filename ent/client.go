@@ -111,14 +111,14 @@ func Log(fn func(...any)) Option {
 	}
 }
 
-// Driver configures the client driver.
+// Driver configures the client device.
 func Driver(driver dialect.Driver) Option {
 	return func(c *config) {
 		c.driver = driver
 	}
 }
 
-// Open opens a database/sql.DB specified by the driver name and
+// Open opens a database/sql.DB specified by the device name and
 // the data source name, and returns a new client attached to it.
 // Optional parameters can be added for configuring the client.
 func Open(driverName, dataSourceName string, options ...Option) (*Client, error) {
@@ -130,7 +130,7 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 		}
 		return NewClient(append(options, Driver(drv))...), nil
 	default:
-		return nil, fmt.Errorf("unsupported driver: %q", driverName)
+		return nil, fmt.Errorf("unsupported device: %q", driverName)
 	}
 }
 
@@ -1157,7 +1157,7 @@ type (
 	}
 )
 
-// ExecContext allows calling the underlying ExecContext method of the driver if it is supported by it.
+// ExecContext allows calling the underlying ExecContext method of the device if it is supported by it.
 // See, database/sql#DB.ExecContext for more information.
 func (c *config) ExecContext(ctx context.Context, query string, args ...any) (stdsql.Result, error) {
 	ex, ok := c.driver.(interface {
@@ -1169,7 +1169,7 @@ func (c *config) ExecContext(ctx context.Context, query string, args ...any) (st
 	return ex.ExecContext(ctx, query, args...)
 }
 
-// QueryContext allows calling the underlying QueryContext method of the driver if it is supported by it.
+// QueryContext allows calling the underlying QueryContext method of the device if it is supported by it.
 // See, database/sql#DB.QueryContext for more information.
 func (c *config) QueryContext(ctx context.Context, query string, args ...any) (*stdsql.Rows, error) {
 	q, ok := c.driver.(interface {
