@@ -282,6 +282,7 @@ func (v *PhoneValidator) Validate(phone string) bool {
 	}
 
 	return true
+
 }
 
 // parsePhoneNumber 解析电话号码
