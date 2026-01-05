@@ -23,8 +23,8 @@ func IsValidEmail(email string) bool {
 }
 
 // IsInternationalMobile IsValidPhone 验证手机号格式
-func IsInternationalMobile(mobile string) bool {
-	parse, err := phonenumbers.Parse(mobile, "")
+func IsInternationalMobile(mobile string, countryCode string) bool {
+	parse, err := phonenumbers.Parse(mobile, countryCode)
 	if err != nil {
 		return false
 	}
@@ -32,18 +32,16 @@ func IsInternationalMobile(mobile string) bool {
 }
 
 // CheckContactType 判断输入是邮箱还是手机号
-func CheckContactType(input string) ContactType {
+func CheckContactType(input, countryCode string) ContactType {
 	input = strings.TrimSpace(input)
 
 	// 先检查是否为手机号
-	if IsInternationalMobile(input) || IsInternationalMobile(input) {
+	if IsInternationalMobile(input, countryCode) {
 		return Mobile
 	}
-
 	// 再检查是否为邮箱
 	if IsValidEmail(input) {
 		return Email
 	}
-
 	return Unknown
 }
