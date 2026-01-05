@@ -27,6 +27,15 @@ var (
 	commonCountryCodes = []string{"US", "CN", "GB", "JP", "KR", "DE", "FR", "IN", "BR", "RU"}
 )
 
+// 初始化正则表达式
+func init() {
+	once.Do(func() {
+		// 简化版邮箱正则，更高效且覆盖大多数情况
+		emailPattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+		emailRegex = regexp.MustCompile(emailPattern)
+	})
+}
+
 // EmailValidator 邮箱验证器
 type EmailValidator struct {
 	allowUnicode   bool
@@ -155,6 +164,24 @@ func NewPhoneValidator(defaultRegion string, options ...func(*PhoneValidator)) *
 	return v
 }
 
+// NewAutoDetectPhoneValidator 创建自动检测国家代码的电话验证器
+func NewAutoDetectPhoneValidator(options ...func(*PhoneValidator)) *PhoneValidator {
+	v := &PhoneValidator{
+		defaultRegion: "", // 空字符串表示自动检测
+		allowedTypes: []phonenumbers.PhoneNumberType{
+			phonenumbers.MOBILE,
+			phonenumbers.FIXED_LINE_OR_MOBILE,
+		},
+		lenientParsing:  true,
+		cacheEnabled:    true,
+		validationCache: &sync.Map{},
+	}
+	for _, option := range options {
+		option(v)
+	}
+	return v
+}
+
 // WithAllowedTypes 设置允许的电话类型
 func WithAllowedTypes(types []phonenumbers.PhoneNumberType) func(*PhoneValidator) {
 	return func(v *PhoneValidator) {
@@ -176,9 +203,15 @@ func WithCache(enabled bool) func(*PhoneValidator) {
 	}
 }
 
-// IsValidPhone 验证电话号码
+// IsValidPhone 验证电话号码（需要国家代码）
 func IsValidPhone(phone, countryCode string) bool {
 	validator := NewPhoneValidator(countryCode)
+	return validator.Validate(phone)
+}
+
+// IsValidPhoneAuto 自动检测国家代码验证电话号码
+func IsValidPhoneAuto(phone string) bool {
+	validator := NewAutoDetectPhoneValidator()
 	return validator.Validate(phone)
 }
 
@@ -192,8 +225,9 @@ func (v *PhoneValidator) Validate(phone string) bool {
 
 	// 检查缓存
 	if v.cacheEnabled {
-		if cached, ok := v.validationCache.Load(phone); ok {
-			if entry, ok := cached.(cacheEntry); ok && entry.country == v.defaultRegion {
+		cacheKey := fmt.Sprintf("%s:%s", phone, v.defaultRegion)
+		if cached, ok := v.validationCache.Load(cacheKey); ok {
+			if entry, ok := cached.(cacheEntry); ok {
 				return entry.valid
 			}
 		}
@@ -203,7 +237,8 @@ func (v *PhoneValidator) Validate(phone string) bool {
 	parsed, err := v.parsePhoneNumber(phone)
 	if err != nil {
 		if v.cacheEnabled {
-			v.validationCache.Store(phone, cacheEntry{valid: false, country: v.defaultRegion})
+			cacheKey := fmt.Sprintf("%s:%s", phone, v.defaultRegion)
+			v.validationCache.Store(cacheKey, cacheEntry{valid: false, country: v.defaultRegion})
 		}
 		return false
 	}
@@ -212,7 +247,8 @@ func (v *PhoneValidator) Validate(phone string) bool {
 	valid := phonenumbers.IsValidNumber(parsed)
 	if !valid {
 		if v.cacheEnabled {
-			v.validationCache.Store(phone, cacheEntry{valid: false, country: v.defaultRegion})
+			cacheKey := fmt.Sprintf("%s:%s", phone, v.defaultRegion)
+			v.validationCache.Store(cacheKey, cacheEntry{valid: false, country: v.defaultRegion})
 		}
 		return false
 	}
@@ -229,14 +265,16 @@ func (v *PhoneValidator) Validate(phone string) bool {
 
 	if !typeAllowed {
 		if v.cacheEnabled {
-			v.validationCache.Store(phone, cacheEntry{valid: false, country: v.defaultRegion})
+			cacheKey := fmt.Sprintf("%s:%s", phone, v.defaultRegion)
+			v.validationCache.Store(cacheKey, cacheEntry{valid: false, country: v.defaultRegion})
 		}
 		return false
 	}
 
 	// 缓存结果
 	if v.cacheEnabled {
-		v.validationCache.Store(phone, cacheEntry{
+		cacheKey := fmt.Sprintf("%s:%s", phone, v.defaultRegion)
+		v.validationCache.Store(cacheKey, cacheEntry{
 			valid:   true,
 			number:  parsed,
 			country: v.defaultRegion,
@@ -251,18 +289,18 @@ func (v *PhoneValidator) parsePhoneNumber(phone string) (*phonenumbers.PhoneNumb
 	var parsed *phonenumbers.PhoneNumber
 	var err error
 
-	// 策略1：如果包含+号，尝试国际格式解析
+	// 策略1：如果包含+号，尝试国际格式解析（优先级最高）
 	if strings.HasPrefix(phone, "+") {
 		parsed, err = phonenumbers.Parse(phone, "")
-		if err == nil {
+		if err == nil && phonenumbers.IsValidNumber(parsed) {
 			return parsed, nil
 		}
 	}
 
-	// 策略2：使用指定的国家代码
+	// 策略2：如果设置了默认地区，使用指定地区解析
 	if v.defaultRegion != "" {
 		parsed, err = phonenumbers.Parse(phone, v.defaultRegion)
-		if err == nil {
+		if err == nil && phonenumbers.IsValidNumber(parsed) {
 			return parsed, nil
 		}
 	}
@@ -275,12 +313,58 @@ func (v *PhoneValidator) parsePhoneNumber(phone string) (*phonenumbers.PhoneNumb
 		}
 	}
 
+	// 策略4：如果没有+号也没有指定国家，尝试猜测可能的国家
+	if !strings.HasPrefix(phone, "+") && v.defaultRegion == "" {
+		// 尝试猜测国家代码
+		possibleCountry := v.guessCountryCode(phone)
+		if possibleCountry != "" {
+			parsed, err = phonenumbers.Parse(phone, possibleCountry)
+			if err == nil && phonenumbers.IsValidNumber(parsed) {
+				return parsed, nil
+			}
+		}
+	}
+
 	return nil, fmt.Errorf("unable to parse phone number: %s", phone)
+}
+
+// guessCountryCode 根据号码格式猜测国家代码
+func (v *PhoneValidator) guessCountryCode(phone string) string {
+	// 移除所有非数字字符
+	cleanPhone := cleanDigits(phone)
+
+	// 根据号码长度和开头数字猜测
+	switch {
+	// 中国手机号：11位，以1开头
+	case len(cleanPhone) == 11 && strings.HasPrefix(cleanPhone, "1"):
+		return "CN"
+
+	// 美国/加拿大：10位，以2-9开头
+	case len(cleanPhone) == 10 && cleanPhone[0] >= '2' && cleanPhone[0] <= '9':
+		return "US"
+
+	// 英国：11位，以7开头
+	case len(cleanPhone) == 11 && strings.HasPrefix(cleanPhone, "7"):
+		return "GB"
+
+	// 印度：10位，以6-9开头
+	case len(cleanPhone) == 10 && cleanPhone[0] >= '6' && cleanPhone[0] <= '9':
+		return "IN"
+
+	default:
+		return ""
+	}
 }
 
 // GetPhoneInfo 获取电话号码详细信息
 func GetPhoneInfo(phone, countryCode string) (*PhoneInfo, error) {
 	validator := NewPhoneValidator(countryCode)
+	return validator.GetPhoneInfo(phone)
+}
+
+// GetPhoneInfoAuto 自动检测获取电话号码详细信息
+func GetPhoneInfoAuto(phone string) (*PhoneInfo, error) {
+	validator := NewAutoDetectPhoneValidator()
 	return validator.GetPhoneInfo(phone)
 }
 
@@ -294,6 +378,9 @@ func (v *PhoneValidator) GetPhoneInfo(phone string) (*PhoneInfo, error) {
 	countryCode := parsed.GetCountryCode()
 	numType := phonenumbers.GetNumberType(parsed)
 
+	// 获取号码类型字符串
+	numTypeStr := getPhoneNumberTypeString(numType)
+
 	info := &PhoneInfo{
 		InternationalFormat: phonenumbers.Format(parsed, phonenumbers.INTERNATIONAL),
 		NationalFormat:      phonenumbers.Format(parsed, phonenumbers.NATIONAL),
@@ -302,7 +389,7 @@ func (v *PhoneValidator) GetPhoneInfo(phone string) (*PhoneInfo, error) {
 		RegionCode:          regionCode,
 		IsValid:             phonenumbers.IsValidNumber(parsed),
 		IsMobile:            numType == phonenumbers.MOBILE || numType == phonenumbers.FIXED_LINE_OR_MOBILE,
-		Type:                int(phonenumbers.GetNumberType(parsed)),
+		Type:                numTypeStr,
 		NationalNumber:      phonenumbers.GetNationalSignificantNumber(parsed),
 	}
 
@@ -318,13 +405,18 @@ type PhoneInfo struct {
 	RegionCode          string
 	IsValid             bool
 	IsMobile            bool
-	Type                int
+	Type                string
 	NationalNumber      string
 }
 
-// CheckContactType 判断输入是邮箱还是手机号
+// CheckContactType 判断输入是邮箱还是手机号（需要国家代码）
 func CheckContactType(input, countryCode string) ContactType {
 	return CheckContactTypeWithOptions(input, countryCode)
+}
+
+// CheckContactTypeAuto 自动检测国家代码判断输入是邮箱还是手机号
+func CheckContactTypeAuto(input string) ContactType {
+	return CheckContactTypeWithOptions(input, "")
 }
 
 // CheckContactTypeWithOptions 可配置的检查联系方式类型
@@ -340,7 +432,15 @@ func CheckContactTypeWithOptions(input, countryCode string, options ...func(*Pho
 	}
 
 	// 检查是否为手机号
-	validator := NewPhoneValidator(countryCode, options...)
+	var validator *PhoneValidator
+	if countryCode == "" {
+		// 自动检测模式
+		validator = NewAutoDetectPhoneValidator(options...)
+	} else {
+		// 指定国家代码模式
+		validator = NewPhoneValidator(countryCode, options...)
+	}
+
 	if validator.Validate(input) {
 		return Mobile
 	}
@@ -393,6 +493,50 @@ func isIPAddress(s string) bool {
 	return false
 }
 
+func cleanDigits(s string) string {
+	var builder strings.Builder
+	builder.Grow(len(s))
+
+	for _, r := range s {
+		if r >= '0' && r <= '9' {
+			builder.WriteRune(r)
+		}
+	}
+	return builder.String()
+}
+
+func getPhoneNumberTypeString(numType phonenumbers.PhoneNumberType) string {
+	// 手动转换 PhoneNumberType 为字符串
+	switch numType {
+	case phonenumbers.MOBILE:
+		return "MOBILE"
+	case phonenumbers.FIXED_LINE:
+		return "FIXED_LINE"
+	case phonenumbers.FIXED_LINE_OR_MOBILE:
+		return "FIXED_LINE_OR_MOBILE"
+	case phonenumbers.TOLL_FREE:
+		return "TOLL_FREE"
+	case phonenumbers.PREMIUM_RATE:
+		return "PREMIUM_RATE"
+	case phonenumbers.SHARED_COST:
+		return "SHARED_COST"
+	case phonenumbers.VOIP:
+		return "VOIP"
+	case phonenumbers.PERSONAL_NUMBER:
+		return "PERSONAL_NUMBER"
+	case phonenumbers.PAGER:
+		return "PAGER"
+	case phonenumbers.UAN:
+		return "UAN"
+	case phonenumbers.VOICEMAIL:
+		return "VOICEMAIL"
+	case phonenumbers.UNKNOWN:
+		return "UNKNOWN"
+	default:
+		return "UNKNOWN"
+	}
+}
+
 // BatchValidatePhones 批量验证电话号码
 func BatchValidatePhones(phones []string, countryCode string) map[string]bool {
 	results := make(map[string]bool)
@@ -405,9 +549,37 @@ func BatchValidatePhones(phones []string, countryCode string) map[string]bool {
 	return results
 }
 
+// BatchValidatePhonesAuto 批量验证电话号码（自动检测）
+func BatchValidatePhonesAuto(phones []string) map[string]bool {
+	results := make(map[string]bool)
+	validator := NewAutoDetectPhoneValidator(WithCache(true))
+
+	for _, phone := range phones {
+		results[phone] = validator.Validate(phone)
+	}
+
+	return results
+}
+
 // ValidateAndNormalizePhone 验证并标准化电话号码
 func ValidateAndNormalizePhone(phone, countryCode string) (normalized string, isValid bool) {
 	validator := NewPhoneValidator(countryCode)
+
+	if !validator.Validate(phone) {
+		return "", false
+	}
+
+	info, err := validator.GetPhoneInfo(phone)
+	if err != nil {
+		return "", false
+	}
+
+	return info.E164Format, true
+}
+
+// ValidateAndNormalizePhoneAuto 验证并标准化电话号码（自动检测）
+func ValidateAndNormalizePhoneAuto(phone string) (normalized string, isValid bool) {
+	validator := NewAutoDetectPhoneValidator()
 
 	if !validator.Validate(phone) {
 		return "", false
