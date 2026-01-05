@@ -1,6 +1,7 @@
 package valid
 
 import (
+	"github.com/nyaruka/phonenumbers"
 	"regexp"
 	"strings"
 )
@@ -23,13 +24,11 @@ func IsValidEmail(email string) bool {
 
 // IsInternationalMobile IsValidPhone 验证手机号格式
 func IsInternationalMobile(mobile string) bool {
-	// 国际手机号：可选+号开头，后跟1-15位数字
-	pattern := `^\+?[1-9]\d{1,14}$`
-	matched, err := regexp.MatchString(pattern, mobile)
+	parse, err := phonenumbers.Parse(mobile, "")
 	if err != nil {
 		return false
 	}
-	return matched
+	return phonenumbers.IsValidNumber(parse)
 }
 
 // CheckContactType 判断输入是邮箱还是手机号
