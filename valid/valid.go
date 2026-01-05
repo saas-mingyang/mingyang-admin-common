@@ -410,18 +410,18 @@ type PhoneInfo struct {
 	NationalNumber      string
 }
 
-// CheckContactType 判断输入是邮箱还是手机号（需要国家代码）
-func CheckContactType(input, countryCode string) ContactType {
-	return CheckContactTypeWithOptions(input, countryCode)
+// CheckContactTypeAuto 判断输入是邮箱还是手机号（需要国家代码）
+func CheckContactTypeAuto(input, countryCode string) ContactType {
+	return CheckContactTypeAutoWithOptions(input, countryCode)
 }
 
-// CheckContactTypeAuto 自动检测国家代码判断输入是邮箱还是手机号
-func CheckContactTypeAuto(input string) ContactType {
-	return CheckContactTypeWithOptions(input, "")
+// CheckContactTypeAutoAuto 自动检测国家代码判断输入是邮箱还是手机号
+func CheckContactTypeAutoAuto(input string) ContactType {
+	return CheckContactTypeAutoWithOptions(input, "")
 }
 
-// CheckContactTypeWithOptions 可配置的检查联系方式类型
-func CheckContactTypeWithOptions(input, countryCode string, options ...func(*PhoneValidator)) ContactType {
+// CheckContactTypeAutoWithOptions 可配置的检查联系方式类型
+func CheckContactTypeAutoWithOptions(input, countryCode string, options ...func(*PhoneValidator)) ContactType {
 	input = strings.TrimSpace(input)
 	if input == "" {
 		return Unknown
