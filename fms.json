@@ -403,6 +403,34 @@
         }
       }
     },
+    "/cloud_file/upload_progress": {
+      "post": {
+        "description": "Get cloud file  upload progress | 获取云文件上传进度",
+        "tags": [
+          "cloudfile"
+        ],
+        "summary": "Get cloud file  upload progress | 获取云文件上传进度",
+        "operationId": "GetCloudFileUploadProgress",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/UUIDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "UploadProgressResp",
+            "schema": {
+              "$ref": "#/definitions/UploadProgressResp"
+            }
+          }
+        }
+      }
+    },
     "/cloud_file_tag": {
       "post": {
         "description": "Get cloud file tag by ID | 通过ID获取云文件标签",
@@ -2434,6 +2462,10 @@
           "x-go-name": "Url"
         }
       },
+      "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
+    },
+    "UploadProgressResp": {
+      "type": "object",
       "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "UploadResp": {

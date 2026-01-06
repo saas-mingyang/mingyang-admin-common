@@ -60,6 +60,11 @@ type (
 		// Url | 文件网址
 		Url string `json:"url"`
 	}
+	UploadProgressResp{
+
+
+	}
+
 )
 
 @server (
@@ -95,6 +100,10 @@ service Fms {
 	//  Get cloud file download url | 获取云文件下载地址
 	@handler getCloudFileDownloadUrl
 	post /cloud_file/download_url (UUIDReq) returns (CloudFileInfoResp)
+
+	// Get cloud file  upload progress | 获取云文件上传进度
+	@handler getCloudFileUploadProgress
+	post /cloud_file/upload_progress (UUIDReq) returns (UploadProgressResp)
 }
 
 @server (

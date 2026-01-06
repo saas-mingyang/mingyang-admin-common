@@ -152,6 +152,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/cloud_file/download_url",
 					Handler: cloudfile.GetCloudFileDownloadUrlHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/cloud_file/upload_progress",
+					Handler: cloudfile.GetCloudFileUploadProgressHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

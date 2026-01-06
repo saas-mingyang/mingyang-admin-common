@@ -335,6 +335,10 @@ type CloudFileDeleteReq struct {
 	Url string `json:"url"`
 }
 
+// swagger:model UploadProgressResp
+type UploadProgressResp struct {
+}
+
 // The response data of storage provider information | 服务提供商信息
 // swagger:model StorageProviderInfo
 type StorageProviderInfo struct {
