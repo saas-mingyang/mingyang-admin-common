@@ -130,7 +130,6 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}
 	service := l.svcCtx.CloudStorage.Service[tenantId]
 	storageProvider := service.ProviderData[provider]
-	fmt.Printf("map类型和值: %#v\n", storageProvider)
 
 	// store to database
 	query := l.svcCtx.DB.CloudFile.Create().
