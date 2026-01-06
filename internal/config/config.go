@@ -26,6 +26,7 @@ type UploadConf struct {
 	MaxVideoSize        int64  `json:",default=1073741824,env=MAX_VIDEO_SIZE"`
 	MaxAudioSize        int64  `json:",default=33554432,env=MAX_AUDIO_SIZE"`
 	MaxOtherSize        int64  `json:",default=10485760,env=MAX_OTHER_SIZE"`
+	MaxApkSize          int64  `json:",default=1073741824,env=MAX_APK_SIZE"`
 	PrivateStorePath    string `json:",env=PRIVATE_PATH"`
 	PublicStorePath     string `json:",env=PUBLIC_PATH"`
 	ServerURL           string `json:",env=SERVER_URL"`

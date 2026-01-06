@@ -49,15 +49,15 @@ func init() {
 	// apk.DefaultTenantID holds the default value on creation for the tenant_id field.
 	apk.DefaultTenantID = apkDescTenantID.Default.(uint64)
 	// apkDescFileSize is the schema descriptor for file_size field.
-	apkDescFileSize := apkFields[3].Descriptor()
+	apkDescFileSize := apkFields[4].Descriptor()
 	// apk.DefaultFileSize holds the default value on creation for the file_size field.
 	apk.DefaultFileSize = apkDescFileSize.Default.(uint64)
 	// apkDescIsForceUpdate is the schema descriptor for is_force_update field.
-	apkDescIsForceUpdate := apkFields[11].Descriptor()
+	apkDescIsForceUpdate := apkFields[12].Descriptor()
 	// apk.DefaultIsForceUpdate holds the default value on creation for the is_force_update field.
 	apk.DefaultIsForceUpdate = apkDescIsForceUpdate.Default.(bool)
 	// apkDescDownloadCount is the schema descriptor for download_count field.
-	apkDescDownloadCount := apkFields[12].Descriptor()
+	apkDescDownloadCount := apkFields[13].Descriptor()
 	// apk.DefaultDownloadCount holds the default value on creation for the download_count field.
 	apk.DefaultDownloadCount = apkDescDownloadCount.Default.(int64)
 	cloudfileMixin := schema.CloudFile{}.Mixin()

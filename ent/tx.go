@@ -168,16 +168,16 @@ func (tx *Tx) init() {
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
 // The idea is to support transactions without adding any extra code to the builders.
 // When a builder calls to driver.Tx(), it gets the same dialect.Tx instance.
-// Commit and Rollback are nop for the internal builders and the app must call one
+// Commit and Rollback are nop for the internal builders and the user must call one
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
 // applies a query, for example: Apk.QueryXXX(), the query will be executed
-// through the device which created this transaction.
+// through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.
 type txDriver struct {
-	// the device we started the transaction from.
+	// the driver we started the transaction from.
 	drv dialect.Driver
 	// tx is the underlying transaction.
 	tx dialect.Tx
@@ -187,7 +187,7 @@ type txDriver struct {
 	onRollback []RollbackHook
 }
 
-// newTx creates a new transactional device.
+// newTx creates a new transactional driver.
 func newTx(ctx context.Context, drv dialect.Driver) (*txDriver, error) {
 	tx, err := drv.Tx(ctx)
 	if err != nil {
@@ -200,7 +200,7 @@ func newTx(ctx context.Context, drv dialect.Driver) (*txDriver, error) {
 // from the internal builders. Should be called only by the internal builders.
 func (tx *txDriver) Tx(context.Context) (dialect.Tx, error) { return tx, nil }
 
-// Dialect returns the dialect of the device we started the transaction from.
+// Dialect returns the dialect of the driver we started the transaction from.
 func (tx *txDriver) Dialect() string { return tx.drv.Dialect() }
 
 // Close is a nop close.

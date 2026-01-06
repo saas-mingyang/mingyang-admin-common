@@ -60,6 +60,7 @@ func (l *ListApkFileLogic) ListApkFile(req *types.ApkFileListReq) (resp *types.A
 				PackageName: v.PackageName,
 				Description: &v.Description,
 				Category:    v.Category,
+				FileId:      v.FileID,
 			})
 	}
 	return resp, nil

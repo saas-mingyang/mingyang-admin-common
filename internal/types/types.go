@@ -456,17 +456,8 @@ type ApkInfo struct {
 	VersionCode string `json:"version_code,optional"`
 	// FileSize | 文件大小
 	FileSize *uint64 `json:"fileSize,optional"`
-	// FileId | 文件ID 或者 下载链接,具体看category
-	FileUrl string `json:"fileUrl,string"`
-	// UploadTime | 上传时间
-	//UploadTime int64 `json:"upload_time,optional"`
-	// Md5 | 文件MD5值
-	//Md5 string `json:"md5,optional"` // 文件MD5值
-	// Sha1 | 文件SHA1值
-	//Sha1 string `json:"sha1,optional"` // 文件SHA1值
-	// Sha256 | 文件SHA256值
-	//Sha256 string `json:"sha256,optional"` // 文件SHA256值
-	// PackageName | 应用包名
+	// 下载链接
+	FileUrl     string `json:"fileUrl,string"`
 	PackageName string `json:"packageName"` // 应用包名
 	// Description | 版本描述
 	Description *string `json:"description,optional"` // 版本描述
@@ -478,6 +469,8 @@ type ApkInfo struct {
 	DownloadCount int64 `json:"downloadCount"` // 下载次数
 	// category | 分类 android ｜ ios
 	Category string `json:"category"` // 分类 android ｜ ios
+	//File Id | 文件ID
+	FileId uint64 `json:"fileId,optional,string"`
 }
 
 // Get cloud file list request params | 云文件列表请求参数

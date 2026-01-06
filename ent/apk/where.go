@@ -89,6 +89,11 @@ func VersionCode(v string) predicate.Apk {
 	return predicate.Apk(sql.FieldEQ(FieldVersionCode, v))
 }
 
+// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
+func FileID(v uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldEQ(FieldFileID, v))
+}
+
 // FileSize applies equality check predicate on the "file_size" field. It's identical to FileSizeEQ.
 func FileSize(v uint64) predicate.Apk {
 	return predicate.Apk(sql.FieldEQ(FieldFileSize, v))
@@ -507,6 +512,46 @@ func VersionCodeEqualFold(v string) predicate.Apk {
 // VersionCodeContainsFold applies the ContainsFold predicate on the "version_code" field.
 func VersionCodeContainsFold(v string) predicate.Apk {
 	return predicate.Apk(sql.FieldContainsFold(FieldVersionCode, v))
+}
+
+// FileIDEQ applies the EQ predicate on the "file_id" field.
+func FileIDEQ(v uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldEQ(FieldFileID, v))
+}
+
+// FileIDNEQ applies the NEQ predicate on the "file_id" field.
+func FileIDNEQ(v uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldNEQ(FieldFileID, v))
+}
+
+// FileIDIn applies the In predicate on the "file_id" field.
+func FileIDIn(vs ...uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldIn(FieldFileID, vs...))
+}
+
+// FileIDNotIn applies the NotIn predicate on the "file_id" field.
+func FileIDNotIn(vs ...uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldNotIn(FieldFileID, vs...))
+}
+
+// FileIDGT applies the GT predicate on the "file_id" field.
+func FileIDGT(v uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldGT(FieldFileID, v))
+}
+
+// FileIDGTE applies the GTE predicate on the "file_id" field.
+func FileIDGTE(v uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldGTE(FieldFileID, v))
+}
+
+// FileIDLT applies the LT predicate on the "file_id" field.
+func FileIDLT(v uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldLT(FieldFileID, v))
+}
+
+// FileIDLTE applies the LTE predicate on the "file_id" field.
+func FileIDLTE(v uint64) predicate.Apk {
+	return predicate.Apk(sql.FieldLTE(FieldFileID, v))
 }
 
 // FileSizeEQ applies the EQ predicate on the "file_size" field.

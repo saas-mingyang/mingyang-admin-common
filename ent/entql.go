@@ -38,6 +38,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			apk.FieldName:          {Type: field.TypeString, Column: apk.FieldName},
 			apk.FieldVersion:       {Type: field.TypeString, Column: apk.FieldVersion},
 			apk.FieldVersionCode:   {Type: field.TypeString, Column: apk.FieldVersionCode},
+			apk.FieldFileID:        {Type: field.TypeUint64, Column: apk.FieldFileID},
 			apk.FieldFileSize:      {Type: field.TypeUint64, Column: apk.FieldFileSize},
 			apk.FieldFileURL:       {Type: field.TypeString, Column: apk.FieldFileURL},
 			apk.FieldMd5:           {Type: field.TypeString, Column: apk.FieldMd5},
@@ -315,6 +316,11 @@ func (f *ApkFilter) WhereVersion(p entql.StringP) {
 // WhereVersionCode applies the entql string predicate on the version_code field.
 func (f *ApkFilter) WhereVersionCode(p entql.StringP) {
 	f.Where(p.Field(apk.FieldVersionCode))
+}
+
+// WhereFileID applies the entql uint64 predicate on the file_id field.
+func (f *ApkFilter) WhereFileID(p entql.Uint64P) {
+	f.Where(p.Field(apk.FieldFileID))
 }
 
 // WhereFileSize applies the entql uint64 predicate on the file_size field.

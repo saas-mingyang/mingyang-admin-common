@@ -1158,6 +1158,12 @@
           "format": "int64",
           "x-go-name": "DownloadCount"
         },
+        "fileId": {
+          "description": "File Id | 文件ID",
+          "type": "string",
+          "format": "uint64",
+          "x-go-name": "FileId"
+        },
         "fileSize": {
           "description": "FileSize | 文件大小",
           "type": "integer",
@@ -1165,7 +1171,7 @@
           "x-go-name": "FileSize"
         },
         "fileUrl": {
-          "description": "FileId | 文件ID 或者 下载链接,具体看category",
+          "description": "下载链接",
           "type": "string",
           "x-go-name": "FileUrl"
         },
@@ -1188,7 +1194,6 @@
           "x-go-name": "Name"
         },
         "packageName": {
-          "description": "UploadTime | 上传时间\nUploadTime int64 `json:\"upload_time,optional\"`\nMd5 | 文件MD5值\nMd5 string `json:\"md5,optional\"` // 文件MD5值\nSha1 | 文件SHA1值\nSha1 string `json:\"sha1,optional\"` // 文件SHA1值\nSha256 | 文件SHA256值\nSha256 string `json:\"sha256,optional\"` // 文件SHA256值\nPackageName | 应用包名",
           "type": "string",
           "x-go-name": "PackageName"
         },

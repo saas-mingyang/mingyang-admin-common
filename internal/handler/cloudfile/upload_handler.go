@@ -1,12 +1,12 @@
 package cloudfile
 
 import (
-	"net/http"
-
+	"context"
 	"github.com/zeromicro/go-zero/rest/httpx"
-
 	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
 	"mingyang-admin-simple-admin-file/internal/svc"
+	"net/http"
+	"time"
 )
 
 // swagger:route post /cloud_file/upload cloudfile Upload
@@ -20,13 +20,20 @@ import (
 
 func UploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// 创建一个新的上下文，设置30分钟超时
+		ctx, cancel := context.WithTimeout(r.Context(), 30*time.Minute)
+		defer cancel() // 确保函数退出时取消上下文
+
+		// 使用新的上下文创建请求
+		r = r.WithContext(ctx)
+
 		l := cloudfile.NewUploadLogic(r, svcCtx)
 		resp, err := l.Upload()
 		if err != nil {
-			err = svcCtx.Trans.TransError(r.Context(), err)
-			httpx.ErrorCtx(r.Context(), w, err)
+			err = svcCtx.Trans.TransError(ctx, err)
+			httpx.ErrorCtx(ctx, w, err)
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			httpx.OkJsonCtx(ctx, w, resp)
 		}
 	}
 }

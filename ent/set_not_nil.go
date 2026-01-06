@@ -125,6 +125,30 @@ func (_m *ApkCreate) SetNotNilVersionCode(value *string) *ApkCreate {
 }
 
 // set field if value's pointer is not nil.
+func (_m *ApkUpdate) SetNotNilFileID(value *uint64) *ApkUpdate {
+	if value != nil {
+		return _m.SetFileID(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkUpdateOne) SetNotNilFileID(value *uint64) *ApkUpdateOne {
+	if value != nil {
+		return _m.SetFileID(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *ApkCreate) SetNotNilFileID(value *uint64) *ApkCreate {
+	if value != nil {
+		return _m.SetFileID(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
 func (_m *ApkUpdate) SetNotNilFileSize(value *uint64) *ApkUpdate {
 	if value != nil {
 		return _m.SetFileSize(*value)

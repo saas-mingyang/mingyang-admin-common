@@ -22,6 +22,7 @@ func (Apk) Fields() []ent.Field {
 			Comment("版本号"),
 		field.String("version_code").Unique().
 			Comment("版本代码(内部版本号)"),
+		field.Uint64("file_id").Comment("文件id"),
 		field.Uint64("file_size").
 			Default(0).
 			Optional().

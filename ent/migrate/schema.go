@@ -19,6 +19,7 @@ var (
 		{Name: "name", Type: field.TypeString, Comment: "APK名称"},
 		{Name: "version", Type: field.TypeString, Comment: "版本号"},
 		{Name: "version_code", Type: field.TypeString, Unique: true, Comment: "版本代码(内部版本号)"},
+		{Name: "file_id", Type: field.TypeUint64, Comment: "文件id"},
 		{Name: "file_size", Type: field.TypeUint64, Nullable: true, Comment: "文件大小", Default: 0},
 		{Name: "file_url", Type: field.TypeString, Comment: "文件id ｜ 下载地址"},
 		{Name: "md5", Type: field.TypeString, Nullable: true, Comment: "文件MD5值"},

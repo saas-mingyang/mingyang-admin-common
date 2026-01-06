@@ -94,6 +94,12 @@ func (_c *ApkCreate) SetVersionCode(v string) *ApkCreate {
 	return _c
 }
 
+// SetFileID sets the "file_id" field.
+func (_c *ApkCreate) SetFileID(v uint64) *ApkCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
 // SetFileSize sets the "file_size" field.
 func (_c *ApkCreate) SetFileSize(v uint64) *ApkCreate {
 	_c.mutation.SetFileSize(v)
@@ -303,7 +309,7 @@ func (_c *ApkCreate) defaults() {
 	}
 }
 
-// check runs all checks and app-defined validators on the builder.
+// check runs all checks and user-defined validators on the builder.
 func (_c *ApkCreate) check() error {
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Apk.created_at"`)}
@@ -322,6 +328,9 @@ func (_c *ApkCreate) check() error {
 	}
 	if _, ok := _c.mutation.VersionCode(); !ok {
 		return &ValidationError{Name: "version_code", err: errors.New(`ent: missing required field "Apk.version_code"`)}
+	}
+	if _, ok := _c.mutation.FileID(); !ok {
+		return &ValidationError{Name: "file_id", err: errors.New(`ent: missing required field "Apk.file_id"`)}
 	}
 	if _, ok := _c.mutation.FileURL(); !ok {
 		return &ValidationError{Name: "file_url", err: errors.New(`ent: missing required field "Apk.file_url"`)}
@@ -394,6 +403,10 @@ func (_c *ApkCreate) createSpec() (*Apk, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.VersionCode(); ok {
 		_spec.SetField(apk.FieldVersionCode, field.TypeString, value)
 		_node.VersionCode = value
+	}
+	if value, ok := _c.mutation.FileID(); ok {
+		_spec.SetField(apk.FieldFileID, field.TypeUint64, value)
+		_node.FileID = value
 	}
 	if value, ok := _c.mutation.FileSize(); ok {
 		_spec.SetField(apk.FieldFileSize, field.TypeUint64, value)

@@ -31,6 +31,8 @@ type Apk struct {
 	Version string `json:"version,omitempty"`
 	// 版本代码(内部版本号)
 	VersionCode string `json:"version_code,omitempty"`
+	// 文件id
+	FileID uint64 `json:"file_id,omitempty"`
 	// 文件大小
 	FileSize uint64 `json:"file_size,omitempty"`
 	// 文件id ｜ 下载地址
@@ -63,7 +65,7 @@ func (*Apk) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apk.FieldIsForceUpdate:
 			values[i] = new(sql.NullBool)
-		case apk.FieldID, apk.FieldStatus, apk.FieldTenantID, apk.FieldFileSize, apk.FieldDownloadCount:
+		case apk.FieldID, apk.FieldStatus, apk.FieldTenantID, apk.FieldFileID, apk.FieldFileSize, apk.FieldDownloadCount:
 			values[i] = new(sql.NullInt64)
 		case apk.FieldName, apk.FieldVersion, apk.FieldVersionCode, apk.FieldFileURL, apk.FieldMd5, apk.FieldSha1, apk.FieldSha256, apk.FieldPackageName, apk.FieldDescription, apk.FieldUpdateLog, apk.FieldCategory:
 			values[i] = new(sql.NullString)
@@ -131,6 +133,12 @@ func (_m *Apk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field version_code", values[i])
 			} else if value.Valid {
 				_m.VersionCode = value.String
+			}
+		case apk.FieldFileID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = uint64(value.Int64)
 			}
 		case apk.FieldFileSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -219,7 +227,7 @@ func (_m *Apk) Update() *ApkUpdateOne {
 }
 
 // Unwrap unwraps the Apk entity that was returned from a transaction after it was closed,
-// so that all future queries will be executed through the device which created the transaction.
+// so that all future queries will be executed through the driver which created the transaction.
 func (_m *Apk) Unwrap() *Apk {
 	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
@@ -254,6 +262,9 @@ func (_m *Apk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version_code=")
 	builder.WriteString(_m.VersionCode)
+	builder.WriteString(", ")
+	builder.WriteString("file_id=")
+	builder.WriteString(fmt.Sprintf("%v", _m.FileID))
 	builder.WriteString(", ")
 	builder.WriteString("file_size=")
 	builder.WriteString(fmt.Sprintf("%v", _m.FileSize))

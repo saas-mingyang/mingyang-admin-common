@@ -27,6 +27,8 @@ const (
 	FieldVersion = "version"
 	// FieldVersionCode holds the string denoting the version_code field in the database.
 	FieldVersionCode = "version_code"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
 	// FieldFileSize holds the string denoting the file_size field in the database.
 	FieldFileSize = "file_size"
 	// FieldFileURL holds the string denoting the file_url field in the database.
@@ -63,6 +65,7 @@ var Columns = []string{
 	FieldName,
 	FieldVersion,
 	FieldVersionCode,
+	FieldFileID,
 	FieldFileSize,
 	FieldFileURL,
 	FieldMd5,
@@ -146,6 +149,11 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 // ByVersionCode orders the results by the version_code field.
 func ByVersionCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersionCode, opts...).ToFunc()
+}
+
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
 }
 
 // ByFileSize orders the results by the file_size field.

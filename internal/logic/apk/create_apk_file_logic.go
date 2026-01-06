@@ -43,6 +43,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		SetPackageName(req.PackageName).
 		SetNillableFileSize(req.FileSize).
 		SetCategory(req.Category).
+		SetFileID(req.FileId).
 		Save(l.ctx)
 	if err != nil {
 		fmt.Printf("create apk error: %v", err)

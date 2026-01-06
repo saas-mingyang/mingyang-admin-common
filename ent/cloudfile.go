@@ -202,7 +202,7 @@ func (_m *CloudFile) Update() *CloudFileUpdateOne {
 }
 
 // Unwrap unwraps the CloudFile entity that was returned from a transaction after it was closed,
-// so that all future queries will be executed through the device which created the transaction.
+// so that all future queries will be executed through the driver which created the transaction.
 func (_m *CloudFile) Unwrap() *CloudFile {
 	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {

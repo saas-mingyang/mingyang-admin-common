@@ -19,8 +19,7 @@ func CheckOverSize(ctx context.Context, svCtx *svc.ServiceContext, fileType stri
 	} else if fileType == "audio" && size > svCtx.Config.UploadConf.MaxAudioSize {
 		return errorx.NewCodeError(errorcode.InvalidArgument,
 			svCtx.Trans.Trans(ctx, "file.overSizeError"))
-	} else if fileType != "image" && fileType != "video" && fileType != "audio" &&
-		size > svCtx.Config.UploadConf.MaxOtherSize {
+	} else if fileType == "apk" && size > svCtx.Config.UploadConf.MaxApkSize {
 		return errorx.NewCodeError(errorcode.InvalidArgument,
 			svCtx.Trans.Trans(ctx, "file.overSizeError"))
 	}
