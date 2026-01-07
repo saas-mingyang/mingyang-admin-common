@@ -2466,6 +2466,97 @@
     },
     "UploadProgressResp": {
       "type": "object",
+      "properties": {
+        "bucket": {
+          "description": "Bucket 云存储桶名称\n文件存储的目标存储桶，用于区分不同的存储空间",
+          "type": "string",
+          "x-go-name": "Bucket"
+        },
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "currentPart": {
+          "description": "CurrentPart 当前正在上传的分片序号\n从1开始计数，表示当前正在上传第几个分片",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CurrentPart"
+        },
+        "fileName": {
+          "description": "FileName 原始文件名（用户上传的文件名）\n包含扩展名，如：example.jpg",
+          "type": "string",
+          "x-go-name": "FileName"
+        },
+        "key": {
+          "description": "Key 文件在云存储中的唯一路径标识\n格式示例：2024-01-15/tenant_id/file_type/filename.ext\n包含目录结构和文件名，确保文件唯一性",
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        },
+        "percentage": {
+          "description": "Percentage 上传百分比（0.0 - 100.0）\n计算方式：(Uploaded / TotalSize) * 100\n前端可用于显示进度条",
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Percentage"
+        },
+        "provider": {
+          "description": "Provider 云存储服务提供商\n枚举值：aws_s3、aliyun_oss、tencent_cos、qiniu_kodo等\n表示文件上传到哪个云存储服务",
+          "type": "string",
+          "x-go-name": "Provider"
+        },
+        "speed": {
+          "description": "Speed 上传速度（KB/s，千字节每秒）\n实时计算的平均上传速度，用于预估剩余时间\n计算方式：Uploaded / 已用时间 / 1024",
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Speed"
+        },
+        "startTime": {
+          "description": "StartTime 上传开始时间\n记录上传任务开始的时间戳，用于计算已用时间和上传速度",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "StartTime"
+        },
+        "status": {
+          "description": "Status 上传状态\n枚举值：preparing(准备中)、uploading(上传中)、completed(已完成)、failed(失败)\n状态流转：preparing → uploading → completed/failed",
+          "type": "string",
+          "x-go-name": "Status"
+        },
+        "totalParts": {
+          "description": "TotalParts 总分片数（仅分片上传时有效）\n大文件分片上传时，文件被分割成的总块数\n计算方式：ceil(TotalSize / chunkSize)",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "TotalParts"
+        },
+        "totalSize": {
+          "description": "TotalSize 文件总大小（字节）\n完整文件的字节数，用于计算上传百分比",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "TotalSize"
+        },
+        "uploadId": {
+          "description": "UploadID 上传任务唯一标识符,使用雪花算法生成，用于查询和跟踪特定上传任务 对应文件Id",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "UploadID"
+        },
+        "uploaded": {
+          "description": "Uploaded 已上传字节数\n实时更新的已成功上传的字节数",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Uploaded"
+        },
+        "userId": {
+          "description": "UserID 用户唯一标识符\n上传文件的用户ID，用于按用户查询上传任务",
+          "type": "string",
+          "x-go-name": "UserID"
+        }
+      },
       "x-go-package": "mingyang-admin-simple-admin-file/internal/types"
     },
     "UploadResp": {

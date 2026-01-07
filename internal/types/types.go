@@ -337,6 +337,54 @@ type CloudFileDeleteReq struct {
 
 // swagger:model UploadProgressResp
 type UploadProgressResp struct {
+	BaseMsgResp
+	// UploadID 上传任务唯一标识符,使用雪花算法生成，用于查询和跟踪特定上传任务 对应文件Id
+	UploadID uint64 `json:"uploadId"`
+	// FileName 原始文件名（用户上传的文件名）
+	// 包含扩展名，如：example.jpg
+	FileName string `json:"fileName"`
+	// TotalSize 文件总大小（字节）
+	// 完整文件的字节数，用于计算上传百分比
+	TotalSize int64 `json:"totalSize"`
+	// Uploaded 已上传字节数
+	// 实时更新的已成功上传的字节数
+	Uploaded int64 `json:"uploaded"`
+	// TotalParts 总分片数（仅分片上传时有效）
+	// 大文件分片上传时，文件被分割成的总块数
+	// 计算方式：ceil(TotalSize / chunkSize)
+	TotalParts int `json:"totalParts"`
+	// CurrentPart 当前正在上传的分片序号
+	// 从1开始计数，表示当前正在上传第几个分片
+	CurrentPart int `json:"currentPart"`
+	// Percentage 上传百分比（0.0 - 100.0）
+	// 计算方式：(Uploaded / TotalSize) * 100
+	// 前端可用于显示进度条
+	Percentage float64 `json:"percentage"`
+	// Speed 上传速度（KB/s，千字节每秒）
+	// 实时计算的平均上传速度，用于预估剩余时间
+	// 计算方式：Uploaded / 已用时间 / 1024
+	Speed float64 `json:"speed"`
+	// Status 上传状态
+	// 枚举值：preparing(准备中)、uploading(上传中)、completed(已完成)、failed(失败)
+	// 状态流转：preparing → uploading → completed/failed
+	Status string `json:"status"`
+	// StartTime 上传开始时间
+	// 记录上传任务开始的时间戳，用于计算已用时间和上传速度
+	StartTime int64 `json:"startTime"`
+	// UserID 用户唯一标识符
+	// 上传文件的用户ID，用于按用户查询上传任务
+	UserID string `json:"userId"`
+	// Provider 云存储服务提供商
+	// 枚举值：aws_s3、aliyun_oss、tencent_cos、qiniu_kodo等
+	// 表示文件上传到哪个云存储服务
+	Provider string `json:"provider"`
+	// Bucket 云存储桶名称
+	// 文件存储的目标存储桶，用于区分不同的存储空间
+	Bucket string `json:"bucket"`
+	// Key 文件在云存储中的唯一路径标识
+	// 格式示例：2024-01-15/tenant_id/file_type/filename.ext
+	// 包含目录结构和文件名，确保文件唯一性
+	Key string `json:"key"`
 }
 
 // The response data of storage provider information | 服务提供商信息
