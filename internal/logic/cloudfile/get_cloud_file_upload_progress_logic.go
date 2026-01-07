@@ -34,10 +34,25 @@ func NewGetCloudFileUploadProgressLogic(ctx context.Context, svcCtx *svc.Service
 // 说明:
 //   - 根据uploadId查询特定上传任务的进度信息
 //   - 支持断点续传、进度显示等场景
-func (l *GetCloudFileUploadProgressLogic) GetCloudFileUploadProgress(req *types.UUIDReq) (resp *types.UploadProgressResp, err error) {
-	logx.Infow("查询多个上传进度",
-		logx.Field("UploadIDs", req.Id),
-		logx.Field("userId", l.ctx.Value("userId")))
+func (l *GetCloudFileUploadProgressLogic) GetCloudFileUploadProgress(req *types.IDReq) (resp *types.UploadProgressResp, err error) {
+	progress, err := GetUploadProgress(req.Id)
 
-	return
+	if err != nil {
+		return nil, err
+	}
+	return &types.UploadProgressResp{
+		UploadID:    req.Id,
+		FileName:    progress.FileName,
+		Key:         progress.Key,
+		Bucket:      progress.Bucket,
+		Provider:    progress.Provider,
+		Status:      progress.Status,
+		TotalSize:   progress.TotalSize,
+		TotalParts:  progress.TotalParts,
+		CurrentPart: progress.CurrentPart,
+		Uploaded:    progress.Uploaded,
+		Percentage:  progress.Percentage,
+		Speed:       progress.Speed,
+		StartTime:   progress.StartTime,
+	}, nil
 }

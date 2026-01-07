@@ -716,3 +716,28 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 
 	return "", fmt.Errorf("云存储客户端未找到: %s", provider)
 }
+
+// GetUploadProgress 查询上传进度
+func GetUploadProgress(uploadId uint64) (*types.UploadProgressResp, error) {
+	// 从进度管理器获取进度信息
+	progress, exists := progressManager.GetProgress(uploadId)
+	if !exists {
+		return nil, errorx.NewCodeNotFoundError("file.uploadProgressNotFound")
+	}
+	// 返回进度信息
+	return &types.UploadProgressResp{
+		UploadID:    progress.UploadID,
+		FileName:    progress.FileName,
+		TotalSize:   progress.TotalSize,
+		Uploaded:    progress.Uploaded,
+		TotalParts:  progress.TotalParts,
+		CurrentPart: progress.CurrentPart,
+		Percentage:  progress.Percentage,
+		Speed:       progress.Speed,
+		Status:      progress.Status,
+		StartTime:   progress.StartTime.Unix(),
+		Provider:    progress.Provider,
+		Bucket:      progress.Bucket,
+		Key:         progress.Key,
+	}, nil
+}
