@@ -4,13 +4,13 @@ package runtime
 
 import (
 	"context"
-	"mingyang-admin-simple-admin-file/ent/apk"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang-admin-simple-admin-file/ent/file"
-	"mingyang-admin-simple-admin-file/ent/filetag"
-	"mingyang-admin-simple-admin-file/ent/schema"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
+	"mingyang.com/admin-simple-admin-file/ent/apk"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang.com/admin-simple-admin-file/ent/file"
+	"mingyang.com/admin-simple-admin-file/ent/filetag"
+	"mingyang.com/admin-simple-admin-file/ent/schema"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 	"time"
 
 	"entgo.io/ent"

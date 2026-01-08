@@ -11,9 +11,9 @@ import (
 	"github.com/qiniu/go-sdk/v7/storage"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
 	"strings"
 	"time"
 )

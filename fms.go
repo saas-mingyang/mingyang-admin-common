@@ -27,9 +27,9 @@ import (
 	"flag"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
-	"mingyang-admin-simple-admin-file/internal/config"
-	"mingyang-admin-simple-admin-file/internal/handler"
-	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/config"
+	"mingyang.com/admin-simple-admin-file/internal/handler"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
 )
 
 var configFile = flag.String("f", "etc/fms.yaml", "the config file")

@@ -6,7 +6,7 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/enum/errorcode"
 	"github.com/zeromicro/go-zero/core/errorx"
 
-	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
 )
 
 func CheckOverSize(ctx context.Context, svCtx *svc.ServiceContext, fileType string, size int64) error {

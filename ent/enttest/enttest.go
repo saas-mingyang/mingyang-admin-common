@@ -5,11 +5,11 @@ package enttest
 import (
 	"context"
 
-	"mingyang-admin-simple-admin-file/ent"
+	"mingyang.com/admin-simple-admin-file/ent"
 	// required by schema hooks.
-	_ "mingyang-admin-simple-admin-file/ent/runtime"
+	_ "mingyang.com/admin-simple-admin-file/ent/runtime"
 
-	"mingyang-admin-simple-admin-file/ent/migrate"
+	"mingyang.com/admin-simple-admin-file/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
 )

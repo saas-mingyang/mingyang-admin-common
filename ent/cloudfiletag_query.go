@@ -8,9 +8,9 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"

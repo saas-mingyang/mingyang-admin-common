@@ -4,7 +4,7 @@ package ent
 
 import (
 	"fmt"
-	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
 	"strings"
 	"time"
 

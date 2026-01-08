@@ -6,9 +6,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"

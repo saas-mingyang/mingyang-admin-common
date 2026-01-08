@@ -2,4 +2,4 @@
 
 package ent
 
-// The schema-stitching logic is generated in mingyang-admin-simple-admin-file/ent/runtime/runtime.go
+// The schema-stitching logic is generated in mingyang.com/admin-simple-admin-file/ent/runtime/runtime.go

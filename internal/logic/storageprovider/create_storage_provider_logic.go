@@ -3,10 +3,10 @@ package storageprovider
 import (
 	"context"
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
-	"mingyang-admin-simple-admin-file/internal/utils/cloud"
-	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/internal/utils/cloud"
+	"mingyang.com/admin-simple-admin-file/internal/utils/dberrorhandler"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 

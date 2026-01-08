@@ -5,9 +5,9 @@ import (
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"mingyang-admin-simple-admin-file/internal/logic/apk"
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/internal/logic/apk"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
 )
 
 // swagger:route post /apk/get apk GetApkFile

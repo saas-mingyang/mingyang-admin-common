@@ -3,8 +3,8 @@ package cloudfile
 import (
 	"context"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
-	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/logic/cloudfile"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
 	"net/http"
 	"time"
 )

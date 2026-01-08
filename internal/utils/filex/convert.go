@@ -8,7 +8,7 @@ import (
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 
-	"mingyang-admin-simple-admin-file/internal/enum/filetype"
+	"mingyang.com/admin-simple-admin-file/internal/enum/filetype"
 )
 
 // ConvertFileTypeToUint8 converts file type string to uint8.

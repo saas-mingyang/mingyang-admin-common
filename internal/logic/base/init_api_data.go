@@ -3,7 +3,7 @@ package base
 import (
 	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/pointy"
-	"mingyang-admin-simple-admin-core/rpc/types/core"
+	"mingyang.com/admin-simple-admin-core/rpc/types/core"
 )
 
 func (l *InitDatabaseLogic) insertApiData() error {

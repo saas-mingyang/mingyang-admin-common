@@ -9,8 +9,8 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
 	"github.com/zeromicro/go-zero/core/logx"
-	"mingyang-admin-simple-admin-file/ent"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
+	"mingyang.com/admin-simple-admin-file/ent"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 )
 
 type CloudServiceGroup struct {

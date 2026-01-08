@@ -5,16 +5,16 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 	"os"
 
-	file2 "mingyang-admin-simple-admin-file/ent/file"
+	file2 "mingyang.com/admin-simple-admin-file/ent/file"
 
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 
-	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
-	"mingyang-admin-simple-admin-file/internal/utils/entx"
+	"mingyang.com/admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang.com/admin-simple-admin-file/internal/utils/entx"
 
-	"mingyang-admin-simple-admin-file/ent"
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/ent"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

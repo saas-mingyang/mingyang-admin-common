@@ -6,8 +6,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"mingyang-admin-simple-admin-file/ent/cloudfile"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"

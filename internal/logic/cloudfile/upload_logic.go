@@ -25,12 +25,12 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
-	"mingyang-admin-simple-admin-file/ent"
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
-	"mingyang-admin-simple-admin-file/internal/utils/cloud"
-	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
-	"mingyang-admin-simple-admin-file/internal/utils/filex"
+	"mingyang.com/admin-simple-admin-file/ent"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/internal/utils/cloud"
+	"mingyang.com/admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang.com/admin-simple-admin-file/internal/utils/filex"
 )
 
 // 定义分片大小

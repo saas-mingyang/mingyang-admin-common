@@ -5,7 +5,7 @@ package hook
 import (
 	"context"
 	"fmt"
-	"mingyang-admin-simple-admin-file/ent"
+	"mingyang.com/admin-simple-admin-file/ent"
 )
 
 // The ApkFunc type is an adapter to allow the use of ordinary

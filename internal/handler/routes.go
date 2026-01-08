@@ -6,14 +6,14 @@ package handler
 import (
 	"net/http"
 
-	apk "mingyang-admin-simple-admin-file/internal/handler/apk"
-	base "mingyang-admin-simple-admin-file/internal/handler/base"
-	cloudfile "mingyang-admin-simple-admin-file/internal/handler/cloudfile"
-	cloudfiletag "mingyang-admin-simple-admin-file/internal/handler/cloudfiletag"
-	file "mingyang-admin-simple-admin-file/internal/handler/file"
-	filetag "mingyang-admin-simple-admin-file/internal/handler/filetag"
-	storageprovider "mingyang-admin-simple-admin-file/internal/handler/storageprovider"
-	"mingyang-admin-simple-admin-file/internal/svc"
+	apk "mingyang.com/admin-simple-admin-file/internal/handler/apk"
+	base "mingyang.com/admin-simple-admin-file/internal/handler/base"
+	cloudfile "mingyang.com/admin-simple-admin-file/internal/handler/cloudfile"
+	cloudfiletag "mingyang.com/admin-simple-admin-file/internal/handler/cloudfiletag"
+	file "mingyang.com/admin-simple-admin-file/internal/handler/file"
+	filetag "mingyang.com/admin-simple-admin-file/internal/handler/filetag"
+	storageprovider "mingyang.com/admin-simple-admin-file/internal/handler/storageprovider"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

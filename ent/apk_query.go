@@ -6,8 +6,8 @@ import (
 	"context"
 	"fmt"
 	"math"
-	"mingyang-admin-simple-admin-file/ent/apk"
-	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/apk"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"

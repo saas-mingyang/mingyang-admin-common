@@ -5,9 +5,9 @@ import (
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/internal/logic/cloudfile"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
 )
 
 // swagger:route post /cloud_file cloudfile GetCloudFileById

@@ -5,7 +5,7 @@ package privacy
 import (
 	"context"
 
-	"mingyang-admin-simple-admin-file/ent"
+	"mingyang.com/admin-simple-admin-file/ent"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"

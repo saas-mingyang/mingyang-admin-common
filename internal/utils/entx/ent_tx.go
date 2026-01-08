@@ -6,7 +6,7 @@ import (
 
 	"github.com/zeromicro/go-zero/core/logx"
 
-	"mingyang-admin-simple-admin-file/ent"
+	"mingyang.com/admin-simple-admin-file/ent"
 )
 
 // WithTx uses transaction in ent.

@@ -1,4 +1,4 @@
-module mingyang-admin-simple-admin-file
+module mingyang.com/admin-simple-admin-file
 
 go 1.25.0
 
@@ -10,9 +10,8 @@ require (
 	github.com/qiniu/go-sdk/v7 v7.25.4
 	github.com/redis/go-redis/v9 v9.16.0
 	github.com/saas-mingyang/mingyang-admin-common v0.4.3
-	github.com/zeromicro/go-zero v1.9.2
+	github.com/zeromicro/go-zero v1.9.1
 	google.golang.org/grpc v1.76.0
-	mingyang-admin-simple-admin-core v0.0.1
 )
 
 require (
@@ -154,4 +153,4 @@ require (
 
 replace github.com/zeromicro/go-zero v1.9.1 => github.com/suyuan32/simple-admin-tools v1.9.1
 
-replace mingyang-admin-simple-admin-core v0.0.1 => ../simple-admin-core-tenant
+

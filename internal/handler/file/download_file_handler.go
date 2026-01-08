@@ -7,9 +7,9 @@ import (
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"mingyang-admin-simple-admin-file/internal/logic/file"
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/internal/logic/file"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
 )
 
 // swagger:route get /file/download/{id} file DownloadFile

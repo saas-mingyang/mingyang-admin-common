@@ -4,7 +4,7 @@ package ent
 
 import (
 	"fmt"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 	"strings"
 	"time"
 

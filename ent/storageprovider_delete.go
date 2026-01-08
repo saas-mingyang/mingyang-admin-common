@@ -4,8 +4,8 @@ package ent
 
 import (
 	"context"
-	"mingyang-admin-simple-admin-file/ent/predicate"
-	"mingyang-admin-simple-admin-file/ent/storageprovider"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

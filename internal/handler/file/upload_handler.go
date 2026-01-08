@@ -5,8 +5,8 @@ import (
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"mingyang-admin-simple-admin-file/internal/logic/file"
-	"mingyang-admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/logic/file"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
 )
 
 // swagger:route post /upload file Upload

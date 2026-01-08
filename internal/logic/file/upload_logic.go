@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"io"
-	"mingyang-admin-simple-admin-file/internal/logic/cloudfile"
+	"mingyang.com/admin-simple-admin-file/internal/logic/cloudfile"
 	"net/http"
 	"os"
 	"path"
@@ -21,10 +21,10 @@ import (
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
-	"mingyang-admin-simple-admin-file/internal/utils/dberrorhandler"
-	"mingyang-admin-simple-admin-file/internal/utils/filex"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/internal/utils/dberrorhandler"
+	"mingyang.com/admin-simple-admin-file/internal/utils/filex"
 )
 
 type UploadLogic struct {

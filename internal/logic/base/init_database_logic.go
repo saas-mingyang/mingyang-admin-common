@@ -12,8 +12,8 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/zeromicro/go-zero/core/errorx"
 
-	"mingyang-admin-simple-admin-file/internal/svc"
-	"mingyang-admin-simple-admin-file/internal/types"
+	"mingyang.com/admin-simple-admin-file/internal/svc"
+	"mingyang.com/admin-simple-admin-file/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

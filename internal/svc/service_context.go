@@ -6,15 +6,15 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
-	"mingyang-admin-simple-admin-core/rpc/coreclient"
+	"mingyang.com/admin-simple-admin-core/rpc/coreclient"
 
-	"mingyang-admin-simple-admin-file/internal/utils/cloud"
+	"mingyang.com/admin-simple-admin-file/internal/utils/cloud"
 
-	"mingyang-admin-simple-admin-file/ent"
-	_ "mingyang-admin-simple-admin-file/ent/runtime"
-	"mingyang-admin-simple-admin-file/internal/config"
-	i18n2 "mingyang-admin-simple-admin-file/internal/i18n"
-	"mingyang-admin-simple-admin-file/internal/middleware"
+	"mingyang.com/admin-simple-admin-file/ent"
+	_ "mingyang.com/admin-simple-admin-file/ent/runtime"
+	"mingyang.com/admin-simple-admin-file/internal/config"
+	i18n2 "mingyang.com/admin-simple-admin-file/internal/i18n"
+	"mingyang.com/admin-simple-admin-file/internal/middleware"
 )
 
 type ServiceContext struct {

@@ -3,7 +3,7 @@
 package file
 
 import (
-	"mingyang-admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
