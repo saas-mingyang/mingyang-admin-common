@@ -8,7 +8,7 @@ Middlewares:
 
 Etcd:
   Hosts:
-    - 192.168.201.228:32487
+    - mingyang-etcd-test-service.mingyang-admin.svc.cluster.local:2379
   Key: fms.api
 
 Auth:
@@ -39,7 +39,7 @@ DatabaseConf:
   Type: postgres
   Host: 192.168.201.188
   Port: 5432
-  DBName: simple_admin_uat
+  DBName: simple_admin_dev
   Username: postgres
   Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
@@ -54,7 +54,7 @@ CasbinDatabaseConf:
   Type: postgres
   Host: 192.168.201.188
   Port: 5432
-  DBName: simple_admin_uat
+  DBName: simple_admin_dev
   Username: postgres
   Password: AM38xymTdFree4Fh
   MaxOpenConn: 100
@@ -76,7 +76,7 @@ CoreRpc:
   #Target: 127.0.0.1:9101
   Etcd:
     Hosts:
-      - 192.168.201.228:32487  # 共享etcd地址
+      - mingyang-etcd-test-service.mingyang-admin.svc.cluster.local:2379  # 共享etcd地址
     Key: core.rpc
   Enabled: true
 
