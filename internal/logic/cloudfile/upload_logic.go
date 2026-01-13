@@ -368,12 +368,6 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	// 使用后缀判断文件类型
 	fileType := getFileTypeByExtension(handler.Filename)
 
-	logx.Infow("文件上传信息",
-		logx.Field("文件名", handler.Filename),
-		logx.Field("文件大小", formatFileSize(handler.Size)),
-		logx.Field("文件类型", fileType),
-		logx.Field("Content-Type", handler.Header.Get("Content-Type")))
-
 	// judge if the file size is over max size
 	// 判断文件大小是否超过设定值
 	err = filex.CheckOverSize(l.ctx, l.svcCtx, fileType, handler.Size)
@@ -434,44 +428,33 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	// 添加进度记录
 	progressManager.AddProgress(uploadId, progress)
 
-	// 启动一个goroutine定期清理旧的进度记录
-	go func() {
-		for {
-			time.Sleep(1 * time.Hour)
-			progressManager.CleanupOldProgress()
-		}
-	}()
-
 	// 开始上传
 	progressManager.UpdateStatus(uploadId, "uploading")
 
-	// 根据文件大小选择上传方式
-	var url string
-	if handler.Size < smallFileThreshold {
-		url, err = l.UploadToProviderSimple(file, relativeSrc, provider, tenantId, uploadId)
-	} else {
-		url, err = l.UploadToProviderMultipart(file, relativeSrc, provider, tenantId, uploadId, handler.Size)
-	}
+	// 移除主函数中的 defer file.Close()
 
-	if err != nil {
-		progressManager.UpdateStatus(uploadId, "failed")
-		logx.Errorw("上传到云存储失败",
-			logx.Field("error", err),
-			logx.Field("fileName", handler.Filename),
-			logx.Field("size", handler.Size),
-			logx.Field("provider", provider))
-		return nil, err
-	}
+	// 启动goroutine进行上传
+	go func(file multipart.File) {
+		defer file.Close()
+		// 创建新的上下文，设置较长的超时时间，例如30分钟
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+		defer cancel()
 
-	// 更新状态为完成
-	progressManager.UpdateStatus(uploadId, "completed")
-
-	logx.Infow("文件上传成功",
-		logx.Field("url", url),
-		logx.Field("fileName", handler.Filename),
-		logx.Field("size", handler.Size),
-		logx.Field("provider", provider),
-		logx.Field("uploadId", uploadId))
+		var err error
+		if handler.Size < smallFileThreshold {
+			err = l.UploadToProviderSimple(ctx, file, relativeSrc, provider, tenantId, uploadId)
+		} else {
+			err = l.UploadToProviderMultipart(ctx, file, relativeSrc, provider, tenantId, uploadId, handler.Size)
+		}
+		if err != nil {
+			progressManager.UpdateStatus(uploadId, "failed")
+			logx.Errorw("上传失败", logx.Field("uploadId", uploadId), logx.Field("error", err))
+			// 可以选择删除数据库记录，或者更新记录状态为失败
+		} else {
+			progressManager.UpdateStatus(uploadId, "completed")
+			logx.Infow("上传成功", logx.Field("uploadId", uploadId))
+		}
+	}(file)
 
 	service := l.svcCtx.CloudStorage.Service[tenantId]
 	storageProvider := service.ProviderData[provider]
@@ -482,13 +465,10 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 		SetName(fileName).
 		SetFileType(filex.ConvertFileTypeToUint8(fileType)).
 		SetStorageProvidersID(storageProvider.Id).
-		SetURL(url).
 		SetSize(uint64(handler.Size)).
-		SetUserID(userId)
-
-	if fileTagId != 0 {
-		query = query.AddTagIDs(fileTagId)
-	}
+		SetURL(relativeSrc).
+		SetUserID(userId).
+		AddTagIDs(fileTagId)
 
 	data, err := query.Save(l.ctx)
 
@@ -496,17 +476,12 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, nil)
 	}
 
-	logic := NewGetCloudFileDownloadUrlLogic(l.ctx, l.svcCtx)
-
-	downloadUrl, err := logic.GetCloudFileDownloadUrl(&types.BaseIDInfo{Id: &data.ID})
-
 	if err != nil {
 		return nil, err
 	}
 	return &types.CloudFileInfoResp{
 		BaseDataInfo: types.BaseDataInfo{
-			Code: 0,
-			Msg:  i18n.Success,
+			Msg: i18n.Success,
 		},
 		Data: types.CloudFileInfo{
 			BaseIDInfo: types.BaseIDInfo{
@@ -515,7 +490,6 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 			},
 			State:       pointy.GetPointer(data.State),
 			Name:        pointy.GetPointer(data.Name),
-			Url:         pointy.GetPointer(*downloadUrl.Data.Url),
 			RelativeSrc: pointy.GetPointer(relativeSrc),
 			Size:        pointy.GetPointer(data.Size),
 			FileType:    pointy.GetPointer(data.FileType),
@@ -525,16 +499,13 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 }
 
 // UploadToProviderSimple 普通上传（带超时和重试）
-func (l *UploadLogic) UploadToProviderSimple(file multipart.File, fileName, provider string, tenantId uint64, uploadId uint64) (url string, err error) {
+func (l *UploadLogic) UploadToProviderSimple(ctx context.Context, file multipart.File, fileName, provider string, tenantId uint64, uploadId uint64) (err error) {
 	logx.Infow("普通上传",
 		logx.Field("文件名", fileName),
 		logx.Field("提供商", provider),
 		logx.Field("uploadId", uploadId))
 
 	if client, ok := l.svcCtx.CloudStorage.Service[tenantId].CloudStorage[provider]; ok {
-		// 设置较长的超时时间
-		ctx, cancel := context.WithTimeout(l.ctx, 10*time.Minute)
-		defer cancel()
 
 		// 创建带进度的ReadSeeker
 		// multipart.File已经实现了io.ReadSeeker，所以我们可以直接使用
@@ -551,7 +522,6 @@ func (l *UploadLogic) UploadToProviderSimple(file multipart.File, fileName, prov
 			Body:   progressReader,
 		})
 		if err != nil {
-			fmt.Printf("failed to upload object %s\n", err)
 			logx.Errorw("failed to upload object", logx.Field("detail", err))
 
 			// 检查错误类型
@@ -564,21 +534,21 @@ func (l *UploadLogic) UploadToProviderSimple(file multipart.File, fileName, prov
 				if aerr.Code() == request.CanceledErrorCode {
 					// 检查是否超时
 					if errors.Is(err, context.DeadlineExceeded) {
-						return "", errorx.NewCodeInternalError("上传超时，请重试或使用分片上传")
+						return errorx.NewCodeInternalError("上传超时，请重试或使用分片上传")
 					}
-					return "", errorx.NewCodeInternalError("上传被取消")
+					return errorx.NewCodeInternalError("上传被取消")
 				}
 			}
-			return "", errorx.NewCodeInternalError("上传失败")
+			return errorx.NewCodeInternalError("上传失败")
 		}
 		logx.Infow("普通上传成功", logx.Field("fileName", fileName))
-		return fileName, nil
+		return nil
 	}
-	return "", fmt.Errorf("云存储客户端未找到: %s", provider)
+	return errorx.NewInternalError("上传失败")
 }
 
 // UploadToProviderMultipart 分片上传实现
-func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, provider string, tenantId uint64, uploadId uint64, totalSize int64) (url string, err error) {
+func (l *UploadLogic) UploadToProviderMultipart(ctx context.Context, file multipart.File, fileName, provider string, tenantId uint64, uploadId uint64, totalSize int64) (err error) {
 	logx.Infow("开始分片上传",
 		logx.Field("文件名", fileName),
 		logx.Field("提供商", provider),
@@ -590,7 +560,7 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 		bucket := l.svcCtx.CloudStorage.Service[tenantId].ProviderData[provider].Bucket
 
 		// 1. 初始化分片上传
-		createResp, err := client.CreateMultipartUploadWithContext(l.ctx, &s3.CreateMultipartUploadInput{
+		createResp, err := client.CreateMultipartUploadWithContext(ctx, &s3.CreateMultipartUploadInput{
 			Bucket: aws.String(bucket),
 			Key:    aws.String(fileName),
 		})
@@ -599,7 +569,7 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 				logx.Field("error", err),
 				logx.Field("bucket", bucket),
 				logx.Field("key", fileName))
-			return "", err
+			return err
 		}
 
 		uploadS3Id := createResp.UploadId
@@ -621,7 +591,7 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 				logx.Errorw("读取文件分片失败",
 					logx.Field("error", err),
 					logx.Field("partNumber", partNumber))
-				return "", err
+				return err
 			}
 
 			// 如果读取到数据为0，说明文件已读完
@@ -643,7 +613,7 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 					logx.Field("speed", fmt.Sprintf("%.1f KB/s", progress.Speed)))
 			}
 
-			partResp, err := client.UploadPartWithContext(l.ctx, &s3.UploadPartInput{
+			partResp, err := client.UploadPartWithContext(ctx, &s3.UploadPartInput{
 				Bucket:     aws.String(bucket),
 				Key:        aws.String(fileName),
 				UploadId:   uploadS3Id,
@@ -657,7 +627,7 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 					logx.Field("partNumber", partNumber))
 
 				// 尝试中止上传
-				_, abortErr := client.AbortMultipartUploadWithContext(l.ctx, &s3.AbortMultipartUploadInput{
+				_, abortErr := client.AbortMultipartUploadWithContext(ctx, &s3.AbortMultipartUploadInput{
 					Bucket:   aws.String(bucket),
 					Key:      aws.String(fileName),
 					UploadId: uploadS3Id,
@@ -666,7 +636,7 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 					logx.Errorw("中止分片上传失败",
 						logx.Field("error", abortErr))
 				}
-				return "", err
+				return err
 			}
 
 			// 保存完成的分片信息
@@ -684,7 +654,7 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 		}
 
 		// 3. 完成分片上传
-		completeResp, err := client.CompleteMultipartUploadWithContext(l.ctx, &s3.CompleteMultipartUploadInput{
+		_, err = client.CompleteMultipartUploadWithContext(ctx, &s3.CompleteMultipartUploadInput{
 			Bucket:   aws.String(bucket),
 			Key:      aws.String(fileName),
 			UploadId: uploadS3Id,
@@ -696,17 +666,13 @@ func (l *UploadLogic) UploadToProviderMultipart(file multipart.File, fileName, p
 		if err != nil {
 			logx.Errorw("完成分片上传失败",
 				logx.Field("error", err))
-			return "", err
+			return err
 		}
 
-		logx.Infow("分片上传完成",
-			logx.Field("Location", *completeResp.Location),
-			logx.Field("总块数", len(completedParts)))
-
-		return fileName, nil
+		return nil
 	}
 
-	return "", fmt.Errorf("云存储客户端未找到: %s", provider)
+	return errorx.NewInternalError("上传失败")
 }
 
 // GetUploadProgress 查询上传进度
