@@ -1439,7 +1439,7 @@
         },
         "providerId": {
           "description": "Provider ID | 提供商的 ID",
-          "type": "integer",
+          "type": "string",
           "format": "uint64",
           "x-go-name": "ProviderId"
         },
