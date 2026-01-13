@@ -437,10 +437,8 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	// 启动goroutine进行上传
 	go func(file multipart.File) {
 		defer file.Close()
-		// 创建新的上下文，设置较长的超时时间，例如30分钟
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
-		defer cancel()
-
+		ctx := context.Background()
+		ctx = tenantctx.WithTenantIdCtx(ctx, tenantId)
 		var err error
 		if handler.Size < smallFileThreshold {
 			err = l.UploadToProviderSimple(ctx, file, relativeSrc, provider, tenantId, uploadId)
@@ -453,7 +451,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 		} else {
 			progressManager.UpdateStatus(uploadId, "completed")
 			logx.Infow("上传成功", logx.Field("uploadId", uploadId))
-			l.updateFileStatusInDB(uploadId, true)
+			l.updateFileStatusInDB(ctx, uploadId, true)
 		}
 	}(file)
 
@@ -499,12 +497,12 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	}, nil
 }
 
-func (l *UploadLogic) updateFileStatusInDB(fileId uint64, success bool) {
+func (l *UploadLogic) updateFileStatusInDB(ctx context.Context, fileId uint64, success bool) {
 	// 使用事务确保数据一致性
 	err := l.svcCtx.DB.CloudFile.Update().
 		Where(cloudfile.ID(fileId)).
 		SetIsDownloaded(success).
-		Exec(l.ctx)
+		Exec(ctx)
 	if err != nil {
 		logx.Errorw("更新文件状态失败",
 			logx.Field("fileId", fileId),
