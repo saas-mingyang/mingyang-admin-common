@@ -20,7 +20,7 @@ CROSConf:
 
 Log:
   ServiceName: fileTenantManagerLogger
-  Mode: file
+  Mode: info
   Path: /home/data/logs
   Level: info
   Compress: false
