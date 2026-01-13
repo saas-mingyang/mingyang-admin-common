@@ -4,13 +4,13 @@ package ent
 
 import (
 	"fmt"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
-	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 )
 
 // Cloud File Table | 云文件表
@@ -36,6 +36,8 @@ type CloudFile struct {
 	FileType uint8 `json:"file_type,omitempty"`
 	// The app who upload the file | 上传用户的 ID
 	UserID string `json:"user_id,omitempty"`
+	// 是否上传完毕
+	IsDownloaded bool `json:"is_downloaded,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CloudFileQuery when eager-loading is set.
 	Edges                        CloudFileEdges `json:"edges"`
@@ -79,7 +81,7 @@ func (*CloudFile) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case cloudfile.FieldState:
+		case cloudfile.FieldState, cloudfile.FieldIsDownloaded:
 			values[i] = new(sql.NullBool)
 		case cloudfile.FieldID, cloudfile.FieldTenantID, cloudfile.FieldSize, cloudfile.FieldFileType:
 			values[i] = new(sql.NullInt64)
@@ -164,6 +166,12 @@ func (_m *CloudFile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UserID = value.String
 			}
+		case cloudfile.FieldIsDownloaded:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_downloaded", values[i])
+			} else if value.Valid {
+				_m.IsDownloaded = value.Bool
+			}
 		case cloudfile.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field cloud_file_storage_providers", value)
@@ -243,6 +251,9 @@ func (_m *CloudFile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(_m.UserID)
+	builder.WriteString(", ")
+	builder.WriteString("is_downloaded=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDownloaded))
 	builder.WriteByte(')')
 	return builder.String()
 }

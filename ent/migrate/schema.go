@@ -58,6 +58,7 @@ var (
 		{Name: "size", Type: field.TypeUint64, Comment: "The file's size | 文件大小"},
 		{Name: "file_type", Type: field.TypeUint8, Comment: "The file's type | 文件类型"},
 		{Name: "user_id", Type: field.TypeString, Comment: "The app who upload the file | 上传用户的 ID"},
+		{Name: "is_downloaded", Type: field.TypeBool, Nullable: true, Comment: "是否上传完毕", Default: false},
 		{Name: "cloud_file_storage_providers", Type: field.TypeUint64, Nullable: true},
 	}
 	// FmsCloudFilesTable holds the schema information for the "fms_cloud_files" table.
@@ -69,7 +70,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "fms_cloud_files_fms_storage_providers_storage_providers",
-				Columns:    []*schema.Column{FmsCloudFilesColumns[10]},
+				Columns:    []*schema.Column{FmsCloudFilesColumns[11]},
 				RefColumns: []*schema.Column{FmsStorageProvidersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

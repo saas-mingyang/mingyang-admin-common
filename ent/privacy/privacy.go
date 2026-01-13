@@ -5,11 +5,11 @@ package privacy
 import (
 	"context"
 
+	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
 	"mingyang.com/admin-simple-admin-file/ent"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"
-	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
 )
 
 var (

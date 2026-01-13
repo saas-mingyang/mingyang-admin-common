@@ -9,9 +9,8 @@ import (
 	// required by schema hooks.
 	_ "mingyang.com/admin-simple-admin-file/ent/runtime"
 
-	"mingyang.com/admin-simple-admin-file/ent/migrate"
-
 	"entgo.io/ent/dialect/sql/schema"
+	"mingyang.com/admin-simple-admin-file/ent/migrate"
 )
 
 type (

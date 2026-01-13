@@ -4,12 +4,12 @@ package ent
 
 import (
 	"context"
-	"mingyang.com/admin-simple-admin-file/ent/filetag"
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/filetag"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 )
 
 // FileTagDelete is the builder for deleting a FileTag entity.

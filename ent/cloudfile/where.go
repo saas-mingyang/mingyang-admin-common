@@ -3,11 +3,11 @@
 package cloudfile
 
 import (
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -98,6 +98,11 @@ func FileType(v uint8) predicate.CloudFile {
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
 func UserID(v string) predicate.CloudFile {
 	return predicate.CloudFile(sql.FieldEQ(FieldUserID, v))
+}
+
+// IsDownloaded applies equality check predicate on the "is_downloaded" field. It's identical to IsDownloadedEQ.
+func IsDownloaded(v bool) predicate.CloudFile {
+	return predicate.CloudFile(sql.FieldEQ(FieldIsDownloaded, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -513,6 +518,26 @@ func UserIDEqualFold(v string) predicate.CloudFile {
 // UserIDContainsFold applies the ContainsFold predicate on the "user_id" field.
 func UserIDContainsFold(v string) predicate.CloudFile {
 	return predicate.CloudFile(sql.FieldContainsFold(FieldUserID, v))
+}
+
+// IsDownloadedEQ applies the EQ predicate on the "is_downloaded" field.
+func IsDownloadedEQ(v bool) predicate.CloudFile {
+	return predicate.CloudFile(sql.FieldEQ(FieldIsDownloaded, v))
+}
+
+// IsDownloadedNEQ applies the NEQ predicate on the "is_downloaded" field.
+func IsDownloadedNEQ(v bool) predicate.CloudFile {
+	return predicate.CloudFile(sql.FieldNEQ(FieldIsDownloaded, v))
+}
+
+// IsDownloadedIsNil applies the IsNil predicate on the "is_downloaded" field.
+func IsDownloadedIsNil() predicate.CloudFile {
+	return predicate.CloudFile(sql.FieldIsNull(FieldIsDownloaded))
+}
+
+// IsDownloadedNotNil applies the NotNil predicate on the "is_downloaded" field.
+func IsDownloadedNotNil() predicate.CloudFile {
+	return predicate.CloudFile(sql.FieldNotNull(FieldIsDownloaded))
 }
 
 // HasStorageProviders applies the HasEdge predicate on the "storage_providers" edge.

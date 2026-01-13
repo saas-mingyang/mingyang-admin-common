@@ -6,18 +6,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"mingyang.com/admin-simple-admin-file/ent/apk"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang.com/admin-simple-admin-file/ent/file"
-	"mingyang.com/admin-simple-admin-file/ent/filetag"
-	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 	"reflect"
 	"sync"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"mingyang.com/admin-simple-admin-file/ent/apk"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang.com/admin-simple-admin-file/ent/file"
+	"mingyang.com/admin-simple-admin-file/ent/filetag"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 )
 
 // ent aliases to avoid import conflicts in user's code.

@@ -6,15 +6,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
-	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 )
 
 // CloudFileUpdate is the builder for updating CloudFile entities.
@@ -137,6 +137,26 @@ func (_u *CloudFileUpdate) SetNillableUserID(v *string) *CloudFileUpdate {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
+	return _u
+}
+
+// SetIsDownloaded sets the "is_downloaded" field.
+func (_u *CloudFileUpdate) SetIsDownloaded(v bool) *CloudFileUpdate {
+	_u.mutation.SetIsDownloaded(v)
+	return _u
+}
+
+// SetNillableIsDownloaded sets the "is_downloaded" field if the given value is not nil.
+func (_u *CloudFileUpdate) SetNillableIsDownloaded(v *bool) *CloudFileUpdate {
+	if v != nil {
+		_u.SetIsDownloaded(*v)
+	}
+	return _u
+}
+
+// ClearIsDownloaded clears the value of the "is_downloaded" field.
+func (_u *CloudFileUpdate) ClearIsDownloaded() *CloudFileUpdate {
+	_u.mutation.ClearIsDownloaded()
 	return _u
 }
 
@@ -286,6 +306,12 @@ func (_u *CloudFileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(cloudfile.FieldUserID, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.IsDownloaded(); ok {
+		_spec.SetField(cloudfile.FieldIsDownloaded, field.TypeBool, value)
+	}
+	if _u.mutation.IsDownloadedCleared() {
+		_spec.ClearField(cloudfile.FieldIsDownloaded, field.TypeBool)
 	}
 	if _u.mutation.StorageProvidersCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -491,6 +517,26 @@ func (_u *CloudFileUpdateOne) SetNillableUserID(v *string) *CloudFileUpdateOne {
 	return _u
 }
 
+// SetIsDownloaded sets the "is_downloaded" field.
+func (_u *CloudFileUpdateOne) SetIsDownloaded(v bool) *CloudFileUpdateOne {
+	_u.mutation.SetIsDownloaded(v)
+	return _u
+}
+
+// SetNillableIsDownloaded sets the "is_downloaded" field if the given value is not nil.
+func (_u *CloudFileUpdateOne) SetNillableIsDownloaded(v *bool) *CloudFileUpdateOne {
+	if v != nil {
+		_u.SetIsDownloaded(*v)
+	}
+	return _u
+}
+
+// ClearIsDownloaded clears the value of the "is_downloaded" field.
+func (_u *CloudFileUpdateOne) ClearIsDownloaded() *CloudFileUpdateOne {
+	_u.mutation.ClearIsDownloaded()
+	return _u
+}
+
 // SetStorageProvidersID sets the "storage_providers" edge to the StorageProvider entity by ID.
 func (_u *CloudFileUpdateOne) SetStorageProvidersID(id uint64) *CloudFileUpdateOne {
 	_u.mutation.SetStorageProvidersID(id)
@@ -667,6 +713,12 @@ func (_u *CloudFileUpdateOne) sqlSave(ctx context.Context) (_node *CloudFile, er
 	}
 	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(cloudfile.FieldUserID, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.IsDownloaded(); ok {
+		_spec.SetField(cloudfile.FieldIsDownloaded, field.TypeBool, value)
+	}
+	if _u.mutation.IsDownloadedCleared() {
+		_spec.ClearField(cloudfile.FieldIsDownloaded, field.TypeBool)
 	}
 	if _u.mutation.StorageProvidersCleared() {
 		edge := &sqlgraph.EdgeSpec{

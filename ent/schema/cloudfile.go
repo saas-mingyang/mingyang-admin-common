@@ -33,6 +33,10 @@ func (CloudFile) Fields() []ent.Field {
 			Comment("The file's type | 文件类型"),
 		field.String("user_id").
 			Comment("The app who upload the file | 上传用户的 ID"),
+		field.Bool("is_downloaded").
+			Default(false).
+			Optional().
+			Comment("是否上传完毕"),
 	}
 }
 

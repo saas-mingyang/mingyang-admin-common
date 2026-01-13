@@ -63,15 +63,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "CloudFile",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			cloudfile.FieldCreatedAt: {Type: field.TypeTime, Column: cloudfile.FieldCreatedAt},
-			cloudfile.FieldUpdatedAt: {Type: field.TypeTime, Column: cloudfile.FieldUpdatedAt},
-			cloudfile.FieldState:     {Type: field.TypeBool, Column: cloudfile.FieldState},
-			cloudfile.FieldTenantID:  {Type: field.TypeUint64, Column: cloudfile.FieldTenantID},
-			cloudfile.FieldName:      {Type: field.TypeString, Column: cloudfile.FieldName},
-			cloudfile.FieldURL:       {Type: field.TypeString, Column: cloudfile.FieldURL},
-			cloudfile.FieldSize:      {Type: field.TypeUint64, Column: cloudfile.FieldSize},
-			cloudfile.FieldFileType:  {Type: field.TypeUint8, Column: cloudfile.FieldFileType},
-			cloudfile.FieldUserID:    {Type: field.TypeString, Column: cloudfile.FieldUserID},
+			cloudfile.FieldCreatedAt:    {Type: field.TypeTime, Column: cloudfile.FieldCreatedAt},
+			cloudfile.FieldUpdatedAt:    {Type: field.TypeTime, Column: cloudfile.FieldUpdatedAt},
+			cloudfile.FieldState:        {Type: field.TypeBool, Column: cloudfile.FieldState},
+			cloudfile.FieldTenantID:     {Type: field.TypeUint64, Column: cloudfile.FieldTenantID},
+			cloudfile.FieldName:         {Type: field.TypeString, Column: cloudfile.FieldName},
+			cloudfile.FieldURL:          {Type: field.TypeString, Column: cloudfile.FieldURL},
+			cloudfile.FieldSize:         {Type: field.TypeUint64, Column: cloudfile.FieldSize},
+			cloudfile.FieldFileType:     {Type: field.TypeUint8, Column: cloudfile.FieldFileType},
+			cloudfile.FieldUserID:       {Type: field.TypeString, Column: cloudfile.FieldUserID},
+			cloudfile.FieldIsDownloaded: {Type: field.TypeBool, Column: cloudfile.FieldIsDownloaded},
 		},
 	}
 	graph.Nodes[2] = &sqlgraph.Node{
@@ -461,6 +462,11 @@ func (f *CloudFileFilter) WhereFileType(p entql.Uint8P) {
 // WhereUserID applies the entql string predicate on the user_id field.
 func (f *CloudFileFilter) WhereUserID(p entql.StringP) {
 	f.Where(p.Field(cloudfile.FieldUserID))
+}
+
+// WhereIsDownloaded applies the entql bool predicate on the is_downloaded field.
+func (f *CloudFileFilter) WhereIsDownloaded(p entql.BoolP) {
+	f.Where(p.Field(cloudfile.FieldIsDownloaded))
 }
 
 // WhereHasStorageProviders applies a predicate to check if query has an edge storage_providers.

@@ -8,14 +8,14 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"mingyang.com/admin-simple-admin-file/ent/file"
-	"mingyang.com/admin-simple-admin-file/ent/filetag"
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/file"
+	"mingyang.com/admin-simple-admin-file/ent/filetag"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 )
 
 // FileQuery is the builder for querying File entities.

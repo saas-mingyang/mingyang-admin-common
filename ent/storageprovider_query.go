@@ -8,14 +8,14 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
-	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 )
 
 // StorageProviderQuery is the builder for querying StorageProvider entities.

@@ -11,17 +11,16 @@ import (
 
 	"mingyang.com/admin-simple-admin-file/ent/migrate"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"mingyang.com/admin-simple-admin-file/ent/apk"
 	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
 	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
 	"mingyang.com/admin-simple-admin-file/ent/file"
 	"mingyang.com/admin-simple-admin-file/ent/filetag"
 	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
-
-	"entgo.io/ent"
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 
 	stdsql "database/sql"
 )

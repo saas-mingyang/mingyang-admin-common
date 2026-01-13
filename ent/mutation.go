@@ -6,6 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
+	"time"
+
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"mingyang.com/admin-simple-admin-file/ent/apk"
 	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
 	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
@@ -13,11 +18,6 @@ import (
 	"mingyang.com/admin-simple-admin-file/ent/filetag"
 	"mingyang.com/admin-simple-admin-file/ent/predicate"
 	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
-	"sync"
-	"time"
-
-	"entgo.io/ent"
-	"entgo.io/ent/dialect/sql"
 )
 
 const (
@@ -1684,6 +1684,7 @@ type CloudFileMutation struct {
 	file_type                *uint8
 	addfile_type             *int8
 	user_id                  *string
+	is_downloaded            *bool
 	clearedFields            map[string]struct{}
 	storage_providers        *uint64
 	clearedstorage_providers bool
@@ -2196,6 +2197,55 @@ func (m *CloudFileMutation) ResetUserID() {
 	m.user_id = nil
 }
 
+// SetIsDownloaded sets the "is_downloaded" field.
+func (m *CloudFileMutation) SetIsDownloaded(b bool) {
+	m.is_downloaded = &b
+}
+
+// IsDownloaded returns the value of the "is_downloaded" field in the mutation.
+func (m *CloudFileMutation) IsDownloaded() (r bool, exists bool) {
+	v := m.is_downloaded
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsDownloaded returns the old "is_downloaded" field's value of the CloudFile entity.
+// If the CloudFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CloudFileMutation) OldIsDownloaded(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsDownloaded is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsDownloaded requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsDownloaded: %w", err)
+	}
+	return oldValue.IsDownloaded, nil
+}
+
+// ClearIsDownloaded clears the value of the "is_downloaded" field.
+func (m *CloudFileMutation) ClearIsDownloaded() {
+	m.is_downloaded = nil
+	m.clearedFields[cloudfile.FieldIsDownloaded] = struct{}{}
+}
+
+// IsDownloadedCleared returns if the "is_downloaded" field was cleared in this mutation.
+func (m *CloudFileMutation) IsDownloadedCleared() bool {
+	_, ok := m.clearedFields[cloudfile.FieldIsDownloaded]
+	return ok
+}
+
+// ResetIsDownloaded resets all changes to the "is_downloaded" field.
+func (m *CloudFileMutation) ResetIsDownloaded() {
+	m.is_downloaded = nil
+	delete(m.clearedFields, cloudfile.FieldIsDownloaded)
+}
+
 // SetStorageProvidersID sets the "storage_providers" edge to the StorageProvider entity by id.
 func (m *CloudFileMutation) SetStorageProvidersID(id uint64) {
 	m.storage_providers = &id
@@ -2323,7 +2373,7 @@ func (m *CloudFileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CloudFileMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, cloudfile.FieldCreatedAt)
 	}
@@ -2351,6 +2401,9 @@ func (m *CloudFileMutation) Fields() []string {
 	if m.user_id != nil {
 		fields = append(fields, cloudfile.FieldUserID)
 	}
+	if m.is_downloaded != nil {
+		fields = append(fields, cloudfile.FieldIsDownloaded)
+	}
 	return fields
 }
 
@@ -2377,6 +2430,8 @@ func (m *CloudFileMutation) Field(name string) (ent.Value, bool) {
 		return m.FileType()
 	case cloudfile.FieldUserID:
 		return m.UserID()
+	case cloudfile.FieldIsDownloaded:
+		return m.IsDownloaded()
 	}
 	return nil, false
 }
@@ -2404,6 +2459,8 @@ func (m *CloudFileMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldFileType(ctx)
 	case cloudfile.FieldUserID:
 		return m.OldUserID(ctx)
+	case cloudfile.FieldIsDownloaded:
+		return m.OldIsDownloaded(ctx)
 	}
 	return nil, fmt.Errorf("unknown CloudFile field %s", name)
 }
@@ -2475,6 +2532,13 @@ func (m *CloudFileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUserID(v)
+		return nil
+	case cloudfile.FieldIsDownloaded:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsDownloaded(v)
 		return nil
 	}
 	return fmt.Errorf("unknown CloudFile field %s", name)
@@ -2548,6 +2612,9 @@ func (m *CloudFileMutation) ClearedFields() []string {
 	if m.FieldCleared(cloudfile.FieldState) {
 		fields = append(fields, cloudfile.FieldState)
 	}
+	if m.FieldCleared(cloudfile.FieldIsDownloaded) {
+		fields = append(fields, cloudfile.FieldIsDownloaded)
+	}
 	return fields
 }
 
@@ -2564,6 +2631,9 @@ func (m *CloudFileMutation) ClearField(name string) error {
 	switch name {
 	case cloudfile.FieldState:
 		m.ClearState()
+		return nil
+	case cloudfile.FieldIsDownloaded:
+		m.ClearIsDownloaded()
 		return nil
 	}
 	return fmt.Errorf("unknown CloudFile nullable field %s", name)
@@ -2599,6 +2669,9 @@ func (m *CloudFileMutation) ResetField(name string) error {
 		return nil
 	case cloudfile.FieldUserID:
 		m.ResetUserID()
+		return nil
+	case cloudfile.FieldIsDownloaded:
+		m.ResetIsDownloaded()
 		return nil
 	}
 	return fmt.Errorf("unknown CloudFile field %s", name)

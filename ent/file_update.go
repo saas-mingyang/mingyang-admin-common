@@ -6,14 +6,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"mingyang.com/admin-simple-admin-file/ent/file"
-	"mingyang.com/admin-simple-admin-file/ent/filetag"
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/file"
+	"mingyang.com/admin-simple-admin-file/ent/filetag"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 )
 
 // FileUpdate is the builder for updating File entities.

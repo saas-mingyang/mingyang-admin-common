@@ -6,13 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"mingyang.com/admin-simple-admin-file/ent/apk"
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/apk"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
 )
 
 // ApkUpdate is the builder for updating Apk entities.

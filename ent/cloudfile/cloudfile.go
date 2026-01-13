@@ -33,6 +33,8 @@ const (
 	FieldFileType = "file_type"
 	// FieldUserID holds the string denoting the user_id field in the database.
 	FieldUserID = "user_id"
+	// FieldIsDownloaded holds the string denoting the is_downloaded field in the database.
+	FieldIsDownloaded = "is_downloaded"
 	// EdgeStorageProviders holds the string denoting the storage_providers edge name in mutations.
 	EdgeStorageProviders = "storage_providers"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -65,6 +67,7 @@ var Columns = []string{
 	FieldSize,
 	FieldFileType,
 	FieldUserID,
+	FieldIsDownloaded,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "fms_cloud_files"
@@ -112,6 +115,8 @@ var (
 	DefaultState bool
 	// DefaultTenantID holds the default value on creation for the "tenant_id" field.
 	DefaultTenantID uint64
+	// DefaultIsDownloaded holds the default value on creation for the "is_downloaded" field.
+	DefaultIsDownloaded bool
 )
 
 // OrderOption defines the ordering options for the CloudFile queries.
@@ -165,6 +170,11 @@ func ByFileType(opts ...sql.OrderTermOption) OrderOption {
 // ByUserID orders the results by the user_id field.
 func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+}
+
+// ByIsDownloaded orders the results by the is_downloaded field.
+func ByIsDownloaded(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsDownloaded, opts...).ToFunc()
 }
 
 // ByStorageProvidersField orders the results by storage_providers field.

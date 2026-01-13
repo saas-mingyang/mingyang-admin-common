@@ -4,6 +4,8 @@ package runtime
 
 import (
 	"context"
+	"time"
+
 	"mingyang.com/admin-simple-admin-file/ent/apk"
 	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
 	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
@@ -11,7 +13,6 @@ import (
 	"mingyang.com/admin-simple-admin-file/ent/filetag"
 	"mingyang.com/admin-simple-admin-file/ent/schema"
 	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -99,6 +100,10 @@ func init() {
 	cloudfileDescTenantID := cloudfileMixinFields2[0].Descriptor()
 	// cloudfile.DefaultTenantID holds the default value on creation for the tenant_id field.
 	cloudfile.DefaultTenantID = cloudfileDescTenantID.Default.(uint64)
+	// cloudfileDescIsDownloaded is the schema descriptor for is_downloaded field.
+	cloudfileDescIsDownloaded := cloudfileFields[5].Descriptor()
+	// cloudfile.DefaultIsDownloaded holds the default value on creation for the is_downloaded field.
+	cloudfile.DefaultIsDownloaded = cloudfileDescIsDownloaded.Default.(bool)
 	cloudfiletagMixin := schema.CloudFileTag{}.Mixin()
 	cloudfiletag.Policy = privacy.NewPolicies(schema.CloudFileTag{})
 	cloudfiletag.Hooks[0] = func(next ent.Mutator) ent.Mutator {

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
 	"net/http"
 	"path/filepath"
 	"strconv"
@@ -449,10 +450,10 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 		if err != nil {
 			progressManager.UpdateStatus(uploadId, "failed")
 			logx.Errorw("上传失败", logx.Field("uploadId", uploadId), logx.Field("error", err))
-			// 可以选择删除数据库记录，或者更新记录状态为失败
 		} else {
 			progressManager.UpdateStatus(uploadId, "completed")
 			logx.Infow("上传成功", logx.Field("uploadId", uploadId))
+			l.updateFileStatusInDB(uploadId, true)
 		}
 	}(file)
 
@@ -496,6 +497,20 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 			UserId:      pointy.GetPointer(data.UserID),
 		},
 	}, nil
+}
+
+func (l *UploadLogic) updateFileStatusInDB(fileId uint64, success bool) {
+	// 使用事务确保数据一致性
+	err := l.svcCtx.DB.CloudFile.Update().
+		Where(cloudfile.ID(fileId)).
+		SetIsDownloaded(success).
+		Exec(l.ctx)
+	if err != nil {
+		logx.Errorw("更新文件状态失败",
+			logx.Field("fileId", fileId),
+			logx.Field("error", err))
+		return
+	}
 }
 
 // UploadToProviderSimple 普通上传（带超时和重试）

@@ -41,6 +41,11 @@ func (l *GetCloudFileDownloadUrlLogic) GetCloudFileDownloadUrl(req *types.BaseID
 	if err != nil || file == nil {
 		return nil, errorx.NewCodeInvalidArgumentError(err.Error())
 	}
+
+	if !file.IsDownloaded {
+		return nil, errorx.NewCodeInvalidArgumentError("file.fileNotUploaded")
+	}
+
 	providers := file.Edges.StorageProviders
 	if providers == nil {
 		return nil, errorx.NewCodeInvalidArgumentError(err.Error())

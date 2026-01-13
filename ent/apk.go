@@ -4,12 +4,12 @@ package ent
 
 import (
 	"fmt"
-	"mingyang.com/admin-simple-admin-file/ent/apk"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"mingyang.com/admin-simple-admin-file/ent/apk"
 )
 
 // APK版本记录

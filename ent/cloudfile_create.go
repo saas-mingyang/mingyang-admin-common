@@ -6,13 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
-	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
-	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
+	"mingyang.com/admin-simple-admin-file/ent/cloudfiletag"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 )
 
 // CloudFileCreate is the builder for creating a CloudFile entity.
@@ -105,6 +105,20 @@ func (_c *CloudFileCreate) SetFileType(v uint8) *CloudFileCreate {
 // SetUserID sets the "user_id" field.
 func (_c *CloudFileCreate) SetUserID(v string) *CloudFileCreate {
 	_c.mutation.SetUserID(v)
+	return _c
+}
+
+// SetIsDownloaded sets the "is_downloaded" field.
+func (_c *CloudFileCreate) SetIsDownloaded(v bool) *CloudFileCreate {
+	_c.mutation.SetIsDownloaded(v)
+	return _c
+}
+
+// SetNillableIsDownloaded sets the "is_downloaded" field if the given value is not nil.
+func (_c *CloudFileCreate) SetNillableIsDownloaded(v *bool) *CloudFileCreate {
+	if v != nil {
+		_c.SetIsDownloaded(*v)
+	}
 	return _c
 }
 
@@ -207,6 +221,10 @@ func (_c *CloudFileCreate) defaults() error {
 		v := cloudfile.DefaultTenantID
 		_c.mutation.SetTenantID(v)
 	}
+	if _, ok := _c.mutation.IsDownloaded(); !ok {
+		v := cloudfile.DefaultIsDownloaded
+		_c.mutation.SetIsDownloaded(v)
+	}
 	return nil
 }
 
@@ -303,6 +321,10 @@ func (_c *CloudFileCreate) createSpec() (*CloudFile, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(cloudfile.FieldUserID, field.TypeString, value)
 		_node.UserID = value
+	}
+	if value, ok := _c.mutation.IsDownloaded(); ok {
+		_spec.SetField(cloudfile.FieldIsDownloaded, field.TypeBool, value)
+		_node.IsDownloaded = value
 	}
 	if nodes := _c.mutation.StorageProvidersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

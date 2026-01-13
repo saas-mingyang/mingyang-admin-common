@@ -581,6 +581,30 @@ func (_m *CloudFileCreate) SetNotNilUserID(value *string) *CloudFileCreate {
 }
 
 // set field if value's pointer is not nil.
+func (_m *CloudFileUpdate) SetNotNilIsDownloaded(value *bool) *CloudFileUpdate {
+	if value != nil {
+		return _m.SetIsDownloaded(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *CloudFileUpdateOne) SetNotNilIsDownloaded(value *bool) *CloudFileUpdateOne {
+	if value != nil {
+		return _m.SetIsDownloaded(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
+func (_m *CloudFileCreate) SetNotNilIsDownloaded(value *bool) *CloudFileCreate {
+	if value != nil {
+		return _m.SetIsDownloaded(*value)
+	}
+	return _m
+}
+
+// set field if value's pointer is not nil.
 func (_m *CloudFileTagUpdate) SetNotNilUpdatedAt(value *time.Time) *CloudFileTagUpdate {
 	if value != nil {
 		return _m.SetUpdatedAt(*value)

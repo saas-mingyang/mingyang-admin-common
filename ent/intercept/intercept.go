@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"entgo.io/ent/dialect/sql"
 	"mingyang.com/admin-simple-admin-file/ent"
 	"mingyang.com/admin-simple-admin-file/ent/apk"
 	"mingyang.com/admin-simple-admin-file/ent/cloudfile"
@@ -14,8 +15,6 @@ import (
 	"mingyang.com/admin-simple-admin-file/ent/filetag"
 	"mingyang.com/admin-simple-admin-file/ent/predicate"
 	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
-
-	"entgo.io/ent/dialect/sql"
 )
 
 // The Query interface represents an operation that queries a graph.

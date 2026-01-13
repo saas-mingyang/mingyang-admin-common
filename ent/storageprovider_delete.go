@@ -4,12 +4,12 @@ package ent
 
 import (
 	"context"
-	"mingyang.com/admin-simple-admin-file/ent/predicate"
-	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"mingyang.com/admin-simple-admin-file/ent/predicate"
+	"mingyang.com/admin-simple-admin-file/ent/storageprovider"
 )
 
 // StorageProviderDelete is the builder for deleting a StorageProvider entity.
