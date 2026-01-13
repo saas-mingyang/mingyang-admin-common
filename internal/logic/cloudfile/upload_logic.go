@@ -176,14 +176,14 @@ func (pm *ProgressManager) DeleteProgress(uploadId uint64) {
 	delete(pm.progressMap, uploadId)
 }
 
-// CleanupOldProgress 清理旧的进度记录（超过24小时）
+// CleanupOldProgress 清理旧的进度记录（超过12小时）
 func (pm *ProgressManager) CleanupOldProgress() {
 	pm.Lock()
 	defer pm.Unlock()
 
 	now := time.Now()
 	for uploadId, progress := range pm.progressMap {
-		if now.Sub(progress.StartTime) > 24*time.Hour {
+		if now.Sub(progress.StartTime) > 12*time.Hour {
 			delete(pm.progressMap, uploadId)
 		}
 	}
@@ -452,14 +452,6 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	} else {
 		url, err = l.UploadToProviderMultipart(file, relativeSrc, provider, tenantId, uploadId, handler.Size)
 	}
-
-	// 延迟删除进度记录（5分钟后）
-	defer func() {
-		go func() {
-			time.Sleep(5 * time.Minute)
-			progressManager.DeleteProgress(uploadId)
-		}()
-	}()
 
 	if err != nil {
 		progressManager.UpdateStatus(uploadId, "failed")

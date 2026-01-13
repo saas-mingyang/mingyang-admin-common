@@ -19,7 +19,7 @@ type (
 		// User ID | 上传用户的 ID
 		UserId *string `json:"userId,optional"`
 		// Provider ID | 提供商的 ID
-		ProviderId *uint64 `json:"providerId,optional"`
+		ProviderId *uint64 `json:"providerId,optional,string"`
 		// Tag ID | 标签 ID
 		TagIds []uint64 `json:"tagIds,optional,omitempty"`
 	}
