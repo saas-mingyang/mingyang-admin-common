@@ -509,16 +509,16 @@ type ApkInfo struct {
 	// FileSize | 文件大小
 	FileSize *uint64 `json:"fileSize,optional"`
 	// 下载链接
-	FileUrl     string `json:"fileUrl,string"`
+	AppStoreUrl string `json:"appStoreUrl,string"`
 	PackageName string `json:"packageName"` // 应用包名
 	// Description | 版本描述
 	Description *string `json:"description,optional"` // 版本描述
 	// UpdateLog | 更新日志
 	UpdateLog *string `json:"updateLog,optional"` // 更新日志
 	// IsForceUpdate | 是否强制更新
-	IsForceUpdate *bool `json:"isForceUpdate"` // 是否强制更新
+	IsForceUpdate *bool `json:"isForceUpdate,optional"` // 是否强制更新
 	// DownloadCount | 下载次数
-	DownloadCount int64 `json:"downloadCount"` // 下载次数
+	DownloadCount int64 `json:"downloadCountl,optional"` // 下载次数
 	// category | 分类 android ｜ ios
 	Category string `json:"category"` // 分类 android ｜ ios
 	//File Id | 文件ID

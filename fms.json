@@ -1164,6 +1164,11 @@
     "ApkInfo": {
       "type": "object",
       "properties": {
+        "appStoreUrl": {
+          "description": "下载链接",
+          "type": "string",
+          "x-go-name": "AppStoreUrl"
+        },
         "category": {
           "description": "category | 分类 android ｜ ios",
           "type": "string",
@@ -1180,7 +1185,7 @@
           "type": "string",
           "x-go-name": "Description"
         },
-        "downloadCount": {
+        "downloadCountl": {
           "description": "DownloadCount | 下载次数",
           "type": "integer",
           "format": "int64",
@@ -1197,11 +1202,6 @@
           "type": "integer",
           "format": "uint64",
           "x-go-name": "FileSize"
-        },
-        "fileUrl": {
-          "description": "下载链接",
-          "type": "string",
-          "x-go-name": "FileUrl"
         },
         "id": {
           "description": "ID",

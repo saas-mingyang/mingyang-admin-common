@@ -1,0 +1,41 @@
+import "../base.api"
+
+
+
+type(
+
+     MultipartInfoReq {
+       // 文件名
+       FileName string `json:"fileName"`
+       // TotalSize 文件总大小（字节）
+       TotalSize int64 `json:"totalSize"`
+       // FileHash 文件Hash,可用于秒传验证
+        FileHash string `json:"fileHash"`
+     }
+     MultipartInfoResp {
+        BaseMsgResp
+        // UploadId 上传ID
+        UploadId string `json:"uploadId"`
+        //  建议发片大小
+        PartSize int64 `json:"partSize"`
+        // 上传过期时间戳
+        ExpireTime int64 `json:"expireTime"`
+     }
+)
+
+
+@server (
+	jwt:   Auth
+	group: multipart
+)
+service Fms {
+
+    // Upload  | 初始化上传
+	@handler uploadMultipartInit
+	post /upload/multipart/init (MultipartInfoReq) returns (MultipartInfoResp)
+
+
+	// upload part  | 上传分片
+	@handler uploadMultipartPart
+	put /upload/multipart/part (MultipartPartReq) returns (MultipartPartResp)
+}

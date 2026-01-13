@@ -36,7 +36,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 		SetName(req.Name).
 		SetVersion(req.Version).
 		SetVersionCode(builder.String()).
-		SetFileURL(req.FileUrl).
+		SetFileURL(req.AppStoreUrl).
 		SetDescription(*req.Description).
 		SetNillableUpdateLog(req.UpdateLog).
 		SetNillableIsForceUpdate(req.IsForceUpdate).

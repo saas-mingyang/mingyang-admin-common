@@ -44,7 +44,7 @@ func (l *GetApkFileLogic) GetApkFile(req *types.IDReq) (resp *types.ApkFileInfoR
 				CreatedAt: pointy.GetPointer(data.CreatedAt.UnixMilli()),
 				UpdatedAt: pointy.GetPointer(data.UpdatedAt.UnixMilli()),
 			},
-			FileUrl:       data.FileURL,
+			AppStoreUrl:   data.FileURL,
 			Name:          data.Name,
 			FileSize:      &data.FileSize,
 			Version:       data.Version,
