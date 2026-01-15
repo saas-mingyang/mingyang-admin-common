@@ -1,41 +1,128 @@
 import "../base.api"
 
-
-
-type(
-
-     MultipartInfoReq {
-       // 文件名
-       FileName string `json:"fileName"`
-       // TotalSize 文件总大小（字节）
-       TotalSize int64 `json:"totalSize"`
-       // FileHash 文件Hash,可用于秒传验证
+type (
+    MultipartInfoReq {
+        // 文件名
+        FileName string `json:"fileName"`
+        // TotalSize 文件总大小（字节）
+        TotalSize int64 `json:"totalSize"`
+        // FileHash 文件Hash,可用于秒传验证
         FileHash string `json:"fileHash"`
-     }
-     MultipartInfoResp {
+    }
+
+    MultipartInfoResp {
         BaseMsgResp
         // UploadId 上传ID
         UploadId string `json:"uploadId"`
-        //  建议发片大小
+        // 建议分片大小
         PartSize int64 `json:"partSize"`
         // 上传过期时间戳
         ExpireTime int64 `json:"expireTime"`
-     }
-)
+    }
 
+    MultipartPartReq {
+        // 上传ID
+        UploadId string `json:"uploadId"`
+        // 分片编号，从1开始
+        PartNumber int64 `json:"partNumber"`
+        // 分片数据
+        PartData []byte `json:"partData"`
+        // 分片哈希（可选）
+        PartHash string `json:"partHash,optional"`
+    }
+
+    MultipartPartResp {
+        BaseMsgResp
+        // 分片ETag，用于后续完成上传
+        ETag string `json:"eTag"`
+    }
+
+    CompleteMultipartReq {
+        // 上传ID
+        UploadId string `json:"uploadId"`
+        // 文件完整哈希
+        FileHash string `json:"fileHash"`
+        // 分片信息列表
+        Parts []PartInfo `json:"parts"`
+    }
+
+    PartInfo {
+        // 分片编号
+        PartNumber int64 `json:"partNumber"`
+        // 分片ETag
+        ETag string `json:"eTag"`
+    }
+
+    CompleteMultipartResp {
+        BaseMsgResp
+        // 文件ID
+        FileId string `json:"fileId"`
+        // 文件URL
+        FileUrl string `json:"fileUrl"`
+        // 文件大小
+        FileSize int64 `json:"fileSize"`
+    }
+
+    AbortMultipartReq {
+        // 上传ID
+        UploadId string `json:"uploadId"`
+    }
+
+    ListPartsReq {
+        // 上传ID
+        UploadId string `json:"uploadId"`
+        // 最大返回数量
+        MaxParts int64 `form:"maxParts,optional,default=1000"`
+        // 分片标记
+        PartNumberMarker int64 `form:"partNumberMarker,optional,default=0"`
+    }
+
+    ListPartsResp {
+        BaseMsgResp
+        // 上传ID
+        UploadId string `json:"uploadId"`
+        // 分片列表
+        Parts []PartDetail `json:"parts"`
+        // 是否已全部列出
+        IsTruncated bool `json:"isTruncated"`
+        // 下一个分片标记
+        NextPartNumberMarker int64 `json:"nextPartNumberMarker"`
+    }
+
+    PartDetail {
+        // 分片编号
+        PartNumber int64 `json:"partNumber"`
+        // 分片大小
+        Size int64 `json:"size"`
+        // 分片ETag
+        ETag string `json:"eTag"`
+        // 最后修改时间
+        LastModified int64 `json:"lastModified"`
+    }
+)
 
 @server (
-	jwt:   Auth
-	group: multipart
+    jwt:   Auth
+    group: multipart
 )
 service Fms {
+    // Upload | 初始化上传
+    @handler uploadMultipartInit
+    post /upload/multipart/init (MultipartInfoReq) returns (MultipartInfoResp)
 
-    // Upload  | 初始化上传
-	@handler uploadMultipartInit
-	post /upload/multipart/init (MultipartInfoReq) returns (MultipartInfoResp)
+    // upload part | 上传分片
+    @handler uploadMultipartPart
+    put /upload/multipart/part (MultipartPartReq) returns (MultipartPartResp)
 
+    // complete upload | 完成上传
+    @handler completeMultipart
+    post /upload/multipart/complete (CompleteMultipartReq) returns (CompleteMultipartResp)
 
-	// upload part  | 上传分片
-	@handler uploadMultipartPart
-	put /upload/multipart/part (MultipartPartReq) returns (MultipartPartResp)
+    // abort upload | 取消上传
+    @handler abortMultipart
+    post /upload/multipart/abort (AbortMultipartReq) returns (BaseMsgResp)
+
+    // list parts | 列出已上传分片
+    @handler listParts
+    get /upload/multipart/list (ListPartsReq) returns (ListPartsResp)
 }
