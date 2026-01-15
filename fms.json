@@ -1225,6 +1225,12 @@
           "type": "string",
           "x-go-name": "PackageName"
         },
+        "status": {
+          "description": "Status | 状态",
+          "type": "integer",
+          "format": "uint8",
+          "x-go-name": "Status"
+        },
         "updateLog": {
           "description": "UpdateLog | 更新日志",
           "type": "string",
