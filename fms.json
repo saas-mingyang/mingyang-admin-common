@@ -1227,7 +1227,7 @@
         },
         "status": {
           "description": "Status | 状态",
-          "type": "integer",
+          "type": "string",
           "format": "uint8",
           "x-go-name": "Status"
         },
