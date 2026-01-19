@@ -40,9 +40,9 @@ var (
 		PrimaryKey: []*schema.Column{ApkFileColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "apk_version_code",
+				Name:    "apk_name_version_code",
 				Unique:  true,
-				Columns: []*schema.Column{ApkFileColumns[7]},
+				Columns: []*schema.Column{ApkFileColumns[5], ApkFileColumns[7]},
 			},
 		},
 	}

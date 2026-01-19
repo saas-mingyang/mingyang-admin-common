@@ -75,6 +75,6 @@ func (Apk) Annotations() []schema.Annotation {
 
 func (Apk) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("version_code").Unique(),
+		index.Fields("name", "version_code").Unique(),
 	}
 }
