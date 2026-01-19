@@ -524,7 +524,7 @@ type ApkInfo struct {
 	//File Id | 文件ID
 	FileId uint64 `json:"fileId,optional,string"`
 	// Status | 状态
-	Status uint8 `json:"status"`
+	Status uint8 `json:"status,string"`
 }
 
 // Get cloud file list request params | 云文件列表请求参数
