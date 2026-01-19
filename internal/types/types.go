@@ -505,7 +505,7 @@ type ApkInfo struct {
 	// min length : 1
 	Version string `json:"version" validate:"max=200,min=1"`
 	// VersionCode | 版本代码(内部版本号)
-	VersionCode string `json:"version_code,optional"`
+	VersionCode string `json:"versionCode,optional"`
 	// FileSize | 文件大小
 	FileSize *uint64 `json:"fileSize,optional"`
 	// 下载链接

@@ -5,8 +5,6 @@ import (
 	"github.com/saas-mingyang/mingyang-admin-common/i18n"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 	"github.com/zeromicro/go-zero/core/logx"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	ent2 "mingyang.com/admin-simple-admin-file/ent"
 	"mingyang.com/admin-simple-admin-file/ent/apk"
 	"mingyang.com/admin-simple-admin-file/internal/svc"
@@ -32,23 +30,7 @@ func NewCreateApkFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.BaseMsgResp, err error) {
 
 	err = entx.WithTx(l.ctx, l.svcCtx.DB, func(tx *ent2.Tx) error {
-		// 2. 检查 versionCode 是否已存在
-		existing, err := tx.Apk.Query().
-			Where(apk.VersionCode(req.VersionCode)).
-			First(l.ctx)
-
-		if err != nil && !ent2.IsNotFound(err) {
-			// 查询出错
-			l.Logger.Errorf("查询版本号错误: %v", err)
-			return err
-		}
-
-		if err == nil && existing != nil {
-			// versionCode 已存在，返回友好错误
-			return status.Error(codes.AlreadyExists, i18n.ValidationError)
-		}
-
-		// 3. 检查同名同版本是否已存在
+		// 1. 检查同名同版本是否已存在
 		existingByName, err := tx.Apk.Query().
 			Where(apk.NameEQ(req.Name), apk.VersionEQ(req.Version)).
 			First(l.ctx)
@@ -58,7 +40,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 			return err
 		}
 
-		// 4. 如果存在同名同版本，则更新（不是删除）
+		// 2. 如果存在同名同版本，则更新（不是删除）
 		if err == nil && existingByName != nil {
 			_, err = tx.Apk.UpdateOneID(existingByName.ID).
 				SetVersionCode(req.VersionCode).
@@ -73,7 +55,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 				Save(l.ctx)
 			return err
 		} else {
-			// 5. 创建新记录
+			// 3. 创建新记录
 			_, err = tx.Apk.Create().
 				SetID(sonyflake.NextID()).
 				SetName(req.Name).
