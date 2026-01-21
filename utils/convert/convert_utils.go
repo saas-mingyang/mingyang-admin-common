@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"google.golang.org/protobuf/types/known/structpb"
+	"log"
 	"strconv"
 	"time"
 )
@@ -16,13 +17,51 @@ func NewConverter() *Converter {
 	return &Converter{}
 }
 
-// TimePtrFromUnix 辅助函数：时间戳转指针，为0返回nil
-func TimePtrFromUnix(unix int64) *time.Time {
-	if unix == 0 {
+// 定义时间戳单位常量
+const (
+	TIMESTAMP_UNIT_SECOND      = "second"
+	TIMESTAMP_UNIT_MILLISECOND = "millisecond"
+	TIMESTAMP_UNIT_MICROSECOND = "microsecond"
+)
+
+// TimestampToTime 将时间戳转换为time.Time
+// unit: 时间戳单位（秒、毫秒、微秒）
+func TimestampToTime(timestamp int64, unit string) *time.Time {
+	if timestamp == 0 {
 		return nil
 	}
-	t := time.Unix(unix, 0)
+
+	var t time.Time
+
+	switch unit {
+	case TIMESTAMP_UNIT_SECOND:
+		t = time.Unix(timestamp, 0)
+	case TIMESTAMP_UNIT_MILLISECOND:
+		sec := timestamp / 1000
+		nsec := (timestamp % 1000) * int64(time.Millisecond)
+		t = time.Unix(sec, nsec)
+	case TIMESTAMP_UNIT_MICROSECOND:
+		sec := timestamp / 1e6
+		nsec := (timestamp % 1e6) * int64(time.Microsecond)
+		t = time.Unix(sec, nsec)
+	default:
+		log.Printf("未知的时间戳单位: %s, 默认使用秒", unit)
+		t = time.Unix(timestamp, 0)
+	}
+
 	return &t
+}
+
+func TimeFromUnixSec(sec int64) *time.Time {
+	return TimestampToTime(sec, TIMESTAMP_UNIT_SECOND)
+}
+
+func TimeFromUnixMillis(millis int64) *time.Time {
+	return TimestampToTime(millis, TIMESTAMP_UNIT_MILLISECOND)
+}
+
+func TimeFromUnixMicros(micros int64) *time.Time {
+	return TimestampToTime(micros, TIMESTAMP_UNIT_MICROSECOND)
 }
 
 // Int32ToUint8Ptr Int32ToUint8PtrPool Int32ToUint8Ptr 辅助函数：int32转指针，超出范围返回nil
