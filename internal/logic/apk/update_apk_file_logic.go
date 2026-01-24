@@ -27,8 +27,10 @@ func NewUpdateApkFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 func (l *UpdateApkFileLogic) UpdateApkFile(req *types.ApkUpdateReq) (resp *types.BaseMsgResp, err error) {
 	err = l.svcCtx.DB.Apk.UpdateOneID(*req.Id).
 		SetDescription(req.Description).
-		SetPackageName(req.PackageName).
 		SetUpdateLog(req.UpdateLog).
+		SetFileURL(req.AppStoreUrl).
+		SetFileID(req.FileId).
+		SetStatus(req.Status).
 		Exec(l.ctx)
 	if err != nil {
 		return nil, errorx.NewCodeInternalError(err.Error())

@@ -505,7 +505,7 @@ type ApkInfo struct {
 	// min length : 1
 	Version string `json:"version" validate:"max=200,min=1"`
 	// VersionCode | 版本代码(内部版本号)
-	VersionCode string `json:"versionCode,optional"`
+	VersionCode string `json:"version_code,optional"`
 	// FileSize | 文件大小
 	FileSize *uint64 `json:"fileSize,optional"`
 	// 下载链接
@@ -525,6 +525,8 @@ type ApkInfo struct {
 	FileId uint64 `json:"fileId,optional,string"`
 	// Status | 状态
 	Status uint8 `json:"status,string"`
+	// FileName
+	FileName string `json:"fileName,optional"`
 }
 
 // Get cloud file list request params | 云文件列表请求参数
@@ -537,6 +539,12 @@ type ApkFileListReq struct {
 	Version *string `json:"version,optional"`
 	// version_code| 版本代码(内部版本号)
 	VersionCode *string `json:"versionCode,optional"`
+	// PackageName | 应用包名
+	PackageName *string `json:"packageName,optional"`
+	// Status | 状态
+	Status *uint8 `json:"status,optional,string"`
+	// Category | 分类 android ｜ ios
+	Category *string `json:"category,optional"`
 }
 
 // swagger:model ApkFileListResp
@@ -564,6 +572,7 @@ type ApkFileInfoResp struct {
 
 // swagger:model ApkUpdateReq
 type ApkUpdateReq struct {
+	FileId uint64 `json:"fileId,string"`
 	BaseIDInfo
 	// PackageName | 应用包名
 	PackageName string `json:"packageName,optional"` // 应用包名
@@ -571,4 +580,8 @@ type ApkUpdateReq struct {
 	Description string `json:"description,optional"` // 版本描述
 	// UpdateLog | 更新日志
 	UpdateLog string `json:"updateLog,optional"` // 更新日志
+	// AppStoreUrl | 应用商店链接
+	AppStoreUrl string `json:"appStoreUrl,optional"`
+	// Status | 状态
+	Status uint8 `json:"status,string"`
 }
