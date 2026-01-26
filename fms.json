@@ -1310,8 +1310,16 @@
           "type": "string",
           "x-go-name": "Description"
         },
-        "fileInfo": {
-          "$ref": "#/definitions/ApkFileInfo"
+        "fileId": {
+          "description": "FileId | 文件ID",
+          "type": "string",
+          "format": "uint64",
+          "x-go-name": "FileId"
+        },
+        "fileUrl": {
+          "description": "FileUrl | 文件链接",
+          "type": "string",
+          "x-go-name": "FileUrl"
         },
         "id": {
           "description": "ID",

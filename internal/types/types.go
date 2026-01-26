@@ -579,7 +579,6 @@ type ApkFileInfoResp struct {
 
 // swagger:model ApkUpdateReq
 type ApkUpdateReq struct {
-	FileInfo ApkFileInfo `json:"fileInfo"`
 	BaseIDInfo
 	// PackageName | 应用包名
 	PackageName string `json:"packageName,optional"` // 应用包名
@@ -591,4 +590,8 @@ type ApkUpdateReq struct {
 	AppStoreUrl string `json:"appStoreUrl,optional"`
 	// Status | 状态
 	Status uint8 `json:"status,string"`
+	// FileId | 文件ID
+	FileId uint64 `json:"fileId,string,optional"`
+	// FileUrl | 文件链接
+	FileUrl string `json:"fileUrl,optional"`
 }

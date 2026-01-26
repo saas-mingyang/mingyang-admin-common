@@ -29,7 +29,8 @@ func (l *UpdateApkFileLogic) UpdateApkFile(req *types.ApkUpdateReq) (resp *types
 		SetNillableDescription(&req.Description).
 		SetUpdateLog(req.UpdateLog).
 		SetNillableFileURL(&req.AppStoreUrl).
-		SetNillableFileID(&req.FileInfo.FileId).
+		SetNillableFileID(&req.FileId).
+		SetNillableFileURL(&req.FileUrl).
 		SetNillableStatus(&req.Status).
 		Exec(l.ctx)
 	if err != nil {
