@@ -1243,6 +1243,7 @@
           "x-go-name": "Name"
         },
         "packageName": {
+          "description": "PackageName | 应用包名",
           "type": "string",
           "x-go-name": "PackageName"
         },

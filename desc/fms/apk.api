@@ -12,7 +12,8 @@ type (
 		// FileSize | 文件大小
 		FileSize *uint64 `json:"fileSize,optional"`
 		// 下载链接
-		AppStoreUrl     string `json:"appStoreUrl,optional,string"`
+		AppStoreUrl     string `json:"appStoreUrl,optional"`
+	    //  PackageName | 应用包名
 		PackageName string `json:"packageName"` // 应用包名
 		// Description | 版本描述
 		Description *string `json:"description,optional"` // 版本描述
