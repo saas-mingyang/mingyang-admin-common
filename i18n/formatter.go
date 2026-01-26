@@ -19,6 +19,7 @@ func NewFormatter(translator *Translator) *Formatter {
 	return &Formatter{
 		translator: translator,
 	}
+
 }
 
 // FormatMessage 格式化国际化消息（兼容您提供的签名）
