@@ -51,7 +51,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 				SetPackageName(req.PackageName).
 				SetNillableFileSize(req.FileSize).
 				SetCategory(req.Category).
-				SetFileID(req.FileId).
+				SetFileID(req.FileInfo.FileId).
 				Save(l.ctx)
 			return err
 		} else {
@@ -68,7 +68,7 @@ func (l *CreateApkFileLogic) CreateApkFile(req *types.ApkInfo) (resp *types.Base
 				SetPackageName(req.PackageName).
 				SetNillableFileSize(req.FileSize).
 				SetCategory(req.Category).
-				SetFileID(req.FileId).
+				SetFileID(req.FileInfo.FileId).
 				Save(l.ctx)
 		}
 

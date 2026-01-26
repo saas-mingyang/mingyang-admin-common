@@ -493,6 +493,12 @@ type CloudFileTagInfoResp struct {
 	Data CloudFileTagInfo `json:"data"`
 }
 
+// swagger:model ApkFileInfo
+type ApkFileInfo struct {
+	FileId uint64 `json:"id,string"`
+	Url    string `json:"url, optional"`
+}
+
 // swagger:model ApkInfo
 type ApkInfo struct {
 	BaseIDInfo
@@ -509,7 +515,8 @@ type ApkInfo struct {
 	// FileSize | 文件大小
 	FileSize *uint64 `json:"fileSize,optional"`
 	// 下载链接
-	AppStoreUrl string `json:"appStoreUrl,optional,string"`
+	AppStoreUrl string `json:"appStoreUrl,optional"`
+	//  PackageName | 应用包名
 	PackageName string `json:"packageName"` // 应用包名
 	// Description | 版本描述
 	Description *string `json:"description,optional"` // 版本描述
@@ -522,7 +529,7 @@ type ApkInfo struct {
 	// category | 分类 android ｜ ios
 	Category string `json:"category"` // 分类 android ｜ ios
 	//File Id | 文件ID
-	FileId uint64 `json:"fileId,optional,string"`
+	FileInfo ApkFileInfo `json:"fileInfo,optional,string"`
 	// Status | 状态
 	Status uint8 `json:"status,string"`
 	// FileName
@@ -572,7 +579,7 @@ type ApkFileInfoResp struct {
 
 // swagger:model ApkUpdateReq
 type ApkUpdateReq struct {
-	FileId uint64 `json:"fileId,string"`
+	FileInfo ApkFileInfo `json:"fileInfo"`
 	BaseIDInfo
 	// PackageName | 应用包名
 	PackageName string `json:"packageName,optional"` // 应用包名

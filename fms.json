@@ -1053,6 +1053,21 @@
     }
   },
   "definitions": {
+    "ApkFileInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64",
+          "x-go-name": "FileId"
+        },
+        "url": {
+          "type": "string",
+          "x-go-name": "Url"
+        }
+      },
+      "x-go-package": "mingyang.com/admin-simple-admin-file/internal/types"
+    },
     "ApkFileInfoResp": {
       "description": "CloudFile information response | 云文件信息返回体",
       "type": "object",
@@ -1207,11 +1222,8 @@
           "format": "int64",
           "x-go-name": "DownloadCount"
         },
-        "fileId": {
-          "description": "File Id | 文件ID",
-          "type": "string",
-          "format": "uint64",
-          "x-go-name": "FileId"
+        "fileInfo": {
+          "$ref": "#/definitions/ApkFileInfo"
         },
         "fileName": {
           "description": "FileName",
@@ -1243,6 +1255,7 @@
           "x-go-name": "Name"
         },
         "packageName": {
+          "description": "PackageName | 应用包名",
           "type": "string",
           "x-go-name": "PackageName"
         },
@@ -1297,10 +1310,8 @@
           "type": "string",
           "x-go-name": "Description"
         },
-        "fileId": {
-          "type": "string",
-          "format": "uint64",
-          "x-go-name": "FileId"
+        "fileInfo": {
+          "$ref": "#/definitions/ApkFileInfo"
         },
         "id": {
           "description": "ID",
