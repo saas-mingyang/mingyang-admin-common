@@ -2,113 +2,93 @@ package i18n
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"strings"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
+
+//////////////////// Formatter ////////////////////
 
 // Formatter 国际化消息格式化器
 type Formatter struct {
-	translator *Translator
+	translator Translator
 }
 
-// NewFormatter 创建新的格式化器
-func NewFormatter(translator *Translator) *Formatter {
-	return &Formatter{
-		translator: translator,
-	}
+// NewFormatter 创建 Formatter
+func NewFormatter(translator Translator) *Formatter {
+	return &Formatter{translator: translator}
 }
 
-// FormatMessage 格式化国际化消息（兼容您提供的签名）
-func (f *Formatter) FormatMessage(ctx context.Context,
-	messageKey string, args ...string) string {
-
-	// 获取原始消息
-	message := f.translator.Trans(ctx, messageKey)
-
-	// 如果没有参数，直接返回
+// Format 普通国际化格式化（支持任意参数）
+// 示例：formatter.Format(ctx, "user.not_found", userId)
+func (f *Formatter) Format(ctx context.Context, key string, args ...any) string {
+	msg := f.translator.Trans(ctx, key)
 	if len(args) == 0 {
-		return message
+		return msg
 	}
-
-	// 替换占位符 {0}, {1}...
-	for i, arg := range args {
-		placeholder := "{" + strconv.Itoa(i) + "}"
-		message = strings.ReplaceAll(message, placeholder, arg)
-	}
-
-	return message
+	return formatArgs(msg, args...)
 }
 
-// FormatMessageWithInterface 支持任意类型参数
-func (f *Formatter) FormatMessageWithInterface(ctx context.Context,
-	messageKey string, args ...interface{}) string {
-
-	// 获取原始消息
-	message := f.translator.Trans(ctx, messageKey)
-
-	// 如果没有参数，直接返回
-	if len(args) == 0 {
-		return message
-	}
-
-	// 替换占位符 {0}, {1}...
-	for i, arg := range args {
-		placeholder := "{" + strconv.Itoa(i) + "}"
-		argStr := toString(arg)
-		message = strings.ReplaceAll(message, placeholder, argStr)
-	}
-
-	return message
+// FormatNamed 命名参数格式化
+// 示例：formatter.FormatNamed(ctx, "user.not_found", map[string]any{"name":"张三"})
+func (f *Formatter) FormatNamed(ctx context.Context, key string, params map[string]any) string {
+	msg := f.translator.Trans(ctx, key)
+	return formatNamedArgs(msg, params)
 }
 
-// FormatError 格式化错误消息
-func (f *Formatter) FormatError(translator *Translator, ctx context.Context,
-	messageKey string, args ...string) error {
-
-	message := f.FormatMessage(ctx, messageKey, args...)
-	return NewI18nError(messageKey, message)
-}
-
-// FormatErrorWithInterface 格式化错误消息（支持任意类型）
-func (f *Formatter) FormatErrorWithInterface(ctx context.Context,
-	messageKey string, args ...interface{}) error {
-
-	message := f.FormatMessageWithInterface(ctx, messageKey, args...)
-	return NewI18nError(messageKey, message)
-}
-
-// toString 将任意类型转换为字符串
-func toString(v interface{}) string {
-	switch val := v.(type) {
-	case string:
-		return val
-	case int, int8, int16, int32, int64:
-		return strconv.FormatInt(v.(int64), 10)
-	case uint, uint8, uint16, uint32, uint64:
-		return strconv.FormatUint(v.(uint64), 10)
-	case float32, float64:
-		return strconv.FormatFloat(v.(float64), 'f', -1, 64)
-	case bool:
-		return strconv.FormatBool(val)
-	default:
-		return ""
+// NewError 创建国际化错误
+func (f *Formatter) NewError(ctx context.Context, key string, args ...any) *I18nError {
+	msg := f.Format(ctx, key, args...)
+	return &I18nError{
+		Key:     key,
+		Message: msg,
 	}
 }
 
-// I18nError 国际化错误
+// NewGrpcError 创建 gRPC 国际化错误（强烈推荐）
+func (f *Formatter) NewGrpcError(ctx context.Context, code codes.Code, key string, args ...any) error {
+	msg := f.Format(ctx, key, args...)
+	return status.Error(code, msg)
+}
+
+// FromGrpcError 从 gRPC 错误提取消息
+func (f *Formatter) FromGrpcError(err error) string {
+	if st, ok := status.FromError(err); ok {
+		return st.Message()
+	}
+	return err.Error()
+}
+
+//////////////////// I18nError ////////////////////
+
+// I18nError 国际化错误结构
 type I18nError struct {
 	Key     string
 	Message string
 }
 
-// NewI18nError 创建国际化错误
-func NewI18nError(key, message string) *I18nError {
-	return &I18nError{
-		Key:     key,
-		Message: message,
-	}
-}
-
 func (e *I18nError) Error() string {
 	return e.Message
+}
+
+//////////////////// 内部工具函数 ////////////////////
+
+// formatArgs 数字占位符格式化：{0} {1}...
+func formatArgs(message string, args ...any) string {
+	for i, arg := range args {
+		ph := "{" + strconv.Itoa(i) + "}"
+		message = strings.ReplaceAll(message, ph, fmt.Sprint(arg))
+	}
+	return message
+}
+
+// formatNamedArgs 命名占位符格式化：{name} {age}...
+func formatNamedArgs(message string, params map[string]any) string {
+	for k, v := range params {
+		message = strings.ReplaceAll(message, "{"+k+"}", fmt.Sprint(v))
+	}
+	return message
 }
