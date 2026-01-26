@@ -4,6 +4,9 @@ import (
 	"context"
 	"strconv"
 	"strings"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // Formatter 国际化消息格式化器
@@ -77,6 +80,42 @@ func (f *Formatter) FormatErrorWithInterface(ctx context.Context,
 	return NewI18nError(messageKey, message)
 }
 
+// FormatGrpcError 格式化gRPC错误消息
+func (f *Formatter) FormatGrpcError(ctx context.Context,
+	messageKey string, args ...interface{}) error {
+
+	message := f.FormatMessageWithInterface(ctx, messageKey, args...)
+	return status.New(codes.InvalidArgument, message).Err()
+}
+
+// FormatGrpcErrorWithCode 使用指定的gRPC错误码格式化gRPC错误消息
+func (f *Formatter) FormatGrpcErrorWithCode(ctx context.Context,
+	code codes.Code, messageKey string, args ...interface{}) error {
+
+	message := f.FormatMessageWithInterface(ctx, messageKey, args...)
+	return status.New(code, message).Err()
+}
+
+// FormatGrpcErrorWithDetails 使用指定的gRPC错误码和详情格式化gRPC错误消息
+func (f *Formatter) FormatGrpcErrorWithDetails(ctx context.Context,
+	code codes.Code, messageKey string, details string, args ...interface{}) error {
+
+	message := f.FormatMessageWithInterface(ctx, messageKey, args...)
+	st := status.New(code, message)
+
+	// 如果有详情信息，添加到错误中
+	if details != "" {
+		// 对于简单的情况，我们只返回带有原始消息和详情组合的错误
+		combinedMessage := message
+		if message != details {
+			combinedMessage = message + ": " + details
+		}
+		return status.New(code, combinedMessage).Err()
+	}
+
+	return st.Err()
+}
+
 // toString 将任意类型转换为字符串
 func toString(v interface{}) string {
 	switch val := v.(type) {
@@ -111,4 +150,18 @@ func NewI18nError(key, message string) *I18nError {
 
 func (e *I18nError) Error() string {
 	return e.Message
+}
+
+// ExtractGrpcErrorMessage 从gRPC错误中提取消息
+func ExtractGrpcErrorMessage(err error) string {
+	if err == nil {
+		return ""
+	}
+
+	st, ok := status.FromError(err)
+	if !ok {
+		return err.Error()
+	}
+
+	return st.Message()
 }
