@@ -19,11 +19,11 @@ func NewFormatter(translator *Translator) *Formatter {
 }
 
 // FormatMessage 格式化国际化消息（兼容您提供的签名）
-func FormatMessage(translator *Translator, ctx context.Context,
+func (f *Formatter) FormatMessage(ctx context.Context,
 	messageKey string, args ...string) string {
 
 	// 获取原始消息
-	message := translator.Trans(ctx, messageKey)
+	message := f.translator.Trans(ctx, messageKey)
 
 	// 如果没有参数，直接返回
 	if len(args) == 0 {
@@ -40,11 +40,11 @@ func FormatMessage(translator *Translator, ctx context.Context,
 }
 
 // FormatMessageWithInterface 支持任意类型参数
-func FormatMessageWithInterface(translator *Translator, ctx context.Context,
+func (f *Formatter) FormatMessageWithInterface(ctx context.Context,
 	messageKey string, args ...interface{}) string {
 
 	// 获取原始消息
-	message := translator.Trans(ctx, messageKey)
+	message := f.translator.Trans(ctx, messageKey)
 
 	// 如果没有参数，直接返回
 	if len(args) == 0 {
@@ -62,18 +62,18 @@ func FormatMessageWithInterface(translator *Translator, ctx context.Context,
 }
 
 // FormatError 格式化错误消息
-func FormatError(translator *Translator, ctx context.Context,
+func (f *Formatter) FormatError(translator *Translator, ctx context.Context,
 	messageKey string, args ...string) error {
 
-	message := FormatMessage(translator, ctx, messageKey, args...)
+	message := f.FormatMessage(ctx, messageKey, args...)
 	return NewI18nError(messageKey, message)
 }
 
 // FormatErrorWithInterface 格式化错误消息（支持任意类型）
-func FormatErrorWithInterface(translator *Translator, ctx context.Context,
+func (f *Formatter) FormatErrorWithInterface(ctx context.Context,
 	messageKey string, args ...interface{}) error {
 
-	message := FormatMessageWithInterface(translator, ctx, messageKey, args...)
+	message := f.FormatMessageWithInterface(ctx, messageKey, args...)
 	return NewI18nError(messageKey, message)
 }
 
