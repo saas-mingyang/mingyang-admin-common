@@ -432,8 +432,6 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 	// 开始上传
 	progressManager.UpdateStatus(uploadId, "uploading")
 
-	// 移除主函数中的 defer file.Close()
-
 	// 启动goroutine进行上传
 	go func(file multipart.File) {
 		defer file.Close()
