@@ -70,7 +70,7 @@ CoreRpc:
   #Target: 127.0.0.1:9101
   Etcd:
     Hosts:
-      - 192.168.201.228:30310   # 共享etcd地址
+      - 192.168.201.228:31660   # 共享etcd地址
     Key: core.rpc
   Enabled: true
 
