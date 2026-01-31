@@ -72,14 +72,13 @@ func (l *ListApkFileLogic) ListApkFile(req *types.ApkFileListReq) (resp *types.A
 			PackageName: v.PackageName,
 			Description: &v.Description,
 			Category:    v.Category,
-			FileInfo: types.ApkFileInfo{
-				FileId: v.FileID,
-			},
+			FileId:      v.FileID,
+
 			Status:   v.Status,
 			FileSize: pointy.GetPointer(v.FileSize),
 		}
-		if apkInfo.FileInfo.FileId != 0 {
-			file, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.ID(apkInfo.FileInfo.FileId)).First(l.ctx)
+		if apkInfo.FileId != 0 {
+			file, err := l.svcCtx.DB.CloudFile.Query().Where(cloudfile.ID(apkInfo.FileId)).First(l.ctx)
 			if err != nil {
 				l.Error("query file error: %v", err)
 			}

@@ -493,12 +493,6 @@ type CloudFileTagInfoResp struct {
 	Data CloudFileTagInfo `json:"data"`
 }
 
-// swagger:model ApkFileInfo
-type ApkFileInfo struct {
-	FileId uint64 `json:"id,string"`
-	Url    string `json:"url, optional"`
-}
-
 // swagger:model ApkInfo
 type ApkInfo struct {
 	BaseIDInfo
@@ -528,12 +522,14 @@ type ApkInfo struct {
 	DownloadCount int64 `json:"downloadCountl,optional"` // 下载次数
 	// category | 分类 android ｜ ios
 	Category string `json:"category"` // 分类 android ｜ ios
-	//File Id | 文件ID
-	FileInfo ApkFileInfo `json:"fileInfo,optional,string"`
 	// Status | 状态
 	Status uint8 `json:"status,string"`
 	// FileName
 	FileName string `json:"fileName,optional"`
+	// FileUrl | 文件链接
+	FileUrl string `json:"fileUrl,optional"`
+	// FileId | 文件ID
+	FileId uint64 `json:"fileId,string,optional"`
 }
 
 // Get cloud file list request params | 云文件列表请求参数
