@@ -84,9 +84,9 @@ func (l *GetCloudFileListLogic) GetCloudFileList(req *types.CloudFileListReq) (*
 	return resp, nil
 }
 
-func (l *GetCloudFileListLogic) getFileTagIds(tags []*ent.CloudFileTag) (result []uint64) {
+func (l *GetCloudFileListLogic) getFileTagIds(tags []*ent.CloudFileTag) (result []string) {
 	for _, v := range tags {
-		result = append(result, v.ID)
+		result = append(result, convert.Uint64SliceToStrings([]uint64{v.ID})...)
 	}
 	return result
 }

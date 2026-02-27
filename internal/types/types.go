@@ -285,7 +285,7 @@ type CloudFileInfo struct {
 	// Provider ID | 提供商的 ID
 	ProviderId *uint64 `json:"providerId,optional,string"`
 	// Tag ID | 标签 ID
-	TagIds []uint64 `json:"tagIds,optional,omitempty"`
+	TagIds []string `json:"tagIds,optional,omitempty"`
 }
 
 // The response data of cloud file list | 云文件列表数据

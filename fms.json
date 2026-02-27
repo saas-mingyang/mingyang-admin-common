@@ -1518,8 +1518,7 @@
           "description": "Tag ID | 标签 ID",
           "type": "array",
           "items": {
-            "type": "integer",
-            "format": "uint64"
+            "type": "string"
           },
           "x-go-name": "TagIds"
         },
