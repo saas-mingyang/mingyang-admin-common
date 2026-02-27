@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"google.golang.org/protobuf/types/known/structpb"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -282,4 +283,75 @@ func Uint64SliceToStringSlice(uintSlice []uint64) []string {
 	}
 
 	return result
+}
+
+// =============================
+// uint64 -> []string
+// =============================
+
+// Uint64ToStrings 将多个 uint64 转换为 []string
+func Uint64ToStrings(ids ...uint64) []string {
+	if len(ids) == 0 {
+		return []string{}
+	}
+
+	result := make([]string, 0, len(ids))
+	for _, id := range ids {
+		result = append(result, strconv.FormatUint(id, 10))
+	}
+	return result
+}
+
+// Uint64SliceToStrings 支持直接传 []uint64
+func Uint64SliceToStrings(ids []uint64) []string {
+	return Uint64ToStrings(ids...)
+}
+
+// =============================
+// []string -> []uint64
+// =============================
+
+// StringsToUint64 将多个 string 转换为 []uint64
+func StringsToUint64(strs ...string) ([]uint64, error) {
+	if len(strs) == 0 {
+		return []uint64{}, nil
+	}
+
+	result := make([]uint64, 0, len(strs))
+	for _, s := range strs {
+		if s == "" {
+			continue
+		}
+
+		id, err := strconv.ParseUint(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, id)
+	}
+
+	return result, nil
+}
+
+// StringSliceToUint64 支持直接传 []string
+func StringSliceToUint64(strs []string) ([]uint64, error) {
+	return StringsToUint64(strs...)
+}
+
+// =============================
+// 逗号字符串互转
+// =============================
+
+// Uint64ToJoinString 1,2,3
+func Uint64ToJoinString(ids ...uint64) string {
+	return strings.Join(Uint64ToStrings(ids...), ",")
+}
+
+// JoinStringToUint64 "1,2,3"
+func JoinStringToUint64(s string) ([]uint64, error) {
+	if s == "" {
+		return []uint64{}, nil
+	}
+	parts := strings.Split(s, ",")
+	return StringSliceToUint64(parts)
 }
