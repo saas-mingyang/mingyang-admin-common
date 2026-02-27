@@ -244,6 +244,10 @@ github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6L
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/saas-mingyang/mingyang-admin-common v0.6.0 h1:ItZlk6axZaF0JkVz026Jx2XS5DMk7Rl4Qw7LeYfp+d8=
 github.com/saas-mingyang/mingyang-admin-common v0.6.0/go.mod h1:dt3cQUGb9j/CELKMmh5Px4W/E/1P0XLRdxevIReB4Wc=
+github.com/saas-mingyang/mingyang-admin-common v0.6.1 h1:nDsHsu2e4fuhdMsrMZLGOQ6vpj8mEM9D5rrRl44sYeo=
+github.com/saas-mingyang/mingyang-admin-common v0.6.1/go.mod h1:dt3cQUGb9j/CELKMmh5Px4W/E/1P0XLRdxevIReB4Wc=
+github.com/saas-mingyang/mingyang-admin-common v0.6.3 h1:ItK/GQ9nNRbqiaagYhGW37ybxYNncn2XhB3ye3jXIW0=
+github.com/saas-mingyang/mingyang-admin-common v0.6.3/go.mod h1:dt3cQUGb9j/CELKMmh5Px4W/E/1P0XLRdxevIReB4Wc=
 github.com/saas-mingyang/mingyang-admin-job v0.0.2 h1:TCQxZGu0kS8iZjNynq9jhDLpWiL332x3cpaiNcr6uBs=
 github.com/saas-mingyang/mingyang-admin-job v0.0.2/go.mod h1:aKPa+uN1zNJjbyOfgDIG8kYynQrYOwiBK/NX7uH6QYs=
 github.com/saas-mingyang/mingyang-admin-message-center v0.0.5 h1:lgkr5GaxoKCB97xnY9cs2FnxOjhpjI9X0y8moJosnYU=

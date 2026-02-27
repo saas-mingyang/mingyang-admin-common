@@ -2,6 +2,7 @@ package cloudfile
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 
 	"github.com/zeromicro/go-zero/core/errorx"
 
@@ -52,7 +53,12 @@ func (l *UpdateCloudFileLogic) UpdateCloudFile(req *types.CloudFileInfo) (*types
 	}
 
 	if req.TagIds != nil {
-		query.AddTagIDs(req.TagIds...)
+		stringsToUint64, err := convert.StringsToUint64(req.TagIds...)
+		if err != nil {
+			logx.Errorf("convert tagIds error: %v", err)
+		} else {
+			query.AddTagIDs(stringsToUint64...)
+		}
 	} else {
 		query.ClearTags()
 	}

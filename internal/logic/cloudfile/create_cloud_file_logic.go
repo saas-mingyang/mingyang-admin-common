@@ -2,6 +2,7 @@ package cloudfile
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/utils/convert"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
 
 	"github.com/zeromicro/go-zero/core/errorx"
@@ -55,7 +56,12 @@ func (l *CreateCloudFileLogic) CreateCloudFile(req *types.CloudFileInfo) (*types
 	}
 
 	if req.TagIds != nil {
-		query = query.AddTagIDs(req.TagIds...)
+		stringsToUint64, err := convert.StringsToUint64()
+		if err != nil {
+			logx.Errorf("convert tagIds error: %v", err)
+		} else {
+			query = query.AddTagIDs(stringsToUint64...)
+		}
 	}
 
 	_, err = query.Save(l.ctx)
