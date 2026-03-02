@@ -355,3 +355,12 @@ func JoinStringToUint64(s string) ([]uint64, error) {
 	parts := strings.Split(s, ",")
 	return StringSliceToUint64(parts)
 }
+
+// DecodeConfig 将 map[string]interface{} 解码为指定结构体
+func DecodeConfig(cfg map[string]interface{}, target interface{}) error {
+	b, err := json.Marshal(cfg)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(b, target)
+}
