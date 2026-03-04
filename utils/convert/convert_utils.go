@@ -384,3 +384,24 @@ func StructToMap(v interface{}) (map[string]interface{}, error) {
 
 	return resultMap, nil
 }
+
+// ToStringMap 将 map[string]interface{} 转换为 map[string]string
+func ToStringMap(original map[string]interface{}) (map[string]string, error) {
+	converted := make(map[string]string)
+	for key, value := range original {
+		// 如果值是 map 类型，则序列化为 JSON 字符串
+		switch v := value.(type) {
+		case map[string]interface{}:
+			// 序列化为 JSON 字符串
+			jsonValue, err := json.Marshal(v)
+			if err != nil {
+				return nil, fmt.Errorf("failed to marshal value: %v", err)
+			}
+			converted[key] = string(jsonValue)
+		default:
+			// 否则，直接转换为字符串
+			converted[key] = fmt.Sprintf("%v", value)
+		}
+	}
+	return converted, nil
+}
