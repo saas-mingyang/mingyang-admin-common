@@ -356,11 +356,31 @@ func JoinStringToUint64(s string) ([]uint64, error) {
 	return StringSliceToUint64(parts)
 }
 
-// DecodeConfig 将 map[string]interface{} 解码为指定结构体
-func DecodeConfig(cfg map[string]interface{}, target interface{}) error {
+// MapToStruct 将 map[string]interface{} 解码为指定结构体
+func MapToStruct(cfg map[string]interface{}, target interface{}) error {
 	b, err := json.Marshal(cfg)
 	if err != nil {
 		return err
 	}
 	return json.Unmarshal(b, target)
+}
+
+// StructToMap 将结构体转换为 map[string]interface{}
+func StructToMap(v interface{}) (map[string]interface{}, error) {
+	// 将结构体转换为 JSON 字符串
+	jsonData, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+
+	// 定义一个 map 用来存储反序列化后的结果
+	var resultMap map[string]interface{}
+
+	// 将 JSON 字符串反序列化为 map
+	err = json.Unmarshal(jsonData, &resultMap)
+	if err != nil {
+		return nil, err
+	}
+
+	return resultMap, nil
 }
