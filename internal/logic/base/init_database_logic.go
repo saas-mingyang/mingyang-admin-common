@@ -44,7 +44,7 @@ func (l *InitDatabaseLogic) InitDatabase() (resp *types.BaseMsgResp, err error) 
 		if err != nil {
 			if status.Code(err) == codes.InvalidArgument {
 				return nil, errorx.NewCodeInvalidArgumentError(
-					"init.alreadyInit")
+					"load.alreadyInit")
 			}
 			return nil, err
 		}

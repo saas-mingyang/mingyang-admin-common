@@ -10,7 +10,7 @@ import (
 	"mingyang.com/admin-simple-admin-file/internal/svc"
 )
 
-// swagger:route get /init/database base InitDatabase
+// swagger:route get /load/database base InitDatabase
 //
 // Initialize database | 初始化数据库
 //
