@@ -21,14 +21,14 @@ import (
 )
 
 const (
-	// Operation types.
+	// Operation server.
 	OpCreate    = ent.OpCreate
 	OpDelete    = ent.OpDelete
 	OpDeleteOne = ent.OpDeleteOne
 	OpUpdate    = ent.OpUpdate
 	OpUpdateOne = ent.OpUpdateOne
 
-	// Node types.
+	// Node server.
 	TypeApk             = "Apk"
 	TypeCloudFile       = "CloudFile"
 	TypeCloudFileTag    = "CloudFileTag"

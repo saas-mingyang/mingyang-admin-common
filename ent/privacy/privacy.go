@@ -265,7 +265,7 @@ type (
 	}
 
 	// The FilterFunc type is an adapter that allows the use of ordinary
-	// functions as filters for query and mutation types.
+	// functions as filters for query and mutation server.
 	FilterFunc func(context.Context, Filter) error
 )
 

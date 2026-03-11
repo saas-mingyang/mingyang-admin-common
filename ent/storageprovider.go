@@ -69,7 +69,7 @@ func (e StorageProviderEdges) CloudfilesOrErr() ([]*CloudFile, error) {
 	return nil, &NotLoadedError{edge: "cloudfiles"}
 }
 
-// scanValues returns the types for scanning values from sql.Rows.
+// scanValues returns the server for scanning values from sql.Rows.
 func (*StorageProvider) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
