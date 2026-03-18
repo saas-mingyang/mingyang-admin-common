@@ -316,14 +316,12 @@ func StringsToUint64(strs ...string) ([]uint64, error) {
 	if len(strs) == 0 {
 		return []uint64{}, nil
 	}
-
 	result := make([]uint64, 0, len(strs))
 	for _, s := range strs {
 		if s == "" {
 			continue
 		}
-
-		id, err := strconv.ParseUint(s, 10, 64)
+		id, err := StringToUint64(s)
 		if err != nil {
 			return nil, err
 		}
@@ -331,6 +329,13 @@ func StringsToUint64(strs ...string) ([]uint64, error) {
 	}
 
 	return result, nil
+}
+
+func StringToUint64(s string) (uint64, error) {
+	if s == "" {
+		return 0, nil
+	}
+	return strconv.ParseUint(s, 10, 64)
 }
 
 // StringSliceToUint64 支持直接传 []string
