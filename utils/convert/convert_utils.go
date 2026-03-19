@@ -27,7 +27,6 @@ const (
 )
 
 // TimestampToTime 将时间戳转换为time.Time
-// unit: 时间戳单位（秒、毫秒、微秒）
 func TimestampToTime(timestamp int64, unit TimestampUnit) *time.Time {
 	if timestamp == 0 {
 		return nil
@@ -37,21 +36,16 @@ func TimestampToTime(timestamp int64, unit TimestampUnit) *time.Time {
 
 	switch unit {
 	case UnitMillisecond:
-		// 处理毫秒，兼容负数
-		sec := timestamp / 1000
-		nsec := (timestamp % 1000) * int64(time.Millisecond)
-		t = time.Unix(sec, nsec)
+		t = time.UnixMilli(timestamp)
+
 	case UnitMicrosecond:
-		// 处理微秒，兼容负数
-		sec := timestamp / 1e6
-		nsec := (timestamp % 1e6) * int64(time.Microsecond)
-		t = time.Unix(sec, nsec)
+		t = time.UnixMicro(timestamp)
+
 	case UnitSecond:
 		fallthrough
 	default:
 		t = time.Unix(timestamp, 0)
 	}
-
 	return &t
 }
 func TimeFromFrontendMillis(millis int64, timeUnit TimestampUnit) *time.Time {
