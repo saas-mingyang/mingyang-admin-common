@@ -58,7 +58,7 @@ func (f *Formatter) FormatMessageWithInterface(ctx context.Context,
 	// 替换占位符 {0}, {1}...
 	for i, arg := range args {
 		placeholder := "{" + strconv.Itoa(i) + "}"
-		argStr := toString(arg)
+		argStr := ToString(arg)
 		message = strings.ReplaceAll(message, placeholder, argStr)
 	}
 
@@ -117,8 +117,8 @@ func (f *Formatter) FormatGrpcErrorWithDetails(ctx context.Context,
 	return st.Err()
 }
 
-// toString 将任意类型转换为字符串
-func toString(v interface{}) string {
+// ToString 将任意类型转换为字符串
+func ToString(v interface{}) string {
 	switch val := v.(type) {
 	case string:
 		return val
