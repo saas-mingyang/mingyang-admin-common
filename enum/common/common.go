@@ -9,7 +9,50 @@ const (
 	DefaultParentId uint64 = 1000000
 	// DefaultInvalidRoleId used to judge whether the token belongs to core, if it is DefaultInvalidRoleId, it belongs to mms
 	DefaultInvalidRoleId uint64 = 1000000
-	DateFormat                  = "2006-01-02"
-	DateTimeFormat              = "2006-01-02 15:04:05"
-	TimeFormat                  = "15:04:05"
+
+	// DateFormat 时间格式
+	DateFormat      = "2006-01-02"
+	DateTimeFormat  = "2006-01-02 15:04:05"
+	TimeFormat      = "15:04:05"
+	TimeZone        = "Asia/Shanghai"
+	TimeStampFormat = "20060102150405"
+
+	// 符号
+
+	// Comma 逗号
+	Comma = ","
+	// Semicolon 分号
+	Semicolon = ";"
+	// Space 空格
+	Space = " "
+	// VerticalLine 竖线
+	VerticalLine = "|"
+	// Colon 冒号
+	Colon = ":"
+	// Dot 点
+	Dot = "."
+	// Slash 斜杠
+	Slash = "/"
+	// BackSlash 反斜杠
+	BackSlash = "\\"
+	// At 符号
+	At = "@"
+	// Underscore 下划线
+	Underscore = "_"
+	// Minus 减号
+	Minus = "-"
+	// Plus 加号
+	Plus = "+"
+	// Star 星号
+	Star = "*"
+	// QuestionMark ？
+	QuestionMark = "?"
+	// Hash 井号
+	Hash = "#"
+	// Percent 符号
+	Percent = "%"
+	// Ampersand 符号
+	Ampersand = "&"
+	// Pipe 符号
+	Pipe = "|"
 )
