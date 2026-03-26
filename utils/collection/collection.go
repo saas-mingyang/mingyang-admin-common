@@ -35,6 +35,14 @@ func (s Set[T]) Len() int {
 	return len(s)
 }
 
+func (s Set[T]) IsEmpty() bool {
+	return len(s) == 0
+}
+
+func (s Set[T]) IsNotEmpty() bool {
+	return len(s) > 0
+}
+
 func (s Set[T]) Clear() {
 	for k := range s {
 		delete(s, k)
