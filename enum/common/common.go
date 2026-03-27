@@ -55,4 +55,22 @@ const (
 	Ampersand = "&"
 	// Pipe 符号
 	Pipe = "|"
+	// Equal 等于
+	Equal = "="
+	// EmptyString ""
+	EmptyString = ""
+
+	// ContentTypeJson application/json
+	ContentTypeJson = "application/json"
+	// ContentTypeForm application/x-www-form-urlencoded
+	ContentTypeForm = "application/x-www-form-urlencoded"
+	// ContentTypeMultipartForm multipart/form-data
+	ContentTypeMultipartForm = "multipart/form-data"
+	// ContentTypeTextPlain text/plain
+	ContentTypeTextPlain = "text/plain"
+	// ContentTypeTextHtml text/html
+	ContentTypeTextHtml = "text/html"
+	// ContentTypeTextXml text/xml
+	ContentTypeTextXml = "text/xml"
+	// ContentTypeApplicationJson application/json
 )
