@@ -72,5 +72,6 @@ const (
 	ContentTypeTextHtml = "text/html"
 	// ContentTypeTextXml text/xml
 	ContentTypeTextXml = "text/xml"
-	// ContentTypeApplicationJson application/json
+	// ContentType
+	ContentType = "Content-Type"
 )
