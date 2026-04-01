@@ -271,6 +271,7 @@ github.com/saas-mingyang/mingyang-admin-common v0.6.8 h1:BHCXWT0lteWydm0njTW/ISk
 github.com/saas-mingyang/mingyang-admin-common v0.6.8/go.mod h1:dt3cQUGb9j/CELKMmh5Px4W/E/1P0XLRdxevIReB4Wc=
 github.com/saas-mingyang/mingyang-admin-common v0.7.0 h1:z9b53M+P045fMsXQ/46RkLQd0htB2FN/ScYddG7jFuk=
 github.com/saas-mingyang/mingyang-admin-common v0.7.0/go.mod h1:dt3cQUGb9j/CELKMmh5Px4W/E/1P0XLRdxevIReB4Wc=
+github.com/saas-mingyang/mingyang-admin-common v0.7.3 h1:U7/gaVR1HfzUBj+O3eoBFf2KCMPJWtsTNiJ3+Sa1dNg=
 github.com/saas-mingyang/mingyang-admin-common v0.7.3/go.mod h1:dt3cQUGb9j/CELKMmh5Px4W/E/1P0XLRdxevIReB4Wc=
 github.com/saas-mingyang/mingyang-admin-job v0.0.2 h1:TCQxZGu0kS8iZjNynq9jhDLpWiL332x3cpaiNcr6uBs=
 github.com/saas-mingyang/mingyang-admin-job v0.0.2/go.mod h1:aKPa+uN1zNJjbyOfgDIG8kYynQrYOwiBK/NX7uH6QYs=
