@@ -252,18 +252,30 @@ func (c *Converter) StructToMap(s *structpb.Struct) map[string]interface{} {
 }
 
 // StringSliceToUint64Slice 将字符串切片转换为 uint64 切片
+// StringSliceToUint64Slice converts a slice of strings to a slice of uint64 values
+// It takes a slice of strings as input and returns a new slice containing uint64 values
+// Each string in the input slice should be a valid representation of an unsigned integer
+// If any string cannot be parsed, the function will panic with the conversion error
 func StringSliceToUint64Slice(strSlice []string) []uint64 {
+	// Print the input slice for debugging purposes
 	fmt.Printf("StringSliceToUint64Slice: %v\n", strSlice)
+	// Create a new uint64 slice with the same length as the input slice
+	// The capacity is set to the length of the input slice to optimize memory usage
 	result := make([]uint64, 0, len(strSlice))
 
+	// Iterate over each string in the input slice
 	for _, str := range strSlice {
+		// Convert the string to a uint64 value
 		val, err := strconv.ParseUint(str, 10, 64)
 		if err != nil {
+			// If conversion fails, panic with the error
 			panic(err)
 		}
+		// Append the converted value to the result slice
 		result = append(result, val)
 	}
 
+	// Return the converted slice
 	return result
 }
 
