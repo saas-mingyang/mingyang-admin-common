@@ -28,9 +28,9 @@ Log:
   StackCoolDownMillis: 100
 
 RedisConf:
-  Host: 192.168.201.228:31314
-  Db: 4
-  Pass: 'redis.123456'
+  Host: 192.168.201.52:30788
+  Db: 0
+  Pass: 'Pwd!23$56'
 
 I18nConf:
   Dir:
