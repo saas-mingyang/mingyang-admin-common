@@ -30,7 +30,7 @@ Log:
 RedisConf:
   Host: 192.168.201.52:30788
   Db: 0
-  Pass: 'Pwd!23$56'
+  Pass: 'MyRedis2026Pwd'
 
 I18nConf:
   Dir:
