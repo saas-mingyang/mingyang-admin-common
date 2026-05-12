@@ -28,15 +28,14 @@ import (
 
 // A RedisConf is a redis config.
 type RedisConf struct {
-	Host          string `json:",env=REDIS_HOST"`
-	Db            int    `json:",default=0,env=REDIS_DB"`
-	Username      string `json:",optional,env=REDIS_USERNAME"`
-	Pass          string `json:",optional,env=REDIS_PASSWORD"`
-	Tls           bool   `json:",optional,env=REDIS_TLS"`
-	Master        string `json:",optional,env=REDIS_MASTER"`
-	PoolSize      int    `json:",optional,default=48,env=REDIS_POOL_SIZE"`
-	MaxIdleConns  int    `json:",optional,default=12,env=REDIS_MAX_IDLE_CONNS"`
-	IsClusterMode bool   `json:",optional,env=REDIS_IS_CLUSTER_MODE"`
+	Host         string `json:",env=REDIS_HOST"`
+	Db           int    `json:",default=0,env=REDIS_DB"`
+	Username     string `json:",optional,env=REDIS_USERNAME"`
+	Pass         string `json:",optional,env=REDIS_PASSWORD"`
+	Tls          bool   `json:",optional,env=REDIS_TLS"`
+	Master       string `json:",optional,env=REDIS_MASTER"`
+	PoolSize     int    `json:",optional,default=48,env=REDIS_POOL_SIZE"`
+	MaxIdleConns int    `json:",optional,default=12,env=REDIS_MAX_IDLE_CONNS"`
 }
 
 func (r RedisConf) Validate() error {
@@ -67,8 +66,6 @@ func (r RedisConf) NewUniversalRedis() (redis.UniversalClient, error) {
 	if r.Master != "" {
 		opt.MasterName = r.Master
 	}
-
-	opt.IsClusterMode = r.IsClusterMode
 
 	if r.Tls {
 		opt.TLSConfig = &tls.Config{MinVersion: tls.VersionTLS12}
