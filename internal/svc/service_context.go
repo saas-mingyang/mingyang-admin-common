@@ -33,6 +33,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ent.Driver(c.DatabaseConf.NewNoCacheDriver()),
 		ent.Debug(), // debug mode
 	)
+	//打印redis配置
+	logx.Infof("redis config: %+v", c.RedisConf)
 
 	rds := c.RedisConf.MustNewUniversalRedis()
 
