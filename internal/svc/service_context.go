@@ -34,6 +34,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ent.Debug(), // debug mode
 	)
 	//打印redis配置
+
 	logx.Infof("redis config: %+v", c.RedisConf)
 
 	rds := c.RedisConf.MustNewUniversalRedis()
