@@ -37,11 +37,11 @@ I18nConf:
 
 DatabaseConf:
   Type: postgres
-  Host: 192.168.201.188
-  Port: 5432
+  Host: 192.168.201.52
+  Port: 30891
   DBName: simple_admin_dev
-  Username: postgres
-  Password: AM38xymTdFree4Fh
+  Username: myuser
+  Password: 'PgsqlPwd!2026My'
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5
@@ -52,11 +52,11 @@ DatabaseConf:
 # CasbinDatabaseConf sets the core database if you use the Casbin of Core.
 CasbinDatabaseConf:
   Type: postgres
-  Host: 192.168.201.188
-  Port: 5432
+  Host: 192.168.201.52
+  Port: 30891
   DBName: simple_admin_dev
-  Username: postgres
-  Password: AM38xymTdFree4Fh
+  Username: myuser
+  Password: 'PgsqlPwd!2026My'
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5
