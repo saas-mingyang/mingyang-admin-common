@@ -31,9 +31,9 @@ type Consumer struct {
 	mu           sync.Mutex
 }
 
-type ConsumerOption func(*Consumer)
+type ConsumerSetup func(*Consumer)
 
-func WithConcurrency(n int64) ConsumerOption {
+func WithConcurrency(n int64) ConsumerSetup {
 	return func(c *Consumer) {
 		if n > 0 {
 			c.concurrency = n
@@ -41,7 +41,7 @@ func WithConcurrency(n int64) ConsumerOption {
 	}
 }
 
-func NewConsumer(conf ConsumerConf, opts ...ConsumerOption) (*Consumer, error) {
+func NewConsumer(conf ConsumerConf, opts ...ConsumerSetup) (*Consumer, error) {
 	rlog.SetLogLevel("warn")
 
 	model := consumer.Clustering
@@ -59,16 +59,30 @@ func NewConsumer(conf ConsumerConf, opts ...ConsumerOption) (*Consumer, error) {
 		groupName = "DEFAULT_CONSUMER"
 	}
 
-	pushConsumer, err := rocketmq.NewPushConsumer(
+	consumeFromWhere := consumer.ConsumeFromFirstOffset
+	switch conf.ConsumeFromWhere {
+	case "last":
+		consumeFromWhere = consumer.ConsumeFromLastOffset
+	case "first":
+		consumeFromWhere = consumer.ConsumeFromFirstOffset
+	case "timestamp":
+		consumeFromWhere = consumer.ConsumeFromTimestamp
+	}
+
+	pushOpts := []consumer.Option{
 		consumer.WithGroupName(groupName),
 		consumer.WithNameServer(resolver),
 		consumer.WithConsumerModel(model),
-		consumer.WithConsumeFromWhere(consumer.ConsumeFromFirstOffset),
+		consumer.WithConsumeFromWhere(consumeFromWhere),
 		consumer.WithCredentials(primitive.Credentials{
 			AccessKey: conf.AccessKey,
 			SecretKey: conf.SecretKey,
 		}),
-	)
+	}
+	if conf.InstanceName != "" {
+		pushOpts = append(pushOpts, consumer.WithInstance(conf.InstanceName))
+	}
+	pushConsumer, err := rocketmq.NewPushConsumer(pushOpts...)
 	if err != nil {
 		return nil, fmt.Errorf("create push consumer failed: %w", err)
 	}
@@ -77,8 +91,8 @@ func NewConsumer(conf ConsumerConf, opts ...ConsumerOption) (*Consumer, error) {
 		pushConsumer: pushConsumer,
 		concurrency:  20,
 	}
-	for _, opt := range opts {
-		opt(c)
+	for _, setup := range opts {
+		setup(c)
 	}
 	return c, nil
 }
@@ -130,6 +144,7 @@ func (c *Consumer) Start() error {
 							entry.topic, entry.tag, msg.MsgId, err)
 						return consumer.ConsumeRetryLater, nil
 					}
+					logx.Infof("orderly message consumed, topic=%s, tag=%s, msgId=%s", entry.topic, entry.tag, msg.MsgId)
 				}
 				return consumer.ConsumeSuccess, nil
 			}
@@ -138,7 +153,7 @@ func (c *Consumer) Start() error {
 				for _, msg := range msgs {
 					m := msg
 					if err := sem.Acquire(ctx, 1); err != nil {
-						logx.Error("acquire semaphore failed: %v", err)
+						logx.Errorf("acquire semaphore failed: %v", err)
 						return consumer.ConsumeRetryLater, nil
 					}
 					go func() {
@@ -146,7 +161,9 @@ func (c *Consumer) Start() error {
 						if err := entry.handler(ctx, m); err != nil {
 							logx.Errorf("concurrent message handle failed, topic=%s, tag=%s, msgId=%s, error=%v",
 								entry.topic, entry.tag, m.MsgId, err)
+							return
 						}
+						logx.Infof("concurrent message consumed, topic=%s, tag=%s, msgId=%s", entry.topic, entry.tag, m.MsgId)
 					}()
 				}
 				return consumer.ConsumeSuccess, nil

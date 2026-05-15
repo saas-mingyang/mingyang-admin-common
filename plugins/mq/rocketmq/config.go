@@ -78,7 +78,7 @@ func (c *ProducerConf) Validate() error {
 	return nil
 }
 
-// MustNewProducer returns a producer. If there are errors, it will exist.
+// MustNewProducer returns a started producer. If there are errors, it will exist.
 func (c *ProducerConf) MustNewProducer() rocketmq.Producer {
 	err := c.Validate()
 	logx.Must(err)
@@ -96,7 +96,9 @@ func (c *ProducerConf) MustNewProducer() rocketmq.Producer {
 		producer.WithRetry(c.Retry),
 		producer.WithCredentials(primitive.Credentials{AccessKey: c.AccessKey, SecretKey: c.SecretKey}),
 	)
+	logx.Must(err)
 
+	err = p.Start()
 	logx.Must(err)
 
 	return p
@@ -116,6 +118,7 @@ type ConsumerConf struct {
 	Resolver              string
 	AccessKey             string
 	SecretKey             string
+	ConsumeFromWhere      string // first, last, timestamp; default first
 }
 
 // Validate validates configurations.

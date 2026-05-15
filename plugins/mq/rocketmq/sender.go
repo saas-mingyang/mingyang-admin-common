@@ -3,9 +3,11 @@ package rocketmq
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
+	"github.com/apache/rocketmq-client-go/v2/producer"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -15,8 +17,22 @@ type Sender struct {
 	producer rocketmq.Producer
 }
 
-func NewSender(producer rocketmq.Producer) *Sender {
-	return &Sender{producer: producer}
+func NewSender(p rocketmq.Producer) *Sender {
+	return &Sender{producer: p}
+}
+
+func MustNewSender(nameServers []string, groupName, namespace, accessKey, secretKey string, sendTimeout, retry int) *Sender {
+	p, err := rocketmq.NewProducer(
+		producer.WithNsResolver(primitive.NewPassthroughResolver(nameServers)),
+		producer.WithGroupName(groupName),
+		producer.WithNamespace(namespace),
+		producer.WithSendMsgTimeout(time.Duration(sendTimeout)*time.Second),
+		producer.WithRetry(retry),
+		producer.WithCredentials(primitive.Credentials{AccessKey: accessKey, SecretKey: secretKey}),
+	)
+	logx.Must(err)
+	logx.Must(p.Start())
+	return &Sender{producer: p}
 }
 
 func WithTag(tag string) MessageOption {
@@ -96,17 +112,6 @@ func (s *Sender) SendWithDelay(ctx context.Context, topic string, body []byte, d
 		return fmt.Errorf("delay level must be 1-18")
 	}
 	opts = append(opts, WithDelayTimeLevel(delayLevel))
-	return s.SendSync(ctx, topic, body, opts...)
-}
-
-func (s *Sender) SendMessage(ctx context.Context, topic, tag string, body []byte, shardingKey string, delayLevel int) error {
-	opts := []MessageOption{WithTag(tag)}
-	if shardingKey != "" {
-		opts = append(opts, WithShardingKey(shardingKey))
-	}
-	if delayLevel > 0 {
-		opts = append(opts, WithDelayTimeLevel(delayLevel))
-	}
 	return s.SendSync(ctx, topic, body, opts...)
 }
 
