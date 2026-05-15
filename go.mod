@@ -18,6 +18,7 @@ require (
 	github.com/mojocn/base64Captcha v1.3.8
 	github.com/nats-io/nats.go v1.47.0
 	github.com/nicksnyder/go-i18n/v2 v2.6.0
+	github.com/nyaruka/phonenumbers v1.6.7
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.16.0
 	github.com/saas-mingyang/mingyang-admin-core v0.0.0-20251107040124-c97a0a448793
@@ -52,6 +53,7 @@ require (
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/inflect v0.21.3 // indirect
+	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
@@ -76,7 +78,6 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/nats-io/nkeys v0.4.11 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
-	github.com/nyaruka/phonenumbers v1.6.7 // indirect
 	github.com/openzipkin/zipkin-go v0.4.3 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
