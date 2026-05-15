@@ -51,9 +51,6 @@ func (c *ProducerConf) Validate() error {
 	if c.GroupName == "" {
 		c.GroupName = "DEFAULT_PRODUCER"
 	}
-	if c.Namespace == "" {
-		c.Namespace = "DEFAULT"
-	}
 	if c.InstanceName == "" {
 		c.InstanceName = "DEFAULT"
 	}
@@ -83,19 +80,22 @@ func (c *ProducerConf) MustNewProducer() rocketmq.Producer {
 	err := c.Validate()
 	logx.Must(err)
 
-	p, err := rocketmq.NewProducer(
+	prodOpts := []producer.Option{
 		producer.WithNsResolver(primitive.NewPassthroughResolver(c.NsResolver)),
 		producer.WithGroupName(c.GroupName),
-		producer.WithNamespace(c.Namespace),
 		producer.WithInstanceName(c.InstanceName),
-		producer.WithSendMsgTimeout(time.Duration(c.MsgTimeOut)*time.Second),
+		producer.WithSendMsgTimeout(time.Duration(c.MsgTimeOut) * time.Second),
 		producer.WithDefaultTopicQueueNums(c.DefaultTopicQueueNums),
 		producer.WithCreateTopicKey(c.CreateTopicKey),
 		producer.WithCompressMsgBodyOverHowmuch(c.CompressMsgBodyOverHowMuch),
 		producer.WithCompressLevel(c.CompressLevel),
 		producer.WithRetry(c.Retry),
 		producer.WithCredentials(primitive.Credentials{AccessKey: c.AccessKey, SecretKey: c.SecretKey}),
-	)
+	}
+	if c.Namespace != "" {
+		prodOpts = append(prodOpts, producer.WithNamespace(c.Namespace))
+	}
+	p, err := rocketmq.NewProducer(prodOpts...)
 	logx.Must(err)
 
 	err = p.Start()
@@ -128,9 +128,6 @@ func (c *ConsumerConf) Validate() error {
 	}
 	if c.GroupName == "" {
 		c.GroupName = "DEFAULT_CONSUMER"
-	}
-	if c.Namespace == "" {
-		c.Namespace = "DEFAULT"
 	}
 	if c.InstanceName == "" {
 		c.InstanceName = "DEFAULT"
@@ -170,17 +167,20 @@ func (c *ConsumerConf) MustNewPushConsumer() rocketmq.PushConsumer {
 		strategy = consumer.AllocateByAveragely
 	}
 
-	csm, err := rocketmq.NewPushConsumer(
+	consumerOpts := []consumer.Option{
 		consumer.WithNsResolver(primitive.NewPassthroughResolver(c.NsResolver)),
 		consumer.WithGroupName(c.GroupName),
-		consumer.WithNamespace(c.Namespace),
 		consumer.WithStrategy(strategy),
-		consumer.WithRebalanceLockInterval(time.Duration(c.RebalanceLockInterval)*time.Second),
+		consumer.WithRebalanceLockInterval(time.Duration(c.RebalanceLockInterval) * time.Second),
 		consumer.WithMaxReconsumeTimes(c.MaxReconsumeTimes),
 		consumer.WithCredentials(primitive.Credentials{AccessKey: c.AccessKey, SecretKey: c.SecretKey}),
 		consumer.WithAutoCommit(c.AutoCommit),
 		consumer.WithInstance(c.InstanceName),
-	)
+	}
+	if c.Namespace != "" {
+		consumerOpts = append(consumerOpts, consumer.WithNamespace(c.Namespace))
+	}
+	csm, err := rocketmq.NewPushConsumer(consumerOpts...)
 
 	logx.Must(err)
 
@@ -204,17 +204,20 @@ func (c *ConsumerConf) MustNewPullConsumer() rocketmq.PullConsumer {
 		strategy = consumer.AllocateByAveragely
 	}
 
-	pcsm, err := rocketmq.NewPullConsumer(
+	consumerOpts := []consumer.Option{
 		consumer.WithNsResolver(primitive.NewPassthroughResolver(c.NsResolver)),
 		consumer.WithGroupName(c.GroupName),
-		consumer.WithNamespace(c.Namespace),
 		consumer.WithStrategy(strategy),
-		consumer.WithRebalanceLockInterval(time.Duration(c.RebalanceLockInterval)*time.Second),
+		consumer.WithRebalanceLockInterval(time.Duration(c.RebalanceLockInterval) * time.Second),
 		consumer.WithMaxReconsumeTimes(c.MaxReconsumeTimes),
 		consumer.WithCredentials(primitive.Credentials{AccessKey: c.AccessKey, SecretKey: c.SecretKey}),
 		consumer.WithAutoCommit(c.AutoCommit),
 		consumer.WithInstance(c.InstanceName),
-	)
+	}
+	if c.Namespace != "" {
+		consumerOpts = append(consumerOpts, consumer.WithNamespace(c.Namespace))
+	}
+	pcsm, err := rocketmq.NewPullConsumer(consumerOpts...)
 
 	logx.Must(err)
 

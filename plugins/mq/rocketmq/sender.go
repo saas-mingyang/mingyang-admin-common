@@ -22,14 +22,17 @@ func NewSender(p rocketmq.Producer) *Sender {
 }
 
 func MustNewSender(nameServers []string, groupName, namespace, accessKey, secretKey string, sendTimeout, retry int) *Sender {
-	p, err := rocketmq.NewProducer(
+	prodOpts := []producer.Option{
 		producer.WithNsResolver(primitive.NewPassthroughResolver(nameServers)),
 		producer.WithGroupName(groupName),
-		producer.WithNamespace(namespace),
-		producer.WithSendMsgTimeout(time.Duration(sendTimeout)*time.Second),
+		producer.WithSendMsgTimeout(time.Duration(sendTimeout) * time.Second),
 		producer.WithRetry(retry),
 		producer.WithCredentials(primitive.Credentials{AccessKey: accessKey, SecretKey: secretKey}),
-	)
+	}
+	if namespace != "" {
+		prodOpts = append(prodOpts, producer.WithNamespace(namespace))
+	}
+	p, err := rocketmq.NewProducer(prodOpts...)
 	logx.Must(err)
 	logx.Must(p.Start())
 	return &Sender{producer: p}
