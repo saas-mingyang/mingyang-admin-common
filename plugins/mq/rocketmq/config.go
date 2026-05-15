@@ -107,18 +107,18 @@ func (c *ProducerConf) MustNewProducer() rocketmq.Producer {
 // ConsumerConf is the configuration of rocketmq consumer.
 type ConsumerConf struct {
 	NsResolver            []string
-	GroupName             string
-	Namespace             string
-	InstanceName          string
-	Strategy              string
-	RebalanceLockInterval int
-	MaxReconsumeTimes     int32  // 1 means 16 times
-	ConsumerModel         string // BroadCasting or Clustering or Unknown
-	AutoCommit            bool
-	Resolver              string
-	AccessKey             string
-	SecretKey             string
-	ConsumeFromWhere      string // first, last, timestamp; default first
+	GroupName             string `json:",optional"`
+	Namespace             string `json:",optional"`
+	InstanceName          string `json:",optional"`
+	Strategy              string `json:",optional"`
+	RebalanceLockInterval int    `json:",optional"`
+	MaxReconsumeTimes     int32  `json:",optional"`
+	ConsumerModel         string `json:",optional"`
+	AutoCommit            bool   `json:",optional"`
+	Resolver              string `json:",optional"`
+	AccessKey             string `json:",optional"`
+	SecretKey             string `json:",optional"`
+	ConsumeFromWhere      string `json:",optional"`
 }
 
 // Validate validates configurations.
