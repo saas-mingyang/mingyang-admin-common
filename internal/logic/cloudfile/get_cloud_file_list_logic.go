@@ -63,22 +63,25 @@ func (l *GetCloudFileListLogic) GetCloudFileList(req *types.CloudFileListReq) (*
 	resp.Data.Total = data.PageDetails.Total
 
 	for _, v := range data.List {
-		resp.Data.Data = append(resp.Data.Data,
-			types.CloudFileInfo{
-				BaseIDInfo: types.BaseIDInfo{
-					Id:        &v.ID,
-					CreatedAt: pointy.GetPointer(v.CreatedAt.UnixMilli()),
-					UpdatedAt: pointy.GetPointer(v.UpdatedAt.UnixMilli()),
-				},
-				State:      &v.State,
-				Name:       &v.Name,
-				Url:        &v.URL,
-				Size:       &v.Size,
-				FileType:   &v.FileType,
-				UserId:     &v.UserID,
-				ProviderId: &v.Edges.StorageProviders.ID,
-				TagIds:     l.getFileTagIds(v.Edges.Tags),
-			})
+		fileInfo := types.CloudFileInfo{
+			BaseIDInfo: types.BaseIDInfo{
+				Id:        &v.ID,
+				CreatedAt: pointy.GetPointer(v.CreatedAt.UnixMilli()),
+				UpdatedAt: pointy.GetPointer(v.UpdatedAt.UnixMilli()),
+			},
+			State:    &v.State,
+			Name:     &v.Name,
+			Url:      &v.URL,
+			Size:     &v.Size,
+			FileType: &v.FileType,
+			UserId:   &v.UserID,
+			TagIds:   l.getFileTagIds(v.Edges.Tags),
+		}
+
+		if v.Edges.StorageProviders != nil {
+			fileInfo.ProviderId = &v.Edges.StorageProviders.ID
+		}
+		resp.Data.Data = append(resp.Data.Data, fileInfo)
 	}
 
 	return resp, nil
