@@ -448,7 +448,7 @@ func (l *UploadLogic) Upload() (resp *types.CloudFileInfoResp, err error) {
 			logx.Errorw("上传失败", logx.Field("uploadId", uploadId), logx.Field("error", err))
 		} else {
 			progressManager.UpdateStatus(uploadId, "completed")
-			logx.Infow("上传成功", logx.Field("uploadId", uploadId))
+			logx.Infow("上传成功,修改状态", logx.Field("uploadId", uploadId))
 			l.updateFileStatusInDB(ctx, uploadId, true)
 		}
 	}(file)
