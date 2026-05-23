@@ -30,41 +30,38 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/file/list",
-					Handler: file.FileListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file/update",
-					Handler: file.UpdateFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file/delete",
-					Handler: file.DeleteFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file/status",
-					Handler: file.ChangePublicStatusHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/file/download/:id",
-					Handler: file.DownloadFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file/delete_by_url",
-					Handler: file.DeleteFileByUrlHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/file/list",
+				Handler: file.FileListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file/update",
+				Handler: file.UpdateFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file/delete",
+				Handler: file.DeleteFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file/status",
+				Handler: file.ChangePublicStatusHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/file/download/:id",
+				Handler: file.DownloadFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file/delete_by_url",
+				Handler: file.DeleteFileByUrlHandler(serverCtx),
+			},
+		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
@@ -80,85 +77,79 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/file_tag/create",
-					Handler: filetag.CreateFileTagHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file_tag/update",
-					Handler: filetag.UpdateFileTagHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file_tag/delete",
-					Handler: filetag.DeleteFileTagHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file_tag/list",
-					Handler: filetag.GetFileTagListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/file_tag",
-					Handler: filetag.GetFileTagByIdHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/file_tag/create",
+				Handler: filetag.CreateFileTagHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file_tag/update",
+				Handler: filetag.UpdateFileTagHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file_tag/delete",
+				Handler: filetag.DeleteFileTagHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file_tag/list",
+				Handler: filetag.GetFileTagListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/file_tag",
+				Handler: filetag.GetFileTagByIdHandler(serverCtx),
+			},
+		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file/create",
-					Handler: cloudfile.CreateCloudFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file/update",
-					Handler: cloudfile.UpdateCloudFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file/delete",
-					Handler: cloudfile.DeleteCloudFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file/list",
-					Handler: cloudfile.GetCloudFileListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file",
-					Handler: cloudfile.GetCloudFileByIdHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file/delete_by_url",
-					Handler: cloudfile.DeleteCloudFileByUrlHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file/download_url",
-					Handler: cloudfile.GetCloudFileDownloadUrlHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file/upload_progress",
-					Handler: cloudfile.GetCloudFileUploadProgressHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file/create",
+				Handler: cloudfile.CreateCloudFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file/update",
+				Handler: cloudfile.UpdateCloudFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file/delete",
+				Handler: cloudfile.DeleteCloudFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file/list",
+				Handler: cloudfile.GetCloudFileListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file",
+				Handler: cloudfile.GetCloudFileByIdHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file/delete_by_url",
+				Handler: cloudfile.DeleteCloudFileByUrlHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file/download_url",
+				Handler: cloudfile.GetCloudFileDownloadUrlHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file/upload_progress",
+				Handler: cloudfile.GetCloudFileUploadProgressHandler(serverCtx),
+			},
+		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
@@ -174,109 +165,100 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/storage_provider/create",
-					Handler: storageprovider.CreateStorageProviderHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/storage_provider/update",
-					Handler: storageprovider.UpdateStorageProviderHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/storage_provider/delete",
-					Handler: storageprovider.DeleteStorageProviderHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/storage_provider/list",
-					Handler: storageprovider.GetStorageProviderListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/storage_provider",
-					Handler: storageprovider.GetStorageProviderByIdHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/storage_provider/create",
+				Handler: storageprovider.CreateStorageProviderHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/storage_provider/update",
+				Handler: storageprovider.UpdateStorageProviderHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/storage_provider/delete",
+				Handler: storageprovider.DeleteStorageProviderHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/storage_provider/list",
+				Handler: storageprovider.GetStorageProviderListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/storage_provider",
+				Handler: storageprovider.GetStorageProviderByIdHandler(serverCtx),
+			},
+		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file_tag/create",
-					Handler: cloudfiletag.CreateCloudFileTagHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file_tag/update",
-					Handler: cloudfiletag.UpdateCloudFileTagHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file_tag/delete",
-					Handler: cloudfiletag.DeleteCloudFileTagHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file_tag/list",
-					Handler: cloudfiletag.GetCloudFileTagListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/cloud_file_tag",
-					Handler: cloudfiletag.GetCloudFileTagByIdHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file_tag/create",
+				Handler: cloudfiletag.CreateCloudFileTagHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file_tag/update",
+				Handler: cloudfiletag.UpdateCloudFileTagHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file_tag/delete",
+				Handler: cloudfiletag.DeleteCloudFileTagHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file_tag/list",
+				Handler: cloudfiletag.GetCloudFileTagListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/cloud_file_tag",
+				Handler: cloudfiletag.GetCloudFileTagByIdHandler(serverCtx),
+			},
+		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/apk/create",
-					Handler: apk.CreateApkFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/apk/update",
-					Handler: apk.UpdateApkFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/apk/delete",
-					Handler: apk.DeleteApkFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/apk/get",
-					Handler: apk.GetApkFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/apk/list",
-					Handler: apk.ListApkFileHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/apk/download_url",
-					Handler: apk.DownloadApkFileHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/apk/create",
+				Handler: apk.CreateApkFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/apk/update",
+				Handler: apk.UpdateApkFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/apk/delete",
+				Handler: apk.DeleteApkFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/apk/get",
+				Handler: apk.GetApkFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/apk/list",
+				Handler: apk.ListApkFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/apk/download_url",
+				Handler: apk.DownloadApkFileHandler(serverCtx),
+			},
+		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }

@@ -14,7 +14,6 @@ import (
 	_ "mingyang.com/admin-simple-admin-file/ent/runtime"
 	"mingyang.com/admin-simple-admin-file/internal/config"
 	i18n2 "mingyang.com/admin-simple-admin-file/internal/i18n"
-	"mingyang.com/admin-simple-admin-file/internal/middleware"
 )
 
 type ServiceContext struct {
@@ -37,19 +36,12 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	logx.Infof("redis config: %+v", c.RedisConf)
 
-	rds := c.RedisConf.MustNewUniversalRedis()
-
-	cbn := c.CasbinConf.MustNewCasbinWithOriginalRedisWatcher(c.CasbinDatabaseConf.Type,
-		c.CasbinDatabaseConf.GetDSN(), c.RedisConf)
-
 	trans := i18n.NewTranslator(c.I18nConf, i18n2.LocaleFS)
 
 	return &ServiceContext{
 		Config:       c,
 		DB:           db,
-		Casbin:       cbn,
 		CoreRpc:      coreclient.NewCore(zrpc.MustNewClient(c.CoreRpc)),
-		Authority:    middleware.NewAuthorityMiddleware(cbn, rds, trans).Handle,
 		Trans:        trans,
 		CloudStorage: cloud.NewCloudServiceGroup(db),
 	}

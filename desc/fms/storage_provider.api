@@ -56,7 +56,6 @@ type (
 @server (
 	jwt:        Auth
 	group:      storageprovider
-	middleware: Authority
 )
 service Fms {
 	// Create storage provider information | 创建服务提供商

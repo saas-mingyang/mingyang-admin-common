@@ -91,7 +91,6 @@ type (
 @server (
 	jwt:        Auth
 	group:      apk
-	middleware: Authority
 )
 service Fms {
 	// Create apk file information | 创建apk文件

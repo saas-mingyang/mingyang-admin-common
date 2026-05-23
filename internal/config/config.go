@@ -10,15 +10,14 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Auth               rest.AuthConf
-	UploadConf         UploadConf
-	DatabaseConf       config.DatabaseConf
-	CasbinDatabaseConf config.DatabaseConf
-	RedisConf          config.RedisConf
-	CasbinConf         casbin.CasbinConf
-	CoreRpc            zrpc.RpcClientConf
-	CROSConf           config.CROSConf
-	I18nConf           i18n.Conf
+	Auth         rest.AuthConf
+	UploadConf   UploadConf
+	DatabaseConf config.DatabaseConf
+	RedisConf    config.RedisConf
+	CasbinConf   casbin.CasbinConf
+	CoreRpc      zrpc.RpcClientConf
+	CROSConf     config.CROSConf
+	I18nConf     i18n.Conf
 }
 
 type UploadConf struct {

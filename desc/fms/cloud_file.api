@@ -117,7 +117,6 @@ type (
 @server (
 	jwt:        Auth
 	group:      cloudfile
-	middleware: Authority
 )
 service Fms {
 	// Create cloud file information | 创建云文件

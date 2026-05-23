@@ -42,7 +42,6 @@ type (
 @server (
 	jwt:        Auth
 	group:      filetag
-	middleware: Authority
 )
 service Fms {
 	// Create file tag information | 创建文件标签

@@ -42,7 +42,6 @@ type (
 @server (
 	jwt:        Auth
 	group:      cloudfiletag
-	middleware: Authority
 )
 service Fms {
 	// Create cloud file tag information | 创建云文件标签

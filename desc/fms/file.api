@@ -93,7 +93,6 @@ type (
 @server (
 	jwt:        Auth
 	group:      file
-	middleware: Authority
 )
 service Fms {
 	// Get file list | 获取文件列表
