@@ -77,7 +77,7 @@ CoreRpc:
   Etcd:
     Hosts:
       - mingyang-etcd-test-service.mingyang-admin.svc.cluster.local:2379  # 共享etcd地址
-    Key: core.rpc
+    Key: mingyang.core.rpc
   Enabled: true
 
 CasbinConf:

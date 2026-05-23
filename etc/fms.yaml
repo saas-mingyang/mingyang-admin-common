@@ -73,7 +73,7 @@ CoreRpc:
       - 192.168.201.58:2379
       - 192.168.201.58:2381
       - 192.168.201.58:2382
-    Key: core.rpc
+    Key: mingyang.core.rpc
   Enabled: true
 
 CasbinConf:
