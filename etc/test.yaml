@@ -8,8 +8,8 @@ Middlewares:
 
 Etcd:
   Hosts:
-    - mingyang-etcd-test-service.mingyang-admin.svc.cluster.local:2379
-  Key: fms.api
+    - my-etcd.default.svc.cluster.local:2379
+  Key: mingyang.fms.api
 
 Auth:
   AccessSecret: jS6VKDtsJf3z1n2VKDtsJf3z1n2  # JWT key
