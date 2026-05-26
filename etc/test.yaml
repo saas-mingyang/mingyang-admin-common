@@ -71,14 +71,18 @@ UploadConf:
   ServerURL: "http://localhost:81"
   DeleteFileWithCloud: true # whether to delete the cloud files when delete local data | 是否删除本地文件的同时删除云端文件
 
-# You can disable the core rpc if you have already initialized file manager's database.
 CoreRpc:
   #Target: 127.0.0.1:9101
   Etcd:
     Hosts:
-      - mingyang-etcd-test-service.mingyang-admin.svc.cluster.local:2379  # 共享etcd地址
+      - my-etcd.default.svc.cluster.local:2379  # 共享etcd地址
     Key: mingyang.core.rpc
   Enabled: true
+  Timeout: 6000
+  Keepalive:
+    Time: 10s
+    Timeout: 20s
+    PermitWithoutStream: true
 
 CasbinConf:
   ModelText: |
