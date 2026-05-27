@@ -27,6 +27,7 @@ import (
 	"flag"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"log"
 	"mingyang.com/admin-simple-admin-file/internal/config"
 	"mingyang.com/admin-simple-admin-file/internal/handler"
 	"mingyang.com/admin-simple-admin-file/internal/svc"
@@ -36,7 +37,7 @@ var configFile = flag.String("f", "etc/fms.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-
+	log.Printf("🚀 Starting API fms...")
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
@@ -45,6 +46,7 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
+	log.Printf("🚀 Started API fms at %s:%d", c.Host, c.Port)
 
 	server.Start()
 }
