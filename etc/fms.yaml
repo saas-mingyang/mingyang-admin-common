@@ -43,18 +43,6 @@ DatabaseConf:
   Debug: true
   LogSlowThreshold: 600ms
 
-# CasbinDatabaseConf sets the core database if you use the Casbin of Core.
-CasbinDatabaseConf:
-  Type: postgres
-  Host: 192.168.201.188
-  Port: 5432
-  DBName: simple_admin_dev
-  Username: postgres
-  Password: AM38xymTdFree4Fh
-  MaxOpenConn: 100
-  SSLMode: disable
-  CacheTime: 5
-
 UploadConf:
   MaxImageSize: 33554432  # 32 mb
   MaxVideoSize: 1073741824 # 1gb
@@ -75,16 +63,3 @@ CoreRpc:
       - 192.168.201.58:2382
     Key: mingyang.core.rpc
   Enabled: true
-
-CasbinConf:
-  ModelText: |
-    [request_definition]
-    r = sub, obj, act, domain
-    [policy_definition]
-    p = sub, obj, act, domain
-    [role_definition]
-    g = _, _
-    [policy_effect]
-    e = some(where (p.eft == allow))
-    [matchers]
-    m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act && r.domain == p.domain
