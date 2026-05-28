@@ -74,4 +74,13 @@ const (
 	ContentTypeTextXml = "text/xml"
 	// ContentType
 	ContentType = "Content-Type"
+
+	GET    = "GET"
+	POST   = "POST"
+	PUT    = "PUT"
+	DELETE = "DELETE"
+
+	Zero = 0
+	One  = 1
+	Two  = 2
 )
