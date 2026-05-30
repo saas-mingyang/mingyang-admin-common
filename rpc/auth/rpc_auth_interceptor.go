@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/jwt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc"
@@ -42,7 +41,7 @@ func UnaryAuthInterceptor(skipMethods []string, secretKey string) grpc.UnaryServ
 		}
 		md, ok := metadata.FromIncomingContext(ctx)
 		if !ok {
-			fmt.Printf("获取md失败")
+			logx.Errorf("failed to get metadata from context")
 			return nil, ErrUnauthorized
 		}
 		tokens := md.Get(Authorization)
@@ -64,7 +63,6 @@ func ValidateToken(token, secretKey string) (Claims, error) {
 		return claims, errors.New("token is empty")
 	}
 	fromToken := jwt.StripBearerPrefixFromToken(token)
-	fmt.Printf("fromToken = %s\n", fromToken)
 	if fromToken == "" {
 		return claims, errors.New("token is empty")
 	}
@@ -72,10 +70,9 @@ func ValidateToken(token, secretKey string) (Claims, error) {
 	if err != nil {
 		return claims, errors.New("ParseJwtToken error")
 	}
-	fmt.Printf("jwtToken = %v\n", jwtToken)
 	err = jwt.MapClaimsToStruct(jwtToken, &claims)
 	if err != nil {
-		fmt.Printf("MapClaimsToStruct error = %v\n", err)
+		logx.Errorf("MapClaimsToStruct error = %v", err)
 		return claims, errors.New("MapClaimsToStruct error")
 	}
 	return claims, nil
