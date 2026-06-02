@@ -72,8 +72,14 @@ const (
 	ContentTypeTextHtml = "text/html"
 	// ContentTypeTextXml text/xml
 	ContentTypeTextXml = "text/xml"
-	// ContentType
+	// ContentType ContentTypeOctetStream application/octet-stream
 	ContentType = "Content-Type"
+	//XForwardedFor  X-Forwarded-For
+	XForwardedFor = "X-Forwarded-For"
+	// XRealIP X-Real-IP
+	XRealIP = "X-Real-IP"
+	// BearerPrefix "Bearer "
+	BearerPrefix = "Bearer "
 
 	GET    = "GET"
 	POST   = "POST"
