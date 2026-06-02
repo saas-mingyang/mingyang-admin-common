@@ -80,6 +80,8 @@ const (
 	XRealIP = "X-Real-IP"
 	// BearerPrefix "Bearer "
 	BearerPrefix = "Bearer "
+	// AcceptLanguage Accept-Language"
+	AcceptLanguage = "Accept-Language"
 
 	GET    = "GET"
 	POST   = "POST"
