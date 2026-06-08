@@ -13,7 +13,7 @@ import (
 func TestProducerAndConsumer(t *testing.T) {
 
 	producerConf := &ProducerConf{
-		NsResolver: []string{"192.168.201.58:9876"},
+		NsResolver: []string{"192.168.201.52:31484"},
 		GroupName:  "test_producer_group",
 		MsgTimeOut: 3,
 		Retry:      2,
@@ -22,7 +22,7 @@ func TestProducerAndConsumer(t *testing.T) {
 	producer := producerConf.MustNewProducer()
 
 	consumerConf := ConsumerConf{
-		NsResolver:       []string{"192.168.201.58:9876"},
+		NsResolver:       []string{"192.168.201.52:31484"},
 		GroupName:        fmt.Sprintf("test_consumer_group_%d", time.Now().UnixMilli()),
 		ConsumerModel:    "Clustering",
 		ConsumeFromWhere: "last",
@@ -63,7 +63,7 @@ func TestProducerAndConsumer(t *testing.T) {
 
 func TestConf_Validate(t *testing.T) {
 	c := &ProducerConf{
-		NsResolver:                 []string{"192.168.201.58:9876"},
+		NsResolver:                 []string{"192.168.201.52:31484"},
 		GroupName:                  "",
 		Namespace:                  "",
 		InstanceName:               "",
@@ -82,7 +82,7 @@ func TestConf_Validate(t *testing.T) {
 func TestSendSyncMessage(t *testing.T) {
 
 	producerConf := &ProducerConf{
-		NsResolver: []string{"192.168.201.58:9876"},
+		NsResolver: []string{"192.168.201.52:31484"},
 		GroupName:  "test_group",
 	}
 	producer := producerConf.MustNewProducer()
@@ -95,7 +95,7 @@ func TestSendDelayMessage(t *testing.T) {
 	t.Skip("RocketMQ server required")
 
 	producerConf := &ProducerConf{
-		NsResolver: []string{"192.168.201.58:9876"},
+		NsResolver: []string{"192.168.201.52:31484"},
 		GroupName:  "test_group",
 	}
 	producer := producerConf.MustNewProducer()
@@ -107,7 +107,7 @@ func TestSendDelayMessage(t *testing.T) {
 func TestConsumerWithOptions(t *testing.T) {
 
 	consumerConf := ConsumerConf{
-		NsResolver:    []string{"192.168.201.58:9876"},
+		NsResolver:    []string{"192.168.201.52:31484"},
 		GroupName:     "test_group",
 		ConsumerModel: "Clustering",
 	}
