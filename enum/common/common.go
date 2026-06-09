@@ -82,6 +82,12 @@ const (
 	BearerPrefix = "Bearer "
 	// AcceptLanguage Accept-Language"
 	AcceptLanguage = "Accept-Language"
+	// ContentLength Content-Length"
+	ContentLength = "Content-Length"
+	// ContentDisposition Content-Disposition
+	ContentDisposition     = "Content-Disposition"
+	AcceptRanges           = "Accept-Ranges"
+	ContentTypeOctetStream = "application/octet"
 
 	GET    = "GET"
 	POST   = "POST"
