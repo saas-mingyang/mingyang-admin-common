@@ -114,14 +114,15 @@ func (l CasbinConf) MustNewRedisWatcher(c redis.RedisConf, f func(string2 string
 }
 
 // MustNewCasbinWithRedisWatcher returns Casbin Enforcer with Redis watcher.
+// MustNewCasbin 内部已 LoadPolicy 把策略加载到内存。不要在启动时 SavePolicy：
+// ent-adapter 的 SavePolicy 实现是 DELETE FROM casbin_rule + 批量 INSERT，
+// 多实例并发启动或与其他进程写策略并发时，会把别处刚加的策略一并擦掉。
 func (l CasbinConf) MustNewCasbinWithRedisWatcher(dbType, dsn string, c redis.RedisConf) *casbin.Enforcer {
 	cbn := l.MustNewCasbin(dbType, dsn)
 	w := l.MustNewRedisWatcher(c, func(data string) {
 		rediswatcher.DefaultUpdateCallback(cbn)(data)
 	})
 	err := cbn.SetWatcher(w)
-	logx.Must(err)
-	err = cbn.SavePolicy()
 	logx.Must(err)
 	return cbn
 }
@@ -153,14 +154,14 @@ func (l CasbinConf) MustNewOriginalRedisWatcher(c config.RedisConf, f func(strin
 }
 
 // MustNewCasbinWithOriginalRedisWatcher returns Casbin Enforcer with original Redis watcher.
+// 启动只 LoadPolicy（在 MustNewCasbin 内已完成），不再 SavePolicy，避免清表后用本进程内存
+// 快照覆盖其他实例并发写入的策略。
 func (l CasbinConf) MustNewCasbinWithOriginalRedisWatcher(dbType, dsn string, c config.RedisConf) *casbin.Enforcer {
 	cbn := l.MustNewCasbin(dbType, dsn)
 	w := l.MustNewOriginalRedisWatcher(c, func(data string) {
 		rediswatcher.DefaultUpdateCallback(cbn)(data)
 	})
 	err := cbn.SetWatcher(w)
-	logx.Must(err)
-	err = cbn.SavePolicy()
 	logx.Must(err)
 	return cbn
 }
