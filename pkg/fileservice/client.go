@@ -1,17 +1,14 @@
 package fileservice
 
 import (
-	"bufio"
 	"bytes"
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
+	"github.com/zeromicro/go-zero/core/logx"
 	"io"
-	"net"
 	"net/http"
-	"net/url"
 )
 
 type uploadResponse struct {
@@ -43,6 +40,9 @@ func Upload(ctx context.Context, baseURL string, data []byte, fileName, contentT
 	}
 
 	presignedURL, objectKey, err := getPresignedUploadURL(ctx, baseURL, fileName, int64(len(data)), contentType, deviceId, expiresIn)
+
+	logx.Infof("presignedURL=%s", presignedURL)
+
 	if err != nil {
 		return common.EmptyString, common.EmptyString, err
 	}
@@ -98,6 +98,12 @@ func getPresignedUploadURL(ctx context.Context, baseURL string, fileName string,
 	if err := json.Unmarshal(respBody, &result); err != nil {
 		return common.EmptyString, common.EmptyString, err
 	}
+	logx.Infof(
+		"upload url=%s key=%s",
+		result.Data.Url,
+		result.Data.Key,
+	)
+
 	if result.Code != common.Zero {
 		return common.EmptyString, common.EmptyString, fmt.Errorf("presigned upload API error: %s", result.Msg)
 	}
@@ -149,48 +155,35 @@ func getDownloadURL(ctx context.Context, baseURL, key string, expiresIn int64) (
 
 // putRaw 通过原始 TCP/TLS 连接发送 PUT 请求，避免 Go http.Client 自动添加的非签名头。
 func putRaw(ctx context.Context, rawURL string, data []byte, contentType string) error {
-	u, err := url.Parse(rawURL)
-	if err != nil {
-		return err
-	}
-
-	var conn net.Conn
-	d := &net.Dialer{Timeout: common.FileServiceDialTimeout}
-
 	ctx, cancel := context.WithTimeout(ctx, common.FileServiceRequestTimeout)
 	defer cancel()
 
-	if u.Scheme == "https" {
-		conn, err = tls.DialWithDialer(d, "tcp", u.Host, &tls.Config{InsecureSkipVerify: false})
-	} else {
-		conn, err = d.DialContext(ctx, "tcp", u.Host)
-	}
+	req, err := http.NewRequestWithContext(
+		ctx,
+		http.MethodPut,
+		rawURL,
+		bytes.NewReader(data),
+	)
 	if err != nil {
 		return err
 	}
-	defer conn.Close()
 
-	var buf bytes.Buffer
-	buf.WriteString(fmt.Sprintf("PUT %s HTTP/1.1\r\n", u.RequestURI()))
-	buf.WriteString(fmt.Sprintf("Host: %s\r\n", u.Host))
-	buf.WriteString(fmt.Sprintf("Content-Length: %d\r\n", len(data)))
-	buf.WriteString(fmt.Sprintf("Content-Type: %s\r\n", contentType))
-	buf.WriteString("\r\n")
-	buf.Write(data)
+	req.Header.Set(common.ContentType, contentType)
 
-	if _, err = conn.Write(buf.Bytes()); err != nil {
-		return err
+	client := &http.Client{
+		Timeout: common.FileServiceRequestTimeout,
 	}
 
-	resp, err := http.ReadResponse(bufio.NewReader(conn), nil)
+	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		respBody, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("presigned URL PUT status %d: %s", resp.StatusCode, string(respBody))
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("upload failed, status=%d, body=%s", resp.StatusCode, string(body))
 	}
+
 	return nil
 }
