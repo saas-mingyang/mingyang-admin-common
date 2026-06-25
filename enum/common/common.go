@@ -79,7 +79,7 @@ const (
 	// XRealIP X-Real-IP
 	XRealIP = "X-Real-IP"
 	// BearerPrefix "Bearer "
-	BearerPrefix = "Bearer "
+	BearerPrefix = "Bearer"
 	// AcceptLanguage Accept-Language"
 	AcceptLanguage = "Accept-Language"
 	// ContentLength Content-Length"
