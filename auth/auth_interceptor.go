@@ -16,16 +16,18 @@ var ErrUnauthorized = status.Error(codes.Unauthenticated, "unauthorized")
 
 // Authorization AUTH_JWT_TOKEN 常量定义
 const (
-	Authorization = "authorization"
+	Authorization = "Authorization"
 )
 
+// Claims pc端鉴权
 type Claims struct {
 	UserId   string `json:"userId"`
 	RoleId   string `json:"roleId"`
 	DeptId   int64  `json:"deptId"`
-	TenantId int64  `json:"jwtTenantId"`
+	TenantId string `json:"jwtTenantId"`
 	Iat      int64  `json:"iat"`
 	Exp      int64  `json:"exp"`
+	ClientIp string `json:"clientIp"`
 }
 
 // UnaryAuthInterceptor 返回 RPC 拦截器
