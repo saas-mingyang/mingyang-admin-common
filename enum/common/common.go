@@ -89,6 +89,17 @@ const (
 	AcceptRanges           = "Accept-Ranges"
 	ContentTypeOctetStream = "application/octet"
 
+	HeaderXUserID   = "X-User-ID"
+	HeaderXRoleID   = "X-Role-ID"
+	HeaderXDeptID   = "X-Dept-ID"
+	HeaderTenantID  = "Tenant-Id"
+	HeaderXTenantID = "X-Tenant-ID"
+
+	CtxKeyAppUserID   = "appUserId"
+	CtxKeyUserID      = "userId"
+	CtxKeyRoleID      = "roleId"
+	CtxKeyJwtTenantID = "jwtTenantId"
+
 	GET    = "GET"
 	POST   = "POST"
 	PUT    = "PUT"

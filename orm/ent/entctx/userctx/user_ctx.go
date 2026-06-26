@@ -16,6 +16,7 @@ package userctx
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -25,7 +26,7 @@ import (
 
 // GetUserIDFromCtx returns user id from context.
 func GetUserIDFromCtx(ctx context.Context) (string, error) {
-	if userId, ok := ctx.Value("userId").(string); !ok {
+	if userId, ok := ctx.Value(common.CtxKeyUserID).(string); !ok {
 		if md, ok := metadata.FromIncomingContext(ctx); !ok {
 			logx.Error("failed to get user id from context", logx.Field("detail", ctx))
 			return "", errorx.NewInvalidArgumentError("failed to get user id from context")
