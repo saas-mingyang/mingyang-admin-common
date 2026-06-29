@@ -2,7 +2,10 @@ package auth
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 	"github.com/saas-mingyang/mingyang-admin-common/utils/jwt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc"
@@ -19,15 +22,44 @@ const (
 	Authorization = "Authorization"
 )
 
+// FlexString 在反序列化 JWT claim 时同时接受 JSON 字符串和数字，统一存为字符串。
+// 历史 token 中 jwtTenantId 被签发为数字，新 token 为字符串，二者都能正确解析。
+type FlexString string
+
+func (f *FlexString) UnmarshalJSON(b []byte) error {
+	if len(b) == 0 || string(b) == "null" {
+		*f = ""
+		return nil
+	}
+	// 已是字符串形式 "123"
+	if b[0] == '"' {
+		var s string
+		if err := json.Unmarshal(b, &s); err != nil {
+			return err
+		}
+		*f = FlexString(s)
+		return nil
+	}
+	// 数字等标量形式 123，原样转为字符串
+	var n json.Number
+	if err := json.Unmarshal(b, &n); err != nil {
+		return fmt.Errorf("FlexString: cannot parse %s: %w", string(b), err)
+	}
+	*f = FlexString(n.String())
+	return nil
+}
+
+func (f FlexString) String() string { return string(f) }
+
 // Claims pc端鉴权
 type Claims struct {
-	UserId   string `json:"userId"`
-	RoleId   string `json:"roleId"`
-	DeptId   int64  `json:"deptId"`
-	TenantId string `json:"jwtTenantId"`
-	Iat      int64  `json:"iat"`
-	Exp      int64  `json:"exp"`
-	ClientIp string `json:"clientIp"`
+	UserId   string     `json:"userId"`
+	RoleId   string     `json:"roleId"`
+	DeptId   int64      `json:"deptId"`
+	TenantId FlexString `json:"jwtTenantId"`
+	Iat      int64      `json:"iat"`
+	Exp      int64      `json:"exp"`
+	ClientIp string     `json:"clientIp"`
 }
 
 // UnaryAuthInterceptor 返回 RPC 拦截器
@@ -61,11 +93,11 @@ func UnaryAuthInterceptor(skipMethods []string, secretKey string) grpc.UnaryServ
 
 func ValidateToken(token, secretKey string) (Claims, error) {
 	var claims Claims
-	if token == "" {
+	if token == common.EmptyString {
 		return claims, errors.New("token is empty")
 	}
 	fromToken := jwt.StripBearerPrefixFromToken(token)
-	if fromToken == "" {
+	if fromToken == common.EmptyString {
 		return claims, errors.New("token is empty")
 	}
 	jwtToken, err := jwt.ParseJwtToken(fromToken, secretKey)

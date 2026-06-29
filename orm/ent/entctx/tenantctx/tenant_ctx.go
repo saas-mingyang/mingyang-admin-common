@@ -91,10 +91,9 @@ func AdminCtx(ctx context.Context) context.Context {
 }
 
 // WithTenantIdCtx returns a context with a specific tenant ID.
-func WithTenantIdCtx(ctx context.Context, tenantId uint64) context.Context {
-	tenantIdStr := strconv.Itoa(int(tenantId))
-	ctx = metadata.AppendToOutgoingContext(ctx, enum.TenantIdCtxKey, tenantIdStr)
-	return context.WithValue(ctx, enum.TenantIdCtxKey, tenantIdStr)
+func WithTenantIdCtx(ctx context.Context, tenantId string) context.Context {
+	ctx = metadata.AppendToOutgoingContext(ctx, enum.TenantIdCtxKey, tenantId)
+	return context.WithValue(ctx, enum.TenantIdCtxKey, tenantId)
 }
 
 // WithIgnoreTenant 创建忽略租户过滤的上下文
