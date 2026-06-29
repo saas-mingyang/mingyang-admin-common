@@ -16,6 +16,7 @@ package tenantctx
 
 import (
 	"context"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 	"strconv"
 
 	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
@@ -108,6 +109,6 @@ func WithoutIgnoreTenant(ctx context.Context) context.Context {
 
 // WithTenantId 动态切换租户
 func WithTenantId(ctx context.Context, tenantId uint64) context.Context {
-	tenantIdStr := strconv.FormatUint(tenantId, 10)
+	tenantIdStr := strconv.FormatUint(tenantId, common.Ten)
 	return context.WithValue(ctx, enum.TenantIdCtxKey, tenantIdStr)
 }
