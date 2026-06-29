@@ -1,8 +1,6 @@
 package bootstrap
 
 import (
-	"fmt"
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,21 +22,21 @@ func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[
 
 	// 获取环境
 	appEnv := strings.TrimSpace(os.Getenv("APP_ENV"))
-	if appEnv == common.EmptyString {
+	if appEnv == "" {
 		appEnv = "dev"
 	}
 
 	logx.Infof("APP_ENV=%s", appEnv)
 
 	// 自动选择本地配置
-	if localFile == common.EmptyString || strings.HasSuffix(localFile, "dev.yaml") {
+	if localFile == "" || strings.HasSuffix(localFile, "dev.yaml") {
 		localFile = filepath.Join("etc", appEnv+".yaml")
 	}
 
 	logx.Infof("local config file: %s", localFile)
 
 	// 仅本地配置
-	if bootstrapFile == common.EmptyString {
+	if bootstrapFile == "" {
 		conf.MustLoad(localFile, &c, conf.UseEnv())
 		return c, nil
 	}
@@ -46,16 +44,27 @@ func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[
 	var bc BootstrapConf
 	conf.MustLoad(bootstrapFile, &bc, conf.UseEnv())
 
-	// 根据环境自动切换 Etcd Key（可选）
-	//
-	// bootstrap.yaml 原来：
-	// Key: mingyang/gateway/api.conf
-	//
-	// APP_ENV=test 后：
-	// Key: mingyang/test/gateway/api.conf
-	//
-	if bc.Etcd.Key != common.EmptyString {
-		bc.Etcd.Key = buildEtcdKey(bc.Etcd.Key, appEnv)
+	// ==========================
+	// 使用环境变量覆盖 Etcd Hosts
+	// ==========================
+	if hosts := strings.TrimSpace(os.Getenv("ETCD_HOSTS")); hosts != "" {
+		var etcdHosts []string
+
+		for _, host := range strings.Split(hosts, ",") {
+			host = strings.TrimSpace(host)
+			if host != "" {
+				etcdHosts = append(etcdHosts, host)
+			}
+		}
+
+		if len(etcdHosts) > 0 {
+			bc.Etcd.Hosts = etcdHosts
+		}
+	}
+
+	// 如果需要，也允许覆盖 Key
+	if key := strings.TrimSpace(os.Getenv("ETCD_KEY")); key != "" {
+		bc.Etcd.Key = key
 	}
 
 	logx.Infof("etcd hosts: %v", bc.Etcd.Hosts)
@@ -72,24 +81,4 @@ func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[
 	logx.Must(err)
 
 	return v, cc
-}
-
-func buildEtcdKey(key, env string) string {
-	key = strings.Trim(key, "/")
-
-	// 已经包含环境
-	if strings.HasPrefix(key, env+"/") {
-		return key
-	}
-
-	// mingyang/gateway/api.conf
-	parts := strings.Split(key, "/")
-	if len(parts) >= 2 {
-		return fmt.Sprintf("%s/%s/%s",
-			parts[0],
-			env,
-			strings.Join(parts[1:], "/"))
-	}
-
-	return fmt.Sprintf("%s/%s", env, key)
 }
