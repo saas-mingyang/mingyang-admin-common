@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
+	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -20,65 +20,55 @@ type BootstrapConf struct {
 func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[T]) {
 	var c T
 
-	// 获取环境
-	appEnv := strings.TrimSpace(os.Getenv("APP_ENV"))
-	if appEnv == "" {
-		appEnv = "dev"
-	}
+	// 有 ETCD_HOSTS，使用配置中心
+	if strings.TrimSpace(os.Getenv("ETCD_HOSTS")) != common.EmptyString {
 
-	logx.Infof("APP_ENV=%s", appEnv)
+		var bc BootstrapConf
+		conf.MustLoad(bootstrapFile, &bc, conf.UseEnv())
 
-	// 自动选择本地配置
-	if localFile == "" || strings.HasSuffix(localFile, "dev.yaml") {
-		localFile = filepath.Join("etc", appEnv+".yaml")
-	}
+		// 使用环境变量覆盖 Hosts
+		bc.Etcd.Hosts = splitHosts(os.Getenv("ETCD_HOSTS"))
 
-	logx.Infof("local config file: %s", localFile)
-
-	// 仅本地配置
-	if bootstrapFile == "" {
-		conf.MustLoad(localFile, &c, conf.UseEnv())
-		return c, nil
-	}
-
-	var bc BootstrapConf
-	conf.MustLoad(bootstrapFile, &bc, conf.UseEnv())
-
-	// ==========================
-	// 使用环境变量覆盖 Etcd Hosts
-	// ==========================
-	if hosts := strings.TrimSpace(os.Getenv("ETCD_HOSTS")); hosts != "" {
-		var etcdHosts []string
-
-		for _, host := range strings.Split(hosts, ",") {
-			host = strings.TrimSpace(host)
-			if host != "" {
-				etcdHosts = append(etcdHosts, host)
-			}
+		// 可选：覆盖 Key
+		if key := strings.TrimSpace(os.Getenv("ETCD_KEY")); key != common.EmptyString {
+			bc.Etcd.Key = key
 		}
 
-		if len(etcdHosts) > 0 {
-			bc.Etcd.Hosts = etcdHosts
+		logx.Infof("use etcd config center")
+		logx.Infof("etcd hosts: %v", bc.Etcd.Hosts)
+		logx.Infof("etcd key: %s", bc.Etcd.Key)
+
+		ss := subscriber.MustNewEtcdSubscriber(bc.Etcd)
+
+		cc := configurator.MustNewConfigCenter[T](configurator.Config{
+			Type: bc.Type,
+			Log:  false,
+		}, ss)
+
+		v, err := cc.GetConfig()
+		logx.Must(err)
+
+		return v, cc
+	}
+
+	// 没有 ETCD_HOSTS，直接读取本地配置
+	if localFile == common.EmptyString {
+		localFile = "etc/dev.yaml"
+	}
+
+	logx.Infof("use local config: %s", localFile)
+
+	conf.MustLoad(localFile, &c, conf.UseEnv())
+	return c, nil
+}
+
+func splitHosts(hosts string) []string {
+	var result []string
+	for _, host := range strings.Split(hosts, ",") {
+		host = strings.TrimSpace(host)
+		if host != "" {
+			result = append(result, host)
 		}
 	}
-
-	// 如果需要，也允许覆盖 Key
-	if key := strings.TrimSpace(os.Getenv("ETCD_KEY")); key != "" {
-		bc.Etcd.Key = key
-	}
-
-	logx.Infof("etcd hosts: %v", bc.Etcd.Hosts)
-	logx.Infof("etcd key: %s", bc.Etcd.Key)
-
-	ss := subscriber.MustNewEtcdSubscriber(bc.Etcd)
-
-	cc := configurator.MustNewConfigCenter[T](configurator.Config{
-		Type: bc.Type,
-		Log:  false,
-	}, ss)
-
-	v, err := cc.GetConfig()
-	logx.Must(err)
-
-	return v, cc
+	return result
 }
