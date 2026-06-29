@@ -25,7 +25,7 @@ type Claims struct {
 	UserId   string `json:"userId"`
 	RoleId   string `json:"roleId"`
 	DeptId   uint64 `json:"deptId"`
-	TenantId uint64 `json:"tenantId"`
+	TenantId uint64 `json:"jwtTenantId"`
 	Iat      int64  `json:"iat"`
 	Exp      int64  `json:"exp"`
 	ClientIp string `json:"clientIp"`
