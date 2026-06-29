@@ -1,11 +1,14 @@
 package bootstrap
 
 import (
+	"fmt"
+	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/configcenter"
 	"github.com/zeromicro/go-zero/core/configcenter/subscriber"
 	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/logx"
+	"os"
 )
 
 // BootstrapConf is the minimal local configuration that points to the etcd
@@ -31,7 +34,17 @@ type BootstrapConf struct {
 func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[T]) {
 	var c T
 
-	if bootstrapFile == "" {
+	// 如果没有指定 localFile，则根据 APP_ENV 自动选择
+	if localFile == common.EmptyString {
+		env := os.Getenv("APP_ENV")
+		if env == "" {
+			env = "dev"
+		}
+
+		localFile = fmt.Sprintf("etc/%s.yaml", env)
+	}
+
+	if bootstrapFile == common.EmptyString {
 		conf.MustLoad(localFile, &c, conf.UseEnv())
 		return c, nil
 	}
