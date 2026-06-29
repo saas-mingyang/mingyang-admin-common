@@ -3,47 +3,41 @@ package bootstrap
 import (
 	"fmt"
 	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/configcenter"
 	"github.com/zeromicro/go-zero/core/configcenter/subscriber"
 	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/logx"
-	"os"
 )
 
-// BootstrapConf is the minimal local configuration that points to the etcd
-// config center. The etcd address itself cannot live inside etcd, so this is
-// the only piece that must stay on local disk (or be supplied via env).
 type BootstrapConf struct {
-	// Type is the format of the config stored in etcd: yaml, json or toml.
 	Type string `json:",default=yaml,options=[yaml,json,toml]"`
-	// Etcd holds the config-center coordinates (Hosts + Key).
 	Etcd discov.EtcdConf
 }
 
-// Load loads the application config of type T.
-//
-// When bootstrapFile is empty it falls back to loading localFile directly via
-// conf.MustLoad — i.e. the original behaviour, so existing deployments that do
-// not pass -cc keep working unchanged.
-//
-// When bootstrapFile is provided it reads the etcd coordinates from it and
-// pulls the full config from the etcd config center. The returned Configurator
-// is non-nil in that case so the caller can register hot-reload listeners; it
-// is nil in the local-file path.
 func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[T]) {
 	var c T
 
-	// 如果没有指定 localFile，则根据 APP_ENV 自动选择
-	if localFile == common.EmptyString {
-		env := os.Getenv("APP_ENV")
-		if env == "" {
-			env = "dev"
-		}
-
-		localFile = fmt.Sprintf("etc/%s.yaml", env)
+	// 获取环境
+	appEnv := strings.TrimSpace(os.Getenv("APP_ENV"))
+	if appEnv == common.EmptyString {
+		appEnv = "dev"
 	}
 
+	logx.Infof("APP_ENV=%s", appEnv)
+
+	// 自动选择本地配置
+	if localFile == common.EmptyString || strings.HasSuffix(localFile, "dev.yaml") {
+		localFile = filepath.Join("etc", appEnv+".yaml")
+	}
+
+	logx.Infof("local config file: %s", localFile)
+
+	// 仅本地配置
 	if bootstrapFile == common.EmptyString {
 		conf.MustLoad(localFile, &c, conf.UseEnv())
 		return c, nil
@@ -52,7 +46,23 @@ func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[
 	var bc BootstrapConf
 	conf.MustLoad(bootstrapFile, &bc, conf.UseEnv())
 
+	// 根据环境自动切换 Etcd Key（可选）
+	//
+	// bootstrap.yaml 原来：
+	// Key: mingyang/gateway/api.conf
+	//
+	// APP_ENV=test 后：
+	// Key: mingyang/test/gateway/api.conf
+	//
+	if bc.Etcd.Key != common.EmptyString {
+		bc.Etcd.Key = buildEtcdKey(bc.Etcd.Key, appEnv)
+	}
+
+	logx.Infof("etcd hosts: %v", bc.Etcd.Hosts)
+	logx.Infof("etcd key: %s", bc.Etcd.Key)
+
 	ss := subscriber.MustNewEtcdSubscriber(bc.Etcd)
+
 	cc := configurator.MustNewConfigCenter[T](configurator.Config{
 		Type: bc.Type,
 		Log:  false,
@@ -62,4 +72,24 @@ func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[
 	logx.Must(err)
 
 	return v, cc
+}
+
+func buildEtcdKey(key, env string) string {
+	key = strings.Trim(key, "/")
+
+	// 已经包含环境
+	if strings.HasPrefix(key, env+"/") {
+		return key
+	}
+
+	// mingyang/gateway/api.conf
+	parts := strings.Split(key, "/")
+	if len(parts) >= 2 {
+		return fmt.Sprintf("%s/%s/%s",
+			parts[0],
+			env,
+			strings.Join(parts[1:], "/"))
+	}
+
+	return fmt.Sprintf("%s/%s", env, key)
 }
