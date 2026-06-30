@@ -1,14 +1,17 @@
 package bootstrap
 
 import (
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
+	"fmt"
+	"github.com/zeromicro/go-zero/core/configcenter/subscriber"
+	"github.com/zeromicro/go-zero/core/discov"
 	"os"
+	"path/filepath"
 	"strings"
+
+	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/configcenter"
-	"github.com/zeromicro/go-zero/core/configcenter/subscriber"
-	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -17,58 +20,120 @@ type BootstrapConf struct {
 	Etcd discov.EtcdConf
 }
 
-func Load[T any](localFile, bootstrapFile string) (T, configurator.Configurator[T]) {
-	var c T
+type Bootstrap[T any] struct {
+	Config       T
+	Configurator configurator.Configurator[T]
+}
 
-	// 有 ETCD_HOSTS，使用配置中心
-	if strings.TrimSpace(os.Getenv("ETCD_HOSTS")) != common.EmptyString {
+func (b *Bootstrap[T]) OnChange(fn func()) {
+	if b.Configurator != nil {
+		b.Configurator.AddListener(fn)
+	}
+}
+func Load[T any](configDir string) *Bootstrap[T] {
+	var cfg T
 
-		var bc BootstrapConf
+	bc := BootstrapConf{}
+
+	bootstrapFile := filepath.Join(configDir, "bootstrap.yaml")
+
+	env := strings.TrimSpace(os.Getenv(common.APP_ENV))
+
+	if env == common.EmptyString {
+		env = common.Dev
+	}
+
+	localFile := filepath.Join(configDir, env+".yaml")
+
+	// 读取 bootstrap
+	if _, err := os.Stat(bootstrapFile); err == nil {
 		conf.MustLoad(bootstrapFile, &bc, conf.UseEnv())
+	}
 
-		// 使用环境变量覆盖 Hosts
-		bc.Etcd.Hosts = splitHosts(os.Getenv("ETCD_HOSTS"))
+	// 第一优先：环境变量
+	if hosts := strings.TrimSpace(os.Getenv(common.ETCD_HOSTS)); hosts != common.EmptyString {
 
-		// 可选：覆盖 Key
-		if key := strings.TrimSpace(os.Getenv("ETCD_KEY")); key != common.EmptyString {
+		bc.Etcd.Hosts = splitHosts(hosts)
+
+		if key := strings.TrimSpace(os.Getenv(common.ETCD_KEY)); key != common.EmptyString {
 			bc.Etcd.Key = key
 		}
 
-		logx.Infof("use etcd config center")
-		logx.Infof("etcd hosts: %v", bc.Etcd.Hosts)
-		logx.Infof("etcd key: %s", bc.Etcd.Key)
+		cfg, cc := loadFromEtcd[T](bc)
 
-		ss := subscriber.MustNewEtcdSubscriber(bc.Etcd)
-
-		cc := configurator.MustNewConfigCenter[T](configurator.Config{
-			Type: bc.Type,
-			Log:  false,
-		}, ss)
-
-		v, err := cc.GetConfig()
-		logx.Must(err)
-
-		return v, cc
+		return &Bootstrap[T]{
+			Config:       cfg,
+			Configurator: cc,
+		}
 	}
 
-	// 没有 ETCD_HOSTS，直接读取本地配置
-	if localFile == common.EmptyString {
-		localFile = "etc/dev.yaml"
+	// 第二优先：bootstrap
+	if len(bc.Etcd.Hosts) > common.Zero {
+
+		cfg, cc := loadFromEtcd[T](bc)
+
+		return &Bootstrap[T]{
+			Config:       cfg,
+			Configurator: cc,
+		}
 	}
 
-	logx.Infof("use local config: %s", localFile)
+	// 本地配置
+	logx.Infof("Config Source : Local")
+	logx.Infof("Config File   : %s", localFile)
 
-	conf.MustLoad(localFile, &c, conf.UseEnv())
-	return c, nil
+	conf.MustLoad(localFile, &cfg, conf.UseEnv())
+
+	return &Bootstrap[T]{
+		Config: cfg,
+	}
 }
 
 func splitHosts(hosts string) []string {
 	var result []string
-	for _, host := range strings.Split(hosts, ",") {
+	for _, host := range strings.Split(hosts, common.Comma) {
 		host = strings.TrimSpace(host)
-		if host != "" {
+		if host != common.EmptyString {
 			result = append(result, host)
 		}
 	}
 	return result
+}
+
+func loadFromEtcd[T any](bc BootstrapConf) (T, configurator.Configurator[T]) {
+	// 默认配置类型
+	if strings.TrimSpace(bc.Type) == common.EmptyString {
+		bc.Type = "yaml"
+	}
+
+	// 参数校验
+	if len(bc.Etcd.Hosts) == common.Zero {
+		logx.Must(fmt.Errorf("etcd hosts is empty"))
+	}
+
+	if strings.TrimSpace(bc.Etcd.Key) == common.EmptyString {
+		logx.Must(fmt.Errorf("etcd key is empty"))
+	}
+
+	logx.Infof("==================================================")
+	logx.Infof("Config Source : ETCD")
+	logx.Infof("Config Type   : %s", bc.Type)
+	logx.Infof("Etcd Hosts    : %v", bc.Etcd.Hosts)
+	logx.Infof("Etcd Key      : %s", bc.Etcd.Key)
+	logx.Infof("==================================================")
+
+	ss := subscriber.MustNewEtcdSubscriber(bc.Etcd)
+
+	cc := configurator.MustNewConfigCenter[T](
+		configurator.Config{
+			Type: bc.Type,
+			Log:  false,
+		},
+		ss,
+	)
+
+	cfg, err := cc.GetConfig()
+	logx.Must(err)
+
+	return cfg, cc
 }

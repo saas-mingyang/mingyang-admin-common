@@ -60,6 +60,13 @@ const (
 	// EmptyString ""
 	EmptyString = ""
 
+	Dev    = "dev"
+	Test   = "test"
+	Pre    = "pre"
+	Pro    = "pro"
+	Rt     = "rt"
+	DirEtc = "etc"
+
 	// ContentTypeJson application/json
 	ContentTypeJson = "application/json"
 	// ContentTypeForm application/x-www-form-urlencoded
