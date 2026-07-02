@@ -62,6 +62,9 @@ func GetDownloadURL(ctx context.Context, baseURL, key string, expiresIn int64) (
 // getPresignedUploadURL 向文件服务申请预签名上传地址。
 func getPresignedUploadURL(ctx context.Context, baseURL string, fileName string, fileSize int64, contentType, deviceId string, expiresIn int64) (presignedURL, key string, err error) {
 
+	//打baseUrl
+	fmt.Printf("baseURL=%s", baseURL)
+
 	body, _ := json.Marshal(map[string]interface{}{
 		"fileName":    fileName,
 		"fileSize":    fileSize,

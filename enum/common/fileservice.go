@@ -3,9 +3,10 @@ package common
 import "time"
 
 const (
+
 	// 文件服务 API 路径
-	FileServicePresignedUploadURL   = "/presigned/upload_url"
-	FileServicePresignedDownloadURL = "/presigned/download_url"
+	FileServicePresignedUploadURL   = "/fms-api/presigned/upload_url"
+	FileServicePresignedDownloadURL = "/fms-api/presigned/download_url"
 
 	FileServiceDefaultDeviceID    = "fileservice"
 	FileServiceDefaultContentType = "application/octet-stream"
