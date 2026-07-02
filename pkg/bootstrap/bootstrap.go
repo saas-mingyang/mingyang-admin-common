@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/zeromicro/go-zero/core/configcenter/subscriber"
 	"github.com/zeromicro/go-zero/core/discov"
+	"github.com/zeromicro/go-zero/core/service"
 	"os"
 	"path/filepath"
 	"strings"
@@ -40,7 +41,7 @@ func Load[T any](configDir string) *Bootstrap[T] {
 	env := strings.TrimSpace(os.Getenv(common.APP_ENV))
 
 	if env == common.EmptyString {
-		env = common.Dev
+		env = service.DevMode
 	}
 
 	localFile := filepath.Join(configDir, env+".yaml")
