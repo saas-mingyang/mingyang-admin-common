@@ -102,6 +102,11 @@ const (
 	HeaderTenantID  = "Tenant-Id"
 	HeaderXTenantID = "X-Tenant-ID"
 
+	HttpsPrefix = "https://"
+	HttpPrefix  = "http://"
+	WsPrefix    = "ws://"
+	WssPrefix   = "wss://"
+
 	CtxKeyAppUserID   = "appUserId"
 	CtxKeyUserID      = "userId"
 	CtxKeyRoleID      = "roleId"
