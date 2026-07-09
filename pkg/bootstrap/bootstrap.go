@@ -56,7 +56,7 @@ func Load[T any](configDir string) *Bootstrap[T] {
 
 		bc.Etcd.Hosts = splitHosts(hosts)
 
-		if key := strings.TrimSpace(os.Getenv(common.ETCD_KEY)); key != common.EmptyString {
+		if key := strings.TrimSpace(os.Getenv(common.ETCD_CONF_KEY)); key != common.EmptyString {
 			bc.Etcd.Key = key
 		}
 
