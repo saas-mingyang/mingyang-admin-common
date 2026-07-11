@@ -28,6 +28,7 @@ import (
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 	"golang.org/x/text/language"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	"github.com/saas-mingyang/mingyang-admin-common/utils/errcode"
@@ -80,29 +81,76 @@ func (l *Translator) Trans(ctx context.Context, msgId string) string {
 	return message
 }
 
+// grpcCodeToI18nKey maps gRPC codes to i18n message keys
+func grpcCodeToI18nKey(code codes.Code) string {
+	switch code {
+	case codes.Unauthenticated:
+		return Unauthorized
+	case codes.PermissionDenied:
+		return PermissionDeny
+	case codes.InvalidArgument:
+		return InvalidArgument
+	case codes.NotFound:
+		return TargetNotFound
+	case codes.Unavailable:
+		return ServiceUnavailable
+	case codes.Internal, codes.Unknown:
+		return InternalError
+	default:
+		return UnknownError
+	}
+}
+
+// codeErrorToI18nKey maps errorx.CodeError codes to i18n message keys
+func codeErrorToI18nKey(code int) string {
+	switch code {
+	case 401:
+		return Unauthorized
+	case 403:
+		return PermissionDeny
+	case 404:
+		return TargetNotFound
+	case 500, 2:
+		return InternalError
+	default:
+		return UnknownError
+	}
+}
+
 // TransError translates the error message
 func (l *Translator) TransError(ctx context.Context, err error) error {
 	lang := ctx.Value("lang").(string)
+	loc := l.MatchLocalizer(lang)
+
+	tryLocalize := func(id string) string {
+		msg, e := loc.LocalizeMessage(&i18n.Message{ID: id})
+		if e != nil || msg == "" {
+			return ""
+		}
+		return msg
+	}
+
 	if errcode.IsGrpcError(err) {
-		message, e := l.MatchLocalizer(lang).LocalizeMessage(&i18n.Message{ID: strings.Split(err.Error(), "desc = ")[1]})
-		if e != nil || message == "" {
-			message = err.Error()
+		msgId := strings.Split(err.Error(), "desc = ")[1]
+		if message := tryLocalize(msgId); message != "" {
+			return status.Error(status.Code(err), message)
 		}
-		return status.Error(status.Code(err), message)
+		fallback := tryLocalize(grpcCodeToI18nKey(status.Code(err)))
+		return status.Error(status.Code(err), fallback)
 	} else if codeErr, ok := err.(*errorx.CodeError); ok {
-		message, e := l.MatchLocalizer(lang).LocalizeMessage(&i18n.Message{ID: codeErr.Error()})
-		if e != nil || message == "" {
-			message = codeErr.Error()
+		if message := tryLocalize(codeErr.Error()); message != "" {
+			return errorx.NewCodeError(codeErr.Code, message)
 		}
-		return errorx.NewCodeError(codeErr.Code, message)
+		fallback := tryLocalize(codeErrorToI18nKey(codeErr.Code))
+		return errorx.NewCodeError(codeErr.Code, fallback)
 	} else if apiErr, ok := err.(*errorx.ApiError); ok {
-		message, e := l.MatchLocalizer(lang).LocalizeMessage(&i18n.Message{ID: apiErr.Error()})
-		if e != nil {
-			message = apiErr.Error()
+		if message := tryLocalize(apiErr.Error()); message != "" {
+			return errorx.NewApiError(apiErr.Code, message)
 		}
-		return errorx.NewApiError(apiErr.Code, message)
+		fallback := tryLocalize(codeErrorToI18nKey(apiErr.Code))
+		return errorx.NewApiError(apiErr.Code, fallback)
 	} else {
-		return errorx.NewApiError(http.StatusInternalServerError, err.Error())
+		return errorx.NewApiError(http.StatusInternalServerError, tryLocalize(InternalError))
 	}
 }
 

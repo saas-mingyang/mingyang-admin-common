@@ -38,6 +38,14 @@ const (
 
 	ApiRequestFailed = "sys.api.apiRequestFailed"
 
+	InternalError   = "common.internalError"
+	UnknownError    = "common.unknownError"
+	InvalidArgument = "common.invalidArgument"
+
+	Unauthorized = "auth.unauthorized"
+	TokenExpired = "auth.tokenExpired"
+	InvalidToken = "auth.invalidToken"
+
 	PasswordStrengthVerification = "cms.passwordStrengthVerification"
 	VerificationCodeExpired      = "cms.verificationCodeExpired"
 	VerificationCodeError        = "cms.verificationCodeError"

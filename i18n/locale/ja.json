@@ -1,5 +1,13 @@
 {
 	"common": {
-		"success": "操作が成功しました"
+		"success": "操作が成功しました",
+		"internalError": "サーバー内部エラー",
+		"unknownError": "不明なエラー",
+		"invalidArgument": "無効な引数"
+	},
+	"auth": {
+		"unauthorized": "認証が期限切れです。再ログインしてください",
+		"tokenExpired": "トークンの有効期限が切れました",
+		"invalidToken": "無効なトークン"
 	}
 }

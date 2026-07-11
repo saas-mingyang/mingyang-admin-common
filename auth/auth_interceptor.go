@@ -13,7 +13,7 @@ import (
 	"net/http"
 )
 
-var ErrUnauthorized = status.Error(codes.Unauthenticated, "unauthorized")
+var ErrUnauthorized = status.Error(codes.Unauthenticated, "auth.unauthorized")
 
 // Authorization AUTH_JWT_TOKEN 常量定义
 const (

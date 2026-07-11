@@ -17,7 +17,15 @@
 		"constraintError": "Operation failed: Data conflict",
 		"validationError": "Operation failed: Validate failed",
 		"notSingularError": "Operation failed: Data is not unique",
-		"serviceUnavailable": "Service is unavailable, please check if the service is enabled"
+		"serviceUnavailable": "Service is unavailable, please check if the service is enabled",
+		"internalError": "Internal server error",
+		"unknownError": "Unknown error",
+		"invalidArgument": "Invalid argument"
+	},
+	"auth": {
+		"unauthorized": "Authentication expired, please login again",
+		"tokenExpired": "Token has expired",
+		"invalidToken": "Invalid token"
 	},
 	"cms": {
 		"passwordStrengthVerification": "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.",
