@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
+	"mingyang.com/admin-common/enum/common"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/configcenter"

@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/saas-mingyang/mingyang-admin-common/config"
+	"mingyang.com/admin-common/config"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"

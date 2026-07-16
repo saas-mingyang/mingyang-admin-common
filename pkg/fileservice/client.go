@@ -5,9 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"
+	"mingyang.com/admin-common/enum/common"
 	"net/http"
 )
 
