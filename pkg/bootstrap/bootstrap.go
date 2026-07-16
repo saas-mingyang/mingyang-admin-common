@@ -5,6 +5,9 @@ import (
 	"github.com/zeromicro/go-zero/core/configcenter/subscriber"
 	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/service"
+	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/rest/httpx"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -137,4 +140,14 @@ func loadFromEtcd[T any](bc BootstrapConf) (T, configurator.Configurator[T]) {
 	logx.Must(err)
 
 	return cfg, cc
+}
+
+func Health() rest.Route {
+	return rest.Route{
+		Method: http.MethodGet,
+		Path:   "/health",
+		Handler: func(w http.ResponseWriter, r *http.Request) {
+			httpx.OkJson(w, map[string]string{"status": "ok"})
+		},
+	}
 }
