@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/saas-mingyang/mingyang-admin-common/config"
+	"mingyang.com/admin-common/config"
 
 	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-zero/core/logx"

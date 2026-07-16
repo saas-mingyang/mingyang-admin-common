@@ -3,13 +3,13 @@ package auth
 import (
 	"context"
 	"errors"
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/jwt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"mingyang.com/admin-common/enum/common"
+	"mingyang.com/admin-common/utils/jwt"
 	"net/http"
 )
 
