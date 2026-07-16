@@ -20,8 +20,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/deptctx"
 	"github.com/saas-mingyang/mingyang-admin-core/rpc/ent/intercept"
+	"mingyang.com/admin-common/orm/ent/entctx/deptctx"
 )
 
 // DepartmentMixin for embedding the department info in different schemas.

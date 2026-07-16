@@ -31,8 +31,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/saas-mingyang/mingyang-admin-common/utils/errcode"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/parse"
+	"mingyang.com/admin-common/utils/errcode"
+	"mingyang.com/admin-common/utils/parse"
 )
 
 //go:embed locale/*.json

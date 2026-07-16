@@ -4,11 +4,11 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
-	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entctx/tenantctx"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/enum"
 	"google.golang.org/grpc/metadata"
+	"mingyang.com/admin-common/enum/common"
+	"mingyang.com/admin-common/orm/ent/entctx/tenantctx"
 )
 
 // UserContextMiddleware 将网关通过 HTTP Header 透传过来的用户身份信息

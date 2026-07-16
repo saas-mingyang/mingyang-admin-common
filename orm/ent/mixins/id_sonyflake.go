@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/saas-mingyang/mingyang-admin-common/utils/sonyflake"
+	"mingyang.com/admin-common/utils/sonyflake"
 	"time"
 )
 

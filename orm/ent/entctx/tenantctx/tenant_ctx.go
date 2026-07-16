@@ -16,13 +16,13 @@ package tenantctx
 
 import (
 	"context"
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
+	"mingyang.com/admin-common/enum/common"
 	"strconv"
 
-	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/enum"
 	"google.golang.org/grpc/metadata"
+	"mingyang.com/admin-common/orm/ent/entenum"
 )
 
 type TenantKey string

@@ -16,7 +16,7 @@ package userctx
 
 import (
 	"context"
-	"github.com/saas-mingyang/mingyang-admin-common/enum/common"
+	"mingyang.com/admin-common/enum/common"
 
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"

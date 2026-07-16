@@ -1,6 +1,6 @@
 package errorcode
 
-import "github.com/saas-mingyang/mingyang-admin-common/enum/common"
+import "mingyang.com/admin-common/enum/common"
 
 const (
 	// OK is returned on success.

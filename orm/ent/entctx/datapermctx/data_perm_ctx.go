@@ -20,10 +20,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/saas-mingyang/mingyang-admin-common/config"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/metadata"
+	"mingyang.com/admin-common/config"
 )
 
 type DataPermKey string

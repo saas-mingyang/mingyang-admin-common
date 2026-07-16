@@ -2,8 +2,8 @@ package config
 
 import (
 	"errors"
-	"github.com/saas-mingyang/mingyang-admin-common/plugins/mq/rocketmq"
 	"github.com/zeromicro/go-zero/core/logx"
+	"mingyang.com/admin-common/plugins/mq/rocketmq"
 )
 
 type RocketMqConf struct {

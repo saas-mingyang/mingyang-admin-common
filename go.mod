@@ -21,7 +21,6 @@ require (
 	github.com/nyaruka/phonenumbers v1.6.7
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.18.0
-	github.com/saas-mingyang/mingyang-admin-common v1.0.5
 	github.com/saas-mingyang/mingyang-admin-core v0.0.0-20251107040124-c97a0a448793
 	github.com/stretchr/testify v1.11.1
 	github.com/zeromicro/go-zero v1.9.1

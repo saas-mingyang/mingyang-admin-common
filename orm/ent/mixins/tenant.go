@@ -18,7 +18,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
+	"mingyang.com/admin-common/orm/ent/entenum"
 )
 
 // TenantMixin for embedding the tenant info in different schemas.

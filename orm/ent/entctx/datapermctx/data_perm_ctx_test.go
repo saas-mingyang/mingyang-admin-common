@@ -19,8 +19,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/saas-mingyang/mingyang-admin-common/orm/ent/entenum"
 	"google.golang.org/grpc/metadata"
+	"mingyang.com/admin-common/orm/ent/entenum"
 )
 
 func TestGetScopeFromCtx(t *testing.T) {

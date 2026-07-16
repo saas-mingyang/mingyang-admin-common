@@ -20,8 +20,8 @@ import (
 
 	"github.com/mojocn/base64Captcha"
 	"github.com/redis/go-redis/v9"
-	"github.com/saas-mingyang/mingyang-admin-common/config"
 	"github.com/zeromicro/go-zero/core/logx"
+	"mingyang.com/admin-common/config"
 )
 
 // NewOriginalRedisStore returns a redis store for captcha.

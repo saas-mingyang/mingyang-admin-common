@@ -19,9 +19,9 @@ import (
 	"time"
 
 	"github.com/mojocn/base64Captcha"
-	"github.com/saas-mingyang/mingyang-admin-common/config"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
+	"mingyang.com/admin-common/config"
 )
 
 // NewRedisStore returns a redis store for captcha.
